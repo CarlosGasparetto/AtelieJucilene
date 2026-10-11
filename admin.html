@@ -17,7 +17,6 @@
 </head>
 <body class="bg-stone-50 text-stone-800 min-h-screen">
 
-  <!-- CABEÇALHO DO PAINEL -->
   <header class="bg-white border-b border-stone-200 sticky top-0 z-30 px-4 py-3 shadow-sm">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-3">
@@ -30,31 +29,27 @@
         </div>
       </div>
       <a href="index.html" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Site
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Loja
       </a>
     </div>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <!-- COLUNA ESQUERDA: FORMULÁRIO DE CADASTRO -->
     <div class="lg:col-span-5">
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 sticky top-20">
         <h2 class="text-xl font-bold text-stone-900 mb-1 flex items-center gap-2">
           <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
         </h2>
-        <p class="text-xs text-stone-500 mb-6">Preencha as informações e tire uma foto para publicar na vitrine.</p>
+        <p class="text-xs text-stone-500 mb-6">Tire uma foto e preencha as informações para exibir na vitrine.</p>
 
         <form id="form-produto" class="space-y-4">
-          <!-- Nome da Peça -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Modelo *</label>
             <input type="text" id="nome" required placeholder="Ex: Passadeira Cozinha Boho Cru"
               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
           </div>
 
-          <!-- Categoria e Preço -->
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">Categoria *</label>
@@ -66,13 +61,12 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-stone-700 mb-1">Preço Normal (R$) *</label>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Preço (R$) *</label>
               <input type="number" step="0.01" id="preco" required placeholder="145.00"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
             </div>
           </div>
 
-          <!-- Medidas e Fio -->
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">Dimensões *</label>
@@ -86,7 +80,6 @@
             </div>
           </div>
 
-          <!-- Pronta Entrega Checkbox -->
           <div class="flex items-center gap-3 p-3 bg-stone-50 rounded-xl border border-stone-200">
             <input type="checkbox" id="pronta_entrega" class="w-4 h-4 text-amber-800 rounded border-stone-300 focus:ring-amber-700">
             <label for="pronta_entrega" class="text-xs font-medium text-stone-800 cursor-pointer">
@@ -94,7 +87,6 @@
             </label>
           </div>
 
-          <!-- Foto da Peça -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Foto da Peça *</label>
             <div class="border-2 border-dashed border-stone-300 hover:border-amber-800 rounded-xl p-4 text-center cursor-pointer bg-stone-50 transition relative">
@@ -104,13 +96,12 @@
               </div>
               <div id="placeholder-upload">
                 <i class="fa-solid fa-camera text-2xl text-stone-400 mb-1"></i>
-                <p class="text-xs font-medium text-stone-600">Tirar foto com o celular ou escolher da galeria</p>
+                <p class="text-xs font-medium text-stone-600">Tirar foto pelo telemóvel ou escolher da galeria</p>
                 <p class="text-[10px] text-stone-400">JPG ou PNG</p>
               </div>
             </div>
           </div>
 
-          <!-- Botão Enviar -->
           <button type="submit" id="btn-submit"
             class="w-full py-3.5 bg-amber-900 hover:bg-amber-950 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo
@@ -119,12 +110,11 @@
       </div>
     </div>
 
-    <!-- COLUNA DIREITA: LISTAGEM E CONTROLE -->
     <div class="lg:col-span-7">
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex justify-between items-center mb-5">
           <div>
-            <h2 class="text-xl font-bold text-stone-900">Peças no Ateliê</h2>
+            <h2 class="text-xl font-bold text-stone-900">Peças Cadastradas</h2>
             <p class="text-xs text-stone-500">Pausar ou remover produtos da vitrine.</p>
           </div>
           <span id="contador-produtos" class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold">
@@ -137,9 +127,7 @@
           <p class="text-xs">Carregando catálogo...</p>
         </div>
 
-        <div id="lista-produtos" class="space-y-3 hidden">
-          <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="lista-produtos" class="space-y-3 hidden"></div>
 
         <div id="lista-vazia" class="hidden py-12 text-center text-stone-400">
           <i class="fa-solid fa-box-open text-3xl mb-2"></i>
@@ -153,15 +141,13 @@
 
   <script>
     // ==============================================================
-    // CREDENCIAIS DO SUPABASE (COLE AS MESMAS DO INDEX.HTML)
+    // CONFIGURAÇÃO DO SUPABASE
     // ==============================================================
-    const SUPABASE_URL = "SUA_SUPABASE_URL_AQUI";
-    const SUPABASE_ANON_KEY = "SUA_SUPABASE_ANON_KEY_AQUI";
+    const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     
-    let db = null;
-    if (SUPABASE_URL !== "SUA_SUPABASE_URL_AQUI") {
-      db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+    // Inicialização do cliente Supabase
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('form-produto');
     const fotoInput = document.getElementById('foto-input');
@@ -174,7 +160,6 @@
     const contadorProdutos = document.getElementById('contador-produtos');
     const btnSubmit = document.getElementById('btn-submit');
 
-    // Pré-visualização da Foto
     fotoInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -184,13 +169,7 @@
       }
     });
 
-    // Listar Peças
     async function carregarProdutos() {
-      if (!db) {
-        loading.innerHTML = `<p class="text-amber-800 text-xs">⚠️ Configure as credenciais do Supabase no topo do script para conectar o banco.</p>`;
-        return;
-      }
-
       loading.classList.remove('hidden');
       listaProdutos.classList.add('hidden');
       listaVazia.classList.add('hidden');
@@ -203,7 +182,7 @@
       loading.classList.add('hidden');
 
       if (error) {
-        alert("Erro ao buscar catálogo: " + error.message);
+        alert("Erro ao buscar peças: " + error.message);
         return;
       }
 
@@ -246,13 +225,8 @@
       });
     }
 
-    // Salvar Novo Produto com Upload de Imagem
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!db) {
-        alert("Preencha as chaves do Supabase no código do admin.html");
-        return;
-      }
       
       const file = fotoInput.files[0];
       if (!file) {
@@ -261,29 +235,27 @@
       }
 
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando imagem...`;
+      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A enviar foto...`;
 
       try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
 
-        // 1. Upload para o bucket 'fotos-tapetes'
+        // Upload para o bucket fotos-tapetes
         const { error: uploadError } = await db.storage
           .from('fotos-tapetes')
           .upload(fileName, file);
 
         if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
 
-        // 2. URL Pública da Imagem
         const { data: publicUrlData } = db.storage
           .from('fotos-tapetes')
           .getPublicUrl(fileName);
 
         const imagem_url = publicUrlData.publicUrl;
 
-        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Salvando peça...`;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A guardar peça...`;
 
-        // 3. Insert na Tabela 'produtos'
         const novoItem = {
           nome: document.getElementById('nome').value,
           categoria: document.getElementById('categoria').value,
@@ -296,9 +268,9 @@
         };
 
         const { error: insertError } = await db.from('produtos').insert([novoItem]);
-        if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
+        if (insertError) throw new Error("Erro ao guardar produto: " + insertError.message);
 
-        alert("Peça publicada com sucesso!");
+        alert("Peça publicada com sucesso no catálogo!");
         form.reset();
         previewContainer.classList.add('hidden');
         placeholderUpload.classList.remove('hidden');
@@ -319,7 +291,7 @@
     };
 
     window.excluirProduto = async (id) => {
-      if (!confirm("Tem certeza que deseja remover esta peça?")) return;
+      if (!confirm("Tem a certeza que deseja remover esta peça?")) return;
       const { error } = await db.from('produtos').delete().eq('id', id);
       if (error) alert("Erro: " + error.message);
       else carregarProdutos();
