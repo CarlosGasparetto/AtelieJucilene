@@ -81,7 +81,16 @@
       </nav>
 
       <!-- AÇÕES -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- BOTÃO ACESSO RESTRITO NO TOPO -->
+        <button onclick="acessarPainelRestrito()" title="Acesso Restrito da Artesã"
+          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-200/80 hover:bg-stone-300 text-stone-700 border border-stone-300/80 transition">
+          <i class="fa-solid fa-lock text-amber-700"></i>
+          <span class="hidden sm:inline">Acesso Restrito</span>
+        </button>
+
+        <!-- Botão WhatsApp Direto -->
         <a id="btn-whats-topo" href="#" target="_blank"
           class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
@@ -402,7 +411,7 @@
     </div>
   </section>
 
-  <!-- RODAPÉ COM ACESSO AO PAINEL -->
+  <!-- RODAPÉ -->
   <footer class="bg-stone-900 text-stone-300 py-12 border-t border-stone-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
       
@@ -427,11 +436,12 @@
       </div>
 
       <div>
-        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Área Restrita</h4>
-        <p class="text-xs text-stone-400 mb-2">Acesso para gerir fotos e peças.</p>
-        <a href="admin.html" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-medium border border-stone-700 transition">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Área da Artesã</h4>
+        <p class="text-xs text-stone-400 mb-2">Acesso protegido para cadastrar peças e fotos.</p>
+        <button onclick="acessarPainelRestrito()"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-medium border border-stone-700 transition">
           <i class="fa-solid fa-lock text-amber-500"></i> Painel Administrativo
-        </a>
+        </button>
       </div>
 
     </div>
@@ -488,20 +498,52 @@
   <!-- SCRIPTS & INTEGRAÇÕES -->
   <script>
     // ==============================================================
-    // CONFIGURAÇÕES ATUALIZADAS E INTEGRADAS
+    // CONFIGURAÇÕES SUPABASE & NÚMERO PADRÃO
     // ==============================================================
-    const WHATSAPP_NUMERO = "5517981347056";
+    let WHATSAPP_NUMERO = "5517981347056"; // Fallback inicial padrão
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
 
-    // Inicialização do cliente Supabase
+    // Inicialização do Supabase
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de tapetes de crochê.')}`;
-    document.getElementById('btn-whats-topo').href = linkWhatsBoasVindas;
-    document.getElementById('btn-whats-flutuante').href = linkWhatsBoasVindas;
+    // FUNÇÃO PARA ACESSO RESTRITO COM SENHA
+    window.acessarPainelRestrito = () => {
+      // Senha padrão de proteção simples para evitar cliques acidentais de visitantes
+      const senha = prompt("Área Restrita do Ateliê da Jucilene.\nDigite a senha de acesso (padrão: 1234):");
+      if (senha === "1234") {
+        window.location.href = "admin.html";
+      } else if (senha !== null) {
+        alert("Senha incorreta!");
+      }
+    };
 
-    // Catálogo demonstrativo de reserva caso a tabela ainda não contenha registos
+    // Atualiza links fixos de WhatsApp
+    function atualizarLinksWhats() {
+      const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de tapetes de crochê.')}`;
+      document.getElementById('btn-whats-topo').href = linkWhatsBoasVindas;
+      document.getElementById('btn-whats-flutuante').href = linkWhatsBoasVindas;
+    }
+
+    // Busca o WhatsApp mais atual na tabela 'configuracoes' do Supabase
+    async function carregarNumeroWhatsBanco() {
+      try {
+        const { data, error } = await db
+          .from('configuracoes')
+          .select('valor')
+          .eq('chave', 'whatsapp')
+          .maybeSingle();
+
+        if (data && data.valor && data.valor.trim() !== '') {
+          WHATSAPP_NUMERO = data.valor.trim();
+        }
+      } catch (e) {
+        console.warn("Usando número padrão:", e);
+      } finally {
+        atualizarLinksWhats();
+      }
+    }
+
     const catalogoDemo = [
       {
         id: "demo-1",
@@ -741,6 +783,7 @@
       document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
+    // Ações de WhatsApp com o número dinâmico
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
       const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -761,6 +804,7 @@
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
+    // Simulador Sob Medida
     let formatoSelecionado = "Retangular";
     window.setFormato = (f) => {
       formatoSelecionado = f;
@@ -786,7 +830,11 @@
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    window.addEventListener('DOMContentLoaded', carregarProdutos);
+    // Inicialização ao carregar a página
+    window.addEventListener('DOMContentLoaded', async () => {
+      await carregarNumeroWhatsBanco();
+      await carregarProdutos();
+    });
   </script>
 </body>
 </html>

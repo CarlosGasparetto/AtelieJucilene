@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Ateliê da Jucilene - Gerenciador de Peças</title>
+  <title>Painel Ateliê da Jucilene - Gerenciador de Peças & Configurações</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,6 +17,7 @@
 </head>
 <body class="bg-stone-50 text-stone-800 min-h-screen">
 
+  <!-- CABEÇALHO DO PAINEL -->
   <header class="bg-white border-b border-stone-200 sticky top-0 z-30 px-4 py-3 shadow-sm">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-3">
@@ -34,10 +35,37 @@
     </div>
   </header>
 
+  <!-- ÁREA DE TRABALHO -->
   <main class="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <div class="lg:col-span-5">
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 sticky top-20">
+    <!-- COLUNA ESQUERDA: CONFIGURAÇÕES E FORMULÁRIO -->
+    <div class="lg:col-span-5 space-y-6">
+
+      <!-- BLOCO: CONFIGURAÇÃO DO WHATSAPP -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+        <h2 class="text-lg font-bold text-stone-900 mb-1 flex items-center gap-2">
+          <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp de Vendas
+        </h2>
+        <p class="text-xs text-stone-500 mb-4">Número para onde todos os pedidos do site são enviados.</p>
+
+        <form id="form-config-whats" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Telefone com DDD (somente números)</label>
+            <div class="flex gap-2">
+              <input type="text" id="whats-config-input" required placeholder="5517981347056"
+                class="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 text-sm outline-none font-mono">
+              <button type="submit" id="btn-salvar-whats"
+                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+                <i class="fa-solid fa-check"></i> Salvar
+              </button>
+            </div>
+            <p class="text-[10px] text-stone-400 mt-1">Formato: 55 + DDD + Telefone (exemplo: 5517981347056)</p>
+          </div>
+        </form>
+      </div>
+      
+      <!-- BLOCO: CADASTRO DE NOVA PEÇA -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <h2 class="text-xl font-bold text-stone-900 mb-1 flex items-center gap-2">
           <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
         </h2>
@@ -96,7 +124,7 @@
               </div>
               <div id="placeholder-upload">
                 <i class="fa-solid fa-camera text-2xl text-stone-400 mb-1"></i>
-                <p class="text-xs font-medium text-stone-600">Tirar foto pelo telemóvel ou escolher da galeria</p>
+                <p class="text-xs font-medium text-stone-600">Tirar foto pelo celular ou escolher da galeria</p>
                 <p class="text-[10px] text-stone-400">JPG ou PNG</p>
               </div>
             </div>
@@ -108,10 +136,12 @@
           </button>
         </form>
       </div>
+
     </div>
 
+    <!-- COLUNA DIREITA: LISTAGEM DE PEÇAS CADASTRADAS -->
     <div class="lg:col-span-7">
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 sticky top-20">
         <div class="flex justify-between items-center mb-5">
           <div>
             <h2 class="text-xl font-bold text-stone-900">Peças Cadastradas</h2>
@@ -146,8 +176,12 @@
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     
-    // Inicialização do cliente Supabase
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Elementos da Página
+    const formConfigWhats = document.getElementById('form-config-whats');
+    const whatsInput = document.getElementById('whats-config-input');
+    const btnSalvarWhats = document.getElementById('btn-salvar-whats');
 
     const form = document.getElementById('form-produto');
     const fotoInput = document.getElementById('foto-input');
@@ -160,6 +194,54 @@
     const contadorProdutos = document.getElementById('contador-produtos');
     const btnSubmit = document.getElementById('btn-submit');
 
+    // 1. CARREGAR CONFIGURAÇÃO DO WHATSAPP
+    async function carregarConfigWhats() {
+      try {
+        const { data, error } = await db
+          .from('configuracoes')
+          .select('valor')
+          .eq('chave', 'whatsapp')
+          .maybeSingle();
+
+        if (data && data.valor) {
+          whatsInput.value = data.valor;
+        } else {
+          whatsInput.value = "5517981347056";
+        }
+      } catch (e) {
+        whatsInput.value = "5517981347056";
+      }
+    }
+
+    // 2. SALVAR NOVO NÚMERO DO WHATSAPP
+    formConfigWhats.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const novoNum = whatsInput.value.replace(/\D/g, '').trim();
+
+      if (novoNum.length < 10) {
+        alert("Digite um número válido com DDD (ex: 5517981347056)");
+        return;
+      }
+
+      btnSalvarWhats.disabled = true;
+      btnSalvarWhats.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+
+      try {
+        const { error } = await db
+          .from('configuracoes')
+          .upsert({ chave: 'whatsapp', valor: novoNum });
+
+        if (error) throw error;
+        alert("WhatsApp atualizado com sucesso! Toda a loja agora usará este novo número.");
+      } catch (err) {
+        alert("Erro ao salvar número: " + err.message);
+      } finally {
+        btnSalvarWhats.disabled = false;
+        btnSalvarWhats.innerHTML = `<i class="fa-solid fa-check"></i> Salvar`;
+      }
+    });
+
+    // 3. PREVIEW DA FOTO
     fotoInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -169,6 +251,7 @@
       }
     });
 
+    // 4. LISTAR PRODUTOS CADASTRADOS
     async function carregarProdutos() {
       loading.classList.remove('hidden');
       listaProdutos.classList.add('hidden');
@@ -203,11 +286,10 @@
           <img src="${item.imagem_url}" class="w-16 h-16 rounded-lg object-cover border border-stone-200">
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-              <h4 class="font-bold text-stone-900 text-sm truncate">${item.nome}</h4>
-              ${item.pronta_entrega ? '<span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded-full font-bold">Pronta Entrega</span>' : ''}
+              <h4 class="font-bold text-stone-900 text-sm truncate">${item.nome}</h4>${item.pronta_entrega ? '<span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded-full font-bold">Pronta Entrega</span>' : ''}
               ${!item.ativo ? '<span class="px-2 py-0.5 text-[10px] bg-stone-200 text-stone-600 rounded-full font-medium">Oculto</span>' : ''}
             </div>
-            <p class="text-xs text-stone-500">${item.medidas} • ${item.fio}</p>
+            <p class="text-xs text-stone-500">${item.medidas} •${item.fio}</p>
             <p class="text-sm font-bold text-amber-900 mt-0.5">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
           </div>
           <div class="flex items-center gap-1.5">
@@ -225,6 +307,7 @@
       });
     }
 
+    // 5. CADASTRAR PRODUTO COM FOTO
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -235,13 +318,12 @@
       }
 
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A enviar foto...`;
+      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto...`;
 
       try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
 
-        // Upload para o bucket fotos-tapetes
         const { error: uploadError } = await db.storage
           .from('fotos-tapetes')
           .upload(fileName, file);
@@ -254,7 +336,7 @@
 
         const imagem_url = publicUrlData.publicUrl;
 
-        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> A guardar peça...`;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Salvando dados...`;
 
         const novoItem = {
           nome: document.getElementById('nome').value,
@@ -268,7 +350,7 @@
         };
 
         const { error: insertError } = await db.from('produtos').insert([novoItem]);
-        if (insertError) throw new Error("Erro ao guardar produto: " + insertError.message);
+        if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
 
         alert("Peça publicada com sucesso no catálogo!");
         form.reset();
@@ -291,12 +373,14 @@
     };
 
     window.excluirProduto = async (id) => {
-      if (!confirm("Tem a certeza que deseja remover esta peça?")) return;
+      if (!confirm("Tem certeza que deseja remover esta peça?")) return;
       const { error } = await db.from('produtos').delete().eq('id', id);
       if (error) alert("Erro: " + error.message);
       else carregarProdutos();
     };
 
+    // Inicialização
+    carregarConfigWhats();
     carregarProdutos();
   </script>
 </body>
