@@ -59,7 +59,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => {
-          console.log('ServiceWorker não registrado:', err);
+          console.log('ServiceWorker:', err);
         });
       });
     }
@@ -90,8 +90,8 @@
         </div>
       </a>
 
-      <!-- MENU NAVEGAÇÃO -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
+      <!-- MENU NAVEGAÇÃO DESKTOP -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-stone-700">
         <a href="#colecao" class="hover:text-argila-700 transition">Coleção</a>
         <a href="#sob-medida" class="hover:text-argila-700 transition">Sob Medida</a>
         <a href="#sobre" class="hover:text-argila-700 transition">A Artesã</a>
@@ -99,19 +99,19 @@
         <a href="#faq" class="hover:text-argila-700 transition">Dúvidas</a>
       </nav>
 
-      <!-- AÇÕES DO TOPO -->
+      <!-- AÇÕES DO TOPO DIREITO -->
       <div class="flex items-center gap-2 sm:gap-3">
         
-        <!-- BOTÃO ACESSO RESTRITO (COM SENHA) -->
+        <!-- BOTÃO ACESSO RESTRITO DESKTOP (COM SENHA) -->
         <button onclick="acessarPainelRestrito()" title="Acesso da Artesã"
-          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-200/80 hover:bg-stone-300 text-stone-700 border border-stone-300/80 transition">
+          class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-200/80 hover:bg-stone-300 text-stone-700 border border-stone-300/80 transition">
           <i class="fa-solid fa-lock text-amber-700"></i>
-          <span class="hidden sm:inline">Acesso Restrito</span>
+          <span>Acesso Restrito</span>
         </button>
 
-        <!-- Botão WhatsApp Direto -->
+        <!-- Botão WhatsApp Direto (Visível em Telas Médias/Grandes) -->
         <a id="btn-whats-topo" href="#" target="_blank"
-          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+          class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
         </a>
 
@@ -122,9 +122,99 @@
             0
           </span>
         </button>
+
+        <!-- MENU SUSPENSO / HAMBÚRGUER (3 BARRINHAS) -->
+        <button onclick="toggleMenuMobile(true)" class="p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 transition" title="Abrir Menu">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- ================= GAVETA DO MENU SUSPENSO (MOBILE/TABLET) ================= -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMenuMobile(false)"></div>
+  <aside id="menu-drawer" class="fixed top-0 right-0 h-full w-full max-w-xs sm:max-w-sm bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+    
+    <!-- Topo do Menu -->
+    <div class="p-5 border-b border-stone-200 flex items-center justify-between bg-[#FAF8F5]">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full bg-argila-100 flex items-center justify-center text-lg">🧶</div>
+        <div>
+          <h3 class="font-serif font-bold text-stone-900 text-sm leading-tight">Ateliê da Jucilene</h3>
+          <p class="text-[10px] text-argila-700 uppercase font-semibold">Menu Principal</p>
+        </div>
+      </div>
+      <button onclick="toggleMenuMobile(false)" class="w-8 h-8 rounded-full bg-stone-200/80 hover:bg-stone-300 flex items-center justify-center text-stone-600">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+    </div>
+
+    <!-- Links de Navegação -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-2 text-stone-800">
+      <a href="#colecao" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
+        <i class="fa-solid fa-gem text-argila-700 w-5 text-center"></i> Coleção de Tapetes
+      </a>
+      <a href="#sob-medida" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
+        <i class="fa-solid fa-ruler-combined text-argila-700 w-5 text-center"></i> Encomenda Sob Medida
+      </a>
+      <a href="#sobre" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
+        <i class="fa-solid fa-heart text-argila-700 w-5 text-center"></i> Sobre a Artesã
+      </a>
+      <a href="#cuidados" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
+        <i class="fa-solid fa-hands-bubbles text-argila-700 w-5 text-center"></i> Guia de Lavagem
+      </a>
+      <a href="#faq" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
+        <i class="fa-solid fa-circle-question text-argila-700 w-5 text-center"></i> Dúvidas Frequentes
+      </a>
+
+      <div class="pt-3 border-t border-stone-200 space-y-2">
+        <!-- Botão WhatsApp no Menu -->
+        <a id="btn-whats-menu" href="#" target="_blank"
+          class="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i> Conversar no WhatsApp
+        </a>
+
+        <!-- Botão Instalar App dentro do Menu -->
+        <button onclick="acionarInstalacaoApp()" id="btn-menu-instalar"
+          class="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-sm transition border border-amber-300">
+          <i class="fa-solid fa-mobile-screen-button"></i> Instalar Aplicativo
+        </button>
+
+        <!-- Acesso Restrito no Menu -->
+        <button onclick="toggleMenuMobile(false); acessarPainelRestrito();"
+          class="flex items-center justify-center gap-2 w-full p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition border border-stone-300">
+          <i class="fa-solid fa-lock text-amber-700"></i> Painel da Artesã (Restrito)
+        </button>
+      </div>
+    </div>
+
+    <!-- Rodapé do Menu -->
+    <div class="p-4 bg-stone-50 border-t border-stone-200 text-center">
+      <p class="text-[11px] text-stone-500">Ateliê da Jucilene • Feito à Mão 🧶</p>
+    </div>
+  </aside>
+
+  <!-- ================= BANNER FLUTUANTE DE INSTALAÇÃO DO APP ================= -->
+  <div id="banner-instalacao" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl z-50 border border-amber-800/40 transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow">
+        🧶
+      </div>
+      <div class="min-w-0">
+        <h4 class="text-xs font-bold text-white leading-tight">Instale o App do Ateliê</h4>
+        <p class="text-[11px] text-stone-300 leading-tight mt-0.5 truncate">Acesse o catálogo rápido na tela do seu celular!</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 flex-shrink-0">
+      <button onclick="acionarInstalacaoApp()"
+        class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition">
+        Instalar
+      </button>
+      <button onclick="dispensarBannerInstalacao()" class="w-8 h-8 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-white flex items-center justify-center text-xs transition" title="Fechar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
 
   <!-- HERO SECTION -->
   <section class="relative pt-12 pb-20 md:py-24 overflow-hidden">
@@ -519,14 +609,85 @@
     // ==============================================================
     // CONFIGURAÇÕES SUPABASE & NÚMERO PADRÃO
     // ==============================================================
-    let WHATSAPP_NUMERO = "5517981347056"; // Fallback inicial padrão
+    let WHATSAPP_NUMERO = "5517981347056";
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
 
-    // Inicialização do Supabase
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // FUNÇÃO PARA ACESSO RESTRITO COM SENHA
+    // ==============================================================
+    // CONTROLE DO MENU SUSPENSO (HAMBÚRGUER)
+    // ==============================================================
+    window.toggleMenuMobile = (abrir) => {
+      const drawer = document.getElementById('menu-drawer');
+      const overlay = document.getElementById('menu-overlay');
+      if (abrir) {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        drawer.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    };
+
+    // ==============================================================
+    // CONTROLE DE INSTALAÇÃO DO APP (PWA)
+    // ==============================================================
+    let instaladorAppPrompt = null;
+    const bannerInstalacao = document.getElementById('banner-instalacao');
+
+    // Captura o evento de instalação do navegador (Chrome, Edge, Android)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      instaladorAppPrompt = e;
+
+      // Exibe o banner apenas se não foi dispensado recentemente nesta sessão
+      if (!sessionStorage.getItem('banner_instalacao_dispensado')) {
+        setTimeout(() => {
+          bannerInstalacao.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+        }, 1500);
+      }
+    });
+
+    // Detecta iPhone / iOS Safari para guiar a instalação
+    function isIos() {
+      return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase()) && !window.MSStream;
+    }
+
+    function isInStandaloneMode() {
+      return ('standalone' in window.navigator) && (window.navigator.standalone);
+    }
+
+    // Se estiver no iOS e não estiver instalado, mostra o banner na primeira visita
+    window.addEventListener('DOMContentLoaded', () => {
+      if (isIos() && !isInStandaloneMode() && !sessionStorage.getItem('banner_instalacao_dispensado')) {
+        setTimeout(() => {
+          bannerInstalacao.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+        }, 2000);
+      }
+    });
+
+    window.acionarInstalacaoApp = async () => {
+      if (instaladorAppPrompt) {
+        instaladorAppPrompt.prompt();
+        const { outcome } = await instaladorAppPrompt.userChoice;
+        instaladorAppPrompt = null;
+        dispensarBannerInstalacao();
+      } else if (isIos()) {
+        alert("📲 Para instalar no seu iPhone:\n\n1. Toque no botão 'Compartilhar' (ícone de quadrado com seta para cima no rodapé do Safari);\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.");
+      } else {
+        alert("📲 Para instalar este aplicativo:\nToque nos 3 pontinhos do seu navegador e escolha 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
+      }
+    };
+
+    window.dispensarBannerInstalacao = () => {
+      bannerInstalacao.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+      sessionStorage.setItem('banner_instalacao_dispensado', 'true');
+    };
+
+    // ==============================================================
+    // ACESSO RESTRITO COM SENHA
+    // ==============================================================
     window.acessarPainelRestrito = () => {
       const senha = prompt("Área Restrita do Ateliê da Jucilene.\nDigite a senha de acesso (padrão: 1234):");
       if (senha === "1234") {
@@ -536,14 +697,16 @@
       }
     };
 
-    // Atualiza links fixos de WhatsApp
+    // ==============================================================
+    // ATUALIZAÇÃO DO WHATSAPP (BANCO SUPABASE)
+    // ==============================================================
     function atualizarLinksWhats() {
       const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de tapetes de crochê.')}`;
       document.getElementById('btn-whats-topo').href = linkWhatsBoasVindas;
       document.getElementById('btn-whats-flutuante').href = linkWhatsBoasVindas;
+      document.getElementById('btn-whats-menu').href = linkWhatsBoasVindas;
     }
 
-    // Busca o WhatsApp mais atual na tabela 'configuracoes' do Supabase
     async function carregarNumeroWhatsBanco() {
       try {
         const { data, error } = await db
@@ -562,6 +725,9 @@
       }
     }
 
+    // ==============================================================
+    // CATÁLOGO E PRODUTOS
+    // ==============================================================
     const catalogoDemo = [
       {
         id: "demo-1",
@@ -801,7 +967,7 @@
       document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    // Ações de WhatsApp com número dinâmico do banco
+    // Ações de WhatsApp
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
       const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
