@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ateliê da Jucilene | Crochê, Artes & Fios</title>
   
+  <!-- ================= SUPORTE A PWA / INSTALAÇÃO COMO APP ================= -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#542612">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ateliê Jucilene">
+  <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=192&q=80">
+
   <!-- Tailwind CSS & Supabase SDK -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -45,6 +53,17 @@
       backdrop-filter: blur(12px);
     }
   </style>
+
+  <!-- Registro do Service Worker para PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.log('ServiceWorker não registrado:', err);
+        });
+      });
+    }
+  </script>
 </head>
 
 <body class="bg-[#FAF8F5] text-stone-800 font-sans antialiased selection:bg-argila-200 selection:text-argila-900">
@@ -80,11 +99,11 @@
         <a href="#faq" class="hover:text-argila-700 transition">Dúvidas</a>
       </nav>
 
-      <!-- AÇÕES -->
+      <!-- AÇÕES DO TOPO -->
       <div class="flex items-center gap-2 sm:gap-3">
         
-        <!-- BOTÃO ACESSO RESTRITO NO TOPO -->
-        <button onclick="acessarPainelRestrito()" title="Acesso Restrito da Artesã"
+        <!-- BOTÃO ACESSO RESTRITO (COM SENHA) -->
+        <button onclick="acessarPainelRestrito()" title="Acesso da Artesã"
           class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-200/80 hover:bg-stone-300 text-stone-700 border border-stone-300/80 transition">
           <i class="fa-solid fa-lock text-amber-700"></i>
           <span class="hidden sm:inline">Acesso Restrito</span>
@@ -509,7 +528,6 @@
 
     // FUNÇÃO PARA ACESSO RESTRITO COM SENHA
     window.acessarPainelRestrito = () => {
-      // Senha padrão de proteção simples para evitar cliques acidentais de visitantes
       const senha = prompt("Área Restrita do Ateliê da Jucilene.\nDigite a senha de acesso (padrão: 1234):");
       if (senha === "1234") {
         window.location.href = "admin.html";
@@ -783,7 +801,7 @@
       document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    // Ações de WhatsApp com o número dinâmico
+    // Ações de WhatsApp com número dinâmico do banco
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
       const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
