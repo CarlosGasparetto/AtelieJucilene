@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ateliê da Jucilene | Crochê, Artes & Fios</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            argila: {
+              50: '#FBF8F5',
+              100: '#F5ECE5',
+              200: '#EBD8CB',
+              600: '#B86F48',
+              700: '#9B5430',
+              800: '#7E3F21',
+              900: '#542612',
+            },
+            cru: {
+              50: '#FAF8F5',
+              100: '#F2EDE4',
+              200: '#E3D7C5',
+              700: '#8A7B66',
+              800: '#5E5242'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+
+<body class="bg-[#FAF8F5] text-stone-800 font-sans antialiased selection:bg-argila-200 selection:text-argila-900">
+
+  <!-- ================= BARRA DE AVISO SUPERIOR ================= -->
+  <div class="bg-argila-900 text-stone-200 text-xs py-2 px-4 text-center font-medium tracking-wide">
+    ✨ Peças 100% artesanais feitas à mão • <span class="text-amber-300 font-bold">5% de desconto no Pix</span> • Enviamos para todo o Brasil
+  </div>
+
+  <!-- ================= CABEÇALHO / NAVBAR ================= -->
+  <header class="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-full bg-argila-100 border border-argila-200 flex items-center justify-center text-xl text-argila-700 shadow-sm group-hover:scale-105 transition">
+          🧶
+        </div>
+        <div>
+          <span class="block font-serif text-xl sm:text-2xl font-bold tracking-tight text-stone-900 leading-none">
+            Ateliê da Jucilene
+          </span>
+          <span class="text-[11px] font-medium tracking-wider uppercase text-argila-700">Crochê, Artes & Fios</span>
+        </div>
+      </a>
+
+      <!-- MENU DESKTOP -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
+        <a href="#colecao" class="hover:text-argila-700 transition">Coleção</a>
+        <a href="#sob-medida" class="hover:text-argila-700 transition">Sob Medida</a>
+        <a href="#sobre" class="hover:text-argila-700 transition">A Artesã</a>
+        <a href="#cuidados" class="hover:text-argila-700 transition">Guia de Lavagem</a>
+        <a href="#faq" class="hover:text-argila-700 transition">Dúvidas</a>
+      </nav>
+
+      <!-- AÇÕES DO TOPO -->
+      <div class="flex items-center gap-3">
+        <!-- Botão WhatsApp Direto -->
+        <a id="btn-whats-topo" href="#" target="_blank"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+          <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
+        </a>
+
+        <!-- Botão Carrinho -->
+        <button onclick="toggleCarrinho(true)" class="relative p-2.5 rounded-full hover:bg-stone-200/60 transition text-stone-700">
+          <i class="fa-solid fa-basket-shopping text-lg"></i>
+          <span id="badge-carrinho" class="absolute -top-1 -right-1 w-5 h-5 bg-argila-700 text-white text-[11px] font-bold rounded-full flex items-center justify-center hidden">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="relative pt-12 pb-20 md:py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-argila-100 border border-argila-200 text-argila-800 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-argila-600 animate-pulse"></span>
+            Feito à Mão com Amor em Cada Ponto
+          </div>
+
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-stone-900 font-bold leading-[1.15]">
+            Aqueça e embeleze seu lar com a elegância do <span class="italic text-argila-700">crochê artesanal</span>.
+          </h1>
+
+          <p class="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Tapetes, passadeiras e jogos exclusivos em barbante de alta qualidade. Peças encorpadas, macias ao toque e desenhadas para transformar a sua casa em um ambiente acolhedor.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#colecao" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-argila-700 hover:bg-argila-800 text-white font-semibold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-gem text-xs"></i> Ver Modelos Prontos
+            </a>
+            <a href="#sob-medida" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 font-semibold text-sm transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-ruler-combined text-xs text-argila-700"></i> Pedir Sob Medida
+            </a>
+          </div>
+
+          <!-- Selos de Confiança -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-stone-200/80">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-hand-holding-heart text-argila-700 text-lg"></i>
+              <span class="text-xs font-medium text-stone-700">100% Manual</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-leaf text-argila-700 text-lg"></i>
+              <span class="text-xs font-medium text-stone-700">Fios Selecionados</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-truck-fast text-argila-700 text-lg"></i>
+              <span class="text-xs font-medium text-stone-700">Envio Seguro</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-pix text-emerald-600 text-lg"></i>
+              <span class="text-xs font-medium text-stone-700">5% OFF no Pix</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foto de Destaque -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md lg:max-w-none">
+            <div class="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-stone-200">
+              <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1000&q=80"
+                alt="Tapete de crochê artesanal Ateliê da Jucilene"
+                class="w-full h-full object-cover">
+            </div>
+
+            <!-- Card Flutuante -->
+            <div class="absolute -bottom-6 -left-6 glass-card p-4 rounded-2xl border border-white/80 shadow-xl max-w-xs flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800 text-xl font-bold">
+                ⭐
+              </div>
+              <div>
+                <p class="text-xs font-bold text-stone-900">Artesanato com Alma</p>
+                <p class="text-[11px] text-stone-500">Cada laçada feita com atenção rigorosa aos detalhes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CATÁLOGO / VITRINE ================= -->
+  <section id="colecao" class="py-20 bg-white border-y border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Nossa Coleção Exclusiva</h2>
+        <p class="text-stone-600 mt-2 text-sm sm:text-base">
+          Escolha peças de pronta entrega ou solicite a confecção na cor e medida perfeita para o seu cômodo.
+        </p>
+
+        <!-- Filtros de Categoria -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-8" id="filtros-container">
+          <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">
+            Todos os Modelos
+          </button>
+          <button onclick="filtrarCategoria('passadeiras')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="passadeiras">
+            Passadeiras de Cozinha
+          </button>
+          <button onclick="filtrarCategoria('sala')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="sala">
+            Tapetes de Sala
+          </button>
+          <button onclick="filtrarCategoria('banheiro')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="banheiro">
+            Jogos de Banheiro
+          </button>
+          <button onclick="filtrarCategoria('infantil')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="infantil">
+            Linha Infantil
+          </button>
+          <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">
+            ⚡ Pronta Entrega
+          </button>
+        </div>
+      </div>
+
+      <!-- Estado de Carregamento -->
+      <div id="loading-catalogo" class="py-16 text-center text-stone-400">
+        <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-argila-700"></i>
+        <p class="text-sm font-medium">Carregando peças do ateliê...</p>
+      </div>
+
+      <!-- Grade de Produtos -->
+      <div id="grade-produtos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SIMULADOR SOB MEDIDA ================= -->
+  <section id="sob-medida" class="py-20 bg-argila-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-md border border-argila-200">
+        
+        <div class="text-center max-w-xl mx-auto mb-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Personalize seu Espaço</span>
+          <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1">Simulador de Tapete Sob Medida</h2>
+          <p class="text-stone-600 text-xs sm:text-sm mt-2">
+            Precisa de um tamanho especial para o seu corredor, pia ou quarto? Monte a sua ideia e envie direto no WhatsApp da Jucilene.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Formato -->
+          <div>
+            <label class="block text-xs font-bold text-stone-800 mb-2">1. Formato do Tapete</label>
+            <div class="grid grid-cols-3 gap-3">
+              <button type="button" onclick="setFormato('Retangular')" class-formato="Retangular" class="formato-btn py-3 rounded-xl border-2 border-argila-700 bg-argila-50 text-argila-900 text-xs font-bold flex flex-col items-center gap-1">
+                <i class="fa-regular fa-square text-base"></i> Retangular
+              </button>
+              <button type="button" onclick="setFormato('Redondo')" class-formato="Redondo" class="formato-btn py-3 rounded-xl border border-stone-200 text-stone-600 text-xs font-bold flex flex-col items-center gap-1">
+                <i class="fa-regular fa-circle text-base"></i> Redondo
+              </button>
+              <button type="button" onclick="setFormato('Oval')" class-formato="Oval" class="formato-btn py-3 rounded-xl border border-stone-200 text-stone-600 text-xs font-bold flex flex-col items-center gap-1">
+                <i class="fa-solid fa-shapes text-base"></i> Oval Clássico
+              </button>
+            </div>
+          </div>
+
+          <!-- Dimensões -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-stone-800 mb-1">Comprimento / Diâmetro (metros)</label>
+              <input type="number" step="0.05" id="sim-comp" value="1.50" min="0.60" max="3.00"
+                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm font-semibold">
+            </div>
+            <div id="box-largura">
+              <label class="block text-xs font-bold text-stone-800 mb-1">Largura (metros)</label>
+              <input type="number" step="0.05" id="sim-larg" value="0.50" min="0.40" max="2.50"
+                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm font-semibold">
+            </div>
+          </div>
+
+          <!-- Cores Preferidas -->
+          <div>
+            <label class="block text-xs font-bold text-stone-800 mb-1">Cores Desejadas</label>
+            <input type="text" id="sim-cores" placeholder="Ex: Cru com detalhes em Terracota e Mostarda"
+              class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm">
+          </div>
+
+          <!-- Bico / Acabamento -->
+          <div>
+            <label class="block text-xs font-bold text-stone-800 mb-1">Estilo do Bico de Acabamento</label>
+            <select id="sim-bico" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm bg-white">
+              <option value="Bico Simples Tradicional">Bico Simples Tradicional (Leque)</option>
+              <option value="Bico Russo Duplo (Luxo)">Bico Russo Duplo (Mais encorpado e rendado)</option>
+              <option value="Ponto Pipoca Texturizado">Ponto Pipoca Texturizado</option>
+              <option value="Franjas em Macramê">Franjas com nós em Macramê</option>
+            </select>
+          </div>
+
+          <button onclick="solicitarSobMedida()"
+            class="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Medidas para Orçamento no WhatsApp
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SOBRE A ARTESÃ ================= -->
+  <section id="sobre" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-5">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80"
+              alt="Artesã tecendo crochê"
+              class="w-full rounded-3xl shadow-xl border-4 border-argila-100 object-cover">
+            <div class="absolute -bottom-5 -right-5 bg-argila-800 text-white p-4 rounded-2xl shadow-lg text-center">
+              <span class="block text-2xl font-serif font-bold">100%</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider">Dedicação</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Por Trás de Cada Ponto</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900 leading-tight">
+            Olá, sou a Jucilene! Bem-vindo ao meu ateliê de arte manual.
+          </h2>
+          <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
+            O crochê para mim é mais do que uma técnica: é a arte de transformar fios simples em peças que acolhem famílias, decoram lares e criam memórias. Cada tapete que sai das minhas mãos é produzido com paciência, carinho e uma seleção rigorosa de fios que garantem maciez, firmeza e longa durabilidade.
+          </p>
+          <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
+            Aqui você não encontra produtos industriais feitos em escala acelerada. Cada peça é única, feita respeitando o tempo do trabalho manual para que chegue à sua casa impecável.
+          </p>
+
+          <div class="flex items-center gap-6 pt-4">
+            <div>
+              <p class="font-serif text-2xl font-bold text-argila-900">Barbantes Premium</p>
+              <p class="text-xs text-stone-500">Cores firmes que não desbotam</p>
+            </div>
+            <div class="border-l border-stone-200 pl-6">
+              <p class="font-serif text-2xl font-bold text-argila-900">Atendimento Pessoal</p>
+              <p class="text-xs text-stone-500">Você fala direto com quem faz</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GUIA DE LAVAGEM ================= -->
+  <section id="cuidados" class="py-20 bg-stone-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Durabilidade Garantida</span>
+      <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1 mb-10">Como Lavar e Conservar seu Tapete de Crochê</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-left">
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-argila-100 text-argila-800 flex items-center justify-center font-bold text-sm mb-4">1</div>
+          <h3 class="font-bold text-sm text-stone-900 mb-1">Sabão Neutro</h3>
+          <p class="text-xs text-stone-600">Use preferencialmente sabão líquido neutro ou de coco. Evite alvejantes com cloro para preservar as cores.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-argila-100 text-argila-800 flex items-center justify-center font-bold text-sm mb-4">2</div>
+          <h3 class="font-bold text-sm text-stone-900 mb-1">Lavagem Suave</h3>
+          <p class="text-xs text-stone-600">Pode ser lavado na máquina no ciclo "Delicado/Roupas Leves". Dica: use saquinho protetor para roupas finas.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-argila-100 text-argila-800 flex items-center justify-center font-bold text-sm mb-4">3</div>
+          <h3 class="font-bold text-sm text-stone-900 mb-1">Não Torcer</h3>
+          <p class="text-xs text-stone-600">Apenas aperte para tirar o excesso de água. Evite centrifugação agressiva para não deformar os bicos.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-argila-100 text-argila-800 flex items-center justify-center font-bold text-sm mb-4">4</div>
+          <h3 class="font-bold text-sm text-stone-900 mb-1">Secar na Horizontal</h3>
+          <p class="text-xs text-stone-600">Seque à sombra esticado na horizontal (sobre o varal ou toalha). Não pendure pelas pontas com grampos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq" class="py-20 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="font-serif text-3xl font-bold text-stone-900 text-center mb-8">Perguntas Frequentes</h2>
+
+      <div class="space-y-4">
+        <details class="group bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <summary class="font-semibold text-stone-900 text-sm cursor-pointer list-none flex justify-between items-center">
+            Qual é o prazo para confecção de encomendas sob medida?
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs sm:text-sm text-stone-600 mt-3 pt-3 border-t border-stone-200">
+            Para peças personalizadas, o prazo médio de confecção varia de <strong>7 a 15 dias úteis</strong>, a depender do tamanho da peça e da fila de pedidos do momento. Para modelos marcados como "Pronta Entrega", a postagem ocorre em até 2 dias úteis.
+          </p>
+        </details>
+
+        <details class="group bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <summary class="font-semibold text-stone-900 text-sm cursor-pointer list-none flex justify-between items-center">
+            Como funciona a entrega e o frete?
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs sm:text-sm text-stone-600 mt-3 pt-3 border-t border-stone-200">
+            Enviamos para todo o território nacional através dos Correios (PAC ou Sedex) e transportadoras conveniadas com desconto especial. Ao fechar o pedido pelo WhatsApp, basta informar seu CEP para calcularmos a opção mais econômica e rápida.
+          </p>
+        </details>
+
+        <details class="group bg-stone-50 p-4 rounded-2xl border border-stone-200">
+          <summary class="font-semibold text-stone-900 text-sm cursor-pointer list-none flex justify-between items-center">
+            Quais são as formas de pagamento aceitas?
+            <i class="fa-solid fa-chevron-down text-xs text-stone-400 group-open:rotate-180 transition"></i>
+          </summary>
+          <p class="text-xs sm:text-sm text-stone-600 mt-3 pt-3 border-t border-stone-200">
+            Aceitamos <strong>Pix com 5% de desconto</strong> ou Cartão de Crédito (com parcelamento via link de pagamento seguro). Para encomendas personalizadas, solicitamos uma entrada de 50% para compra do material e o restante na finalização antes do envio.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RODAPÉ COM LINK DO PAINEL ================= -->
+  <footer class="bg-stone-900 text-stone-300 py-12 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      
+      <div class="md:col-span-2 space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🧶</span>
+          <span class="font-serif text-xl font-bold text-white">Ateliê da Jucilene</span>
+        </div>
+        <p class="text-xs text-stone-400 max-w-sm">
+          Crochê, Artes & Fios. Transformando barbantes ecológicos e nobres em tapeçaria artesanal com afeto e sofisticação para o seu lar.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Navegação</h4>
+        <ul class="text-xs space-y-2 text-stone-400">
+          <li><a href="#colecao" class="hover:text-white transition">Modelos Prontos</a></li>
+          <li><a href="#sob-medida" class="hover:text-white transition">Tapetes Sob Medida</a></li>
+          <li><a href="#sobre" class="hover:text-white transition">Sobre a Jucilene</a></li>
+          <li><a href="#cuidados" class="hover:text-white transition">Como Lavar</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-200 mb-3">Área Restrita</h4>
+        <p class="text-xs text-stone-400 mb-2">Espaço exclusivo para gerenciamento de catálogo e fotos.</p>
+        <!-- LINK PARA O PAINEL ADMINISTRATIVO -->
+        <a href="admin.html" target="_blank"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-medium border border-stone-700 transition">
+          <i class="fa-solid fa-lock text-amber-500"></i> Painel Administrativo
+        </a>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
+      <p>© 2026 Ateliê da Jucilene — Crochê, Artes & Fios. Todos os direitos reservados.</p>
+      <div class="flex items-center gap-4">
+        <span>Feito com dedicação artesanal</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= GAVETA DO CARRINHO (DRAWER) ================= -->
+  <div id="carrinho-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCarrinho(false)"></div>
+  <aside id="carrinho-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-4 border-b border-stone-200 flex items-center justify-between">
+      <h3 class="font-serif font-bold text-stone-900 text-lg flex items-center gap-2">
+        <i class="fa-solid fa-basket-shopping text-argila-700"></i> Seu Carrinho
+      </h3>
+      <button onclick="toggleCarrinho(false)" class="p-2 text-stone-400 hover:text-stone-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Lista de Itens -->
+    <div id="carrinho-itens" class="flex-1 overflow-y-auto p-4 space-y-3">
+      <!-- Vazio por padrão -->
+    </div>
+
+    <!-- Rodapé do Carrinho -->
+    <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-3">
+      <div class="flex justify-between text-xs text-stone-600">
+        <span>Subtotal</span>
+        <span id="carrinho-subtotal">R$ 0,00</span>
+      </div>
+      <div class="flex justify-between text-xs text-emerald-700 font-bold">
+        <span>Desconto no Pix (5%)</span>
+        <span id="carrinho-desconto">- R$ 0,00</span>
+      </div>
+      <div class="flex justify-between text-base font-bold text-stone-900 pt-2 border-t border-stone-200">
+        <span>Total no Pix</span>
+        <span id="carrinho-total" class="text-argila-800">R$ 0,00</span>
+      </div>
+
+      <button onclick="finalizarPedidoWhatsApp()"
+        class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow transition flex items-center justify-center gap-2">
+        <i class="fa-brands fa-whatsapp text-lg"></i> Concluir Pedido no WhatsApp
+      </button>
+      <p class="text-[10px] text-center text-stone-400">Você combinará as cores, frete e pagamento diretamente com a Jucilene.</p>
+    </div>
+  </aside>
+
+  <!-- ================= BOTÃO WHATSAPP FLUTUANTE ================= -->
+  <a id="btn-whats-flutuante" href="#" target="_blank"
+    class="fixed bottom-6 right-6 z-30 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-xl hover:scale-110 transition text-2xl"
+    title="Tire dúvidas no WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- ================= SCRIPTS & SUPABASE ================= -->
+  <script>
+    // ==============================================================
+    // CONFIGURAÇÕES GERAIS (PREENCHA AQUI)
+    // ==============================================================
+    const WHATSAPP_NUMERO = "5517999999999"; // Coloque o DDD + Telefone da Jucilene (sem espaços ou traços)
+    
+    const SUPABASE_URL = "SUA_SUPABASE_URL_AQUI";
+    const SUPABASE_ANON_KEY = "SUA_SUPABASE_ANON_KEY_AQUI";
+
+    // Inicializa o cliente Supabase se as credenciais existirem
+    let db = null;
+    if (SUPABASE_URL !== "SUA_SUPABASE_URL_AQUI") {
+      db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    // Configura links de WhatsApp
+    const whatsLinkPadrao = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer mais sobre os tapetes de crochê.')}`;
+    document.getElementById('btn-whats-topo').href = whatsLinkPadrao;
+    document.getElementById('btn-whats-flutuante').href = whatsLinkPadrao;
+
+    // Catálogo de Demonstração (Fallback)
+    const catalogoDemo = [
+      {
+        id: "1",
+        nome: "Passadeira Cozinha Boho",
+        categoria: "passadeiras",
+        preco: 145.00,
+        medidas: "1,40m x 0,45m",
+        fio: "Barbante Ecológico nº 8",
+        pronta_entrega: true,
+        imagem_url: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: "2",
+        nome: "Tapete Redondo Mandala Sala",
+        categoria: "sala",
+        preco: 230.00,
+        medidas: "1,15m de diâmetro",
+        fio: "100% Algodão Premium nº 6",
+        pronta_entrega: false,
+        imagem_url: "https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: "3",
+        nome: "Jogo de Banheiro Russo 3 Peças",
+        categoria: "banheiro",
+        preco: 185.00,
+        medidas: "Tampa + 2 Tapetes",
+        fio: "Barbante Macio nº 6",
+        pronta_entrega: true,
+        imagem_url: "https://images.unsplash.com/photo-1584589167171-541ce45f1eea?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: "4",
+        nome: "Tapete Ursinho Infantil Quarto",
+        categoria: "infantil",
+        preco: 160.00,
+        medidas: "1,00m de diâmetro",
+        fio: "Barbante Hipoalergênico",
+        pronta_entrega: false,
+        imagem_url: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=800&q=80"
+      }
+    ];
+
+    let produtos = [];
+    let carrinho = [];
+
+    // Carregar Produtos do Supabase ou Fallback
+    async function carregarProdutos() {
+      const loading = document.getElementById('loading-catalogo');
+      const grade = document.getElementById('grade-produtos');
+
+      try {
+        if (db) {
+          const { data, error } = await db
+            .from('produtos')
+            .select('*')
+            .eq('ativo', true)
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            produtos = data;
+          } else {
+            produtos = catalogoDemo;
+          }
+        } else {
+          produtos = catalogoDemo;
+        }
+      } catch (e) {
+        produtos = catalogoDemo;
+      } finally {
+        loading.classList.add('hidden');
+        grade.classList.remove('hidden');
+        renderizarGrade(produtos);
+      }
+    }
+
+    // Renderizar Produtos na Vitrine
+    function renderizarGrade(lista) {
+      const grade = document.getElementById('grade-produtos');
+      grade.innerHTML = '';
+
+      if (lista.length === 0) {
+        grade.innerHTML = `<p class="col-span-full text-center text-stone-400 text-sm py-12">Nenhuma peça encontrada nesta categoria no momento.</p>`;
+        return;
+      }
+
+      lista.forEach(prod => {
+        const precoPix = prod.preco * 0.95;
+        const div = document.createElement('div');
+        div.className = "bg-[#FAF8F5] rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:shadow-md transition flex flex-col";
+        div.innerHTML = `
+          <div class="relative aspect-square rounded-2xl overflow-hidden bg-stone-200 mb-4">
+            <img src="${prod.imagem_url}" alt="${prod.nome}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            ${prod.pronta_entrega ? `
+              <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+                ⚡ Pronta Entrega
+              </span>
+            ` : `
+              <span class="absolute top-3 left-3 bg-argila-800/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+                🧵 Sob Encomenda
+              </span>
+            `}
+          </div>
+
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <p class="text-[11px] text-argila-700 font-bold uppercase tracking-wider">${prod.fio}</p>
+              <h3 class="font-bold text-stone-900 text-base mt-0.5 leading-snug">${prod.nome}</h3>
+              <p class="text-xs text-stone-500 mt-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-ruler"></i> ${prod.medidas}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-stone-200/60">
+              <div class="flex items-baseline justify-between mb-3">
+                <div>
+                  <span class="text-xs text-stone-400 line-through">R$ ${parseFloat(prod.preco).toFixed(2).replace('.', ',')}</span>
+                  <p class="text-lg font-bold text-argila-900">R$ ${precoPix.toFixed(2).replace('.', ',')} <span class="text-[11px] text-emerald-700 font-semibold">no Pix</span></p>
+                </div>
+                <span class="text-[11px] text-stone-500 font-medium">ou 3x de R$ ${(prod.preco/3).toFixed(2).replace('.', ',')}</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="adicionarAoCarrinho('${prod.id}')"
+                  class="w-full py-2.5 rounded-xl bg-argila-700 hover:bg-argila-800 text-white text-xs font-bold transition flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-cart-plus"></i> Carrinho
+                </button>
+                <button onclick="comprarAgoraWhatsApp('${prod.nome}', '${prod.medidas}', ${prod.preco})"
+                  class="w-full py-2.5 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 text-xs font-bold transition flex items-center justify-center gap-1.5">
+                  <i class="fa-brands fa-whatsapp text-emerald-600"></i> Pedir Já
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        grade.appendChild(div);
+      });
+    }
+
+    // Filtragem por Categoria
+    window.filtrarCategoria = (cat) => {
+      document.querySelectorAll('.filtro-btn').forEach(btn => {
+        if (btn.dataset.categoria === cat) {
+          btn.className = "filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition";
+        } else {
+          btn.className = "filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition";
+        }
+      });
+
+      if (cat === 'todos') {
+        renderizarGrade(produtos);
+      } else if (cat === 'pronta_entrega') {
+        renderizarGrade(produtos.filter(p => p.pronta_entrega));
+      } else {
+        renderizarGrade(produtos.filter(p => p.categoria === cat));
+      }
+    };
+
+    // Gestão do Carrinho
+    window.toggleCarrinho = (abrir) => {
+      const drawer = document.getElementById('carrinho-drawer');
+      const overlay = document.getElementById('carrinho-overlay');
+      if (abrir) {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        drawer.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    };
+
+    window.adicionarAoCarrinho = (id) => {
+      const prod = produtos.find(p => p.id == id);
+      if (!prod) return;
+
+      const itemExistente = carrinho.find(item => item.id == id);
+      if (itemExistente) {
+        itemExistente.qtd += 1;
+      } else {
+        carrinho.push({ ...prod, qtd: 1 });
+      }
+
+      atualizarCarrinho();
+      toggleCarrinho(true);
+    };
+
+    window.alterarQtd = (id, delta) => {
+      const item = carrinho.find(i => i.id == id);
+      if (!item) return;
+      item.qtd += delta;
+      if (item.qtd <= 0) {
+        carrinho = carrinho.filter(i => i.id != id);
+      }
+      atualizarCarrinho();
+    };
+
+    function atualizarCarrinho() {
+      const container = document.getElementById('carrinho-itens');
+      const badge = document.getElementById('badge-carrinho');
+      container.innerHTML = '';
+
+      let subtotal = 0;
+      let qtdTotal = 0;
+
+      if (carrinho.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-stone-400">
+            <i class="fa-solid fa-basket-shopping text-3xl mb-2"></i>
+            <p class="text-xs">Seu carrinho está vazio.</p>
+          </div>
+        `;
+        badge.classList.add('hidden');
+      } else {
+        carrinho.forEach(item => {
+          subtotal += item.preco * item.qtd;
+          qtdTotal += item.qtd;
+
+          const el = document.createElement('div');
+          el.className = "flex items-center gap-3 p-2.5 bg-stone-50 rounded-xl border border-stone-200";
+          el.innerHTML = `
+            <img src="${item.imagem_url}" class="w-14 h-14 rounded-lg object-cover">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-stone-900 truncate">${item.nome}</h4>
+              <p class="text-[11px] text-stone-500">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
+              <div class="flex items-center gap-2 mt-1">
+                <button onclick="alterarQtd('${item.id}', -1)" class="w-5 h-5 bg-stone-200 rounded flex items-center justify-center text-xs font-bold">-</button>
+                <span class="text-xs font-bold">${item.qtd}</span>
+                <button onclick="alterarQtd('${item.id}', 1)" class="w-5 h-5 bg-stone-200 rounded flex items-center justify-center text-xs font-bold">+</button>
+              </div>
+            </div>
+            <p class="text-xs font-bold text-argila-800">R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}</p>
+          `;
+          container.appendChild(el);
+        });
+
+        badge.textContent = qtdTotal;
+        badge.classList.remove('hidden');
+      }
+
+      const desc = subtotal * 0.05;
+      const total = subtotal - desc;
+
+      document.getElementById('carrinho-subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      document.getElementById('carrinho-desconto').textContent = `- R$ ${desc.toFixed(2).replace('.', ',')}`;
+      document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    // Ações de WhatsApp
+    window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
+      const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
+      window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    window.finalizarPedidoWhatsApp = () => {
+      if (carrinho.length === 0) return;
+      let msg = `Olá Jucilene! Gostaria de fechar o seguinte pedido no *Ateliê da Jucilene*:\n\n`;
+      let total = 0;
+
+      carrinho.forEach(item => {
+        msg += `• *${item.qtd}x ${item.nome}* (${item.medidas}) - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
+        total += item.preco * item.qtd;
+      });
+
+      const totalPix = total * 0.95;
+      msg += `\n*Total estimado no Pix (5% OFF): R$ ${totalPix.toFixed(2).replace('.', ',')}*\n\nQual o frete para o meu CEP e o prazo de envio?`;
+      window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    // Simulador Sob Medida
+    let formatoSelecionado = "Retangular";
+    window.setFormato = (f) => {
+      formatoSelecionado = f;
+      document.querySelectorAll('.formato-btn').forEach(btn => {
+        if (btn.getAttribute('class-formato') === f) {
+          btn.className = "formato-btn py-3 rounded-xl border-2 border-argila-700 bg-argila-50 text-argila-900 text-xs font-bold flex flex-col items-center gap-1";
+        } else {
+          btn.className = "formato-btn py-3 rounded-xl border border-stone-200 text-stone-600 text-xs font-bold flex flex-col items-center gap-1";
+        }
+      });
+      document.getElementById('box-largura').style.display = (f === 'Redondo') ? 'none' : 'block';
+    };
+
+    window.solicitarSobMedida = () => {
+      const comp = document.getElementById('sim-comp').value;
+      const larg = document.getElementById('sim-larg').value;
+      const cores = document.getElementById('sim-cores').value || "A combinar";
+      const bico = document.getElementById('sim-bico').value;
+
+      const dim = (formatoSelecionado === 'Redondo') ? `${comp}m de diâmetro` : `${comp}m x ${larg}m`;
+      const msg = `Olá Jucilene! Gostaria de um orçamento de tapete sob medida:\n\n• Formato: *${formatoSelecionado}*\n• Dimensões: *${dim}*\n• Cores desejadas: *${cores}*\n• Acabamento de borda: *${bico}*\n\nPoderia me passar o valor e prazo de confecção?`;
+
+      window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', carregarProdutos);
+  </script>
+</body>
+</html>

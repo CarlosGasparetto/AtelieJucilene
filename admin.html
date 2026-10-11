@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Ateliê da Jucilene - Gerenciador de Peças</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800 min-h-screen">
+
+  <!-- CABEÇALHO DO PAINEL -->
+  <header class="bg-white border-b border-stone-200 sticky top-0 z-30 px-4 py-3 shadow-sm">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-lg">
+          🧶
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-stone-900 leading-tight">Ateliê da Jucilene</h1>
+          <p class="text-[11px] text-stone-500 font-medium">Crochê, Artes & Fios • Painel de Controle</p>
+        </div>
+      </div>
+      <a href="index.html" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Site
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- COLUNA ESQUERDA: FORMULÁRIO DE CADASTRO -->
+    <div class="lg:col-span-5">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 sticky top-20">
+        <h2 class="text-xl font-bold text-stone-900 mb-1 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
+        </h2>
+        <p class="text-xs text-stone-500 mb-6">Preencha as informações e tire uma foto para publicar na vitrine.</p>
+
+        <form id="form-produto" class="space-y-4">
+          <!-- Nome da Peça -->
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Modelo *</label>
+            <input type="text" id="nome" required placeholder="Ex: Passadeira Cozinha Boho Cru"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
+          </div>
+
+          <!-- Categoria e Preço -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Categoria *</label>
+              <select id="categoria" required class="w-full px-3 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none bg-white">
+                <option value="passadeiras">Passadeira</option>
+                <option value="sala">Tapete de Sala</option>
+                <option value="banheiro">Jogo de Banheiro</option>
+                <option value="infantil">Linha Infantil</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Preço Normal (R$) *</label>
+              <input type="number" step="0.01" id="preco" required placeholder="145.00"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
+            </div>
+          </div>
+
+          <!-- Medidas e Fio -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Dimensões *</label>
+              <input type="text" id="medidas" required placeholder="Ex: 1,40m x 0,45m"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-700 mb-1">Tipo de Barbante *</label>
+              <input type="text" id="fio" required placeholder="Ex: Barbante nº 8 Ecológico"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
+            </div>
+          </div>
+
+          <!-- Pronta Entrega Checkbox -->
+          <div class="flex items-center gap-3 p-3 bg-stone-50 rounded-xl border border-stone-200">
+            <input type="checkbox" id="pronta_entrega" class="w-4 h-4 text-amber-800 rounded border-stone-300 focus:ring-amber-700">
+            <label for="pronta_entrega" class="text-xs font-medium text-stone-800 cursor-pointer">
+              Disponível para <strong class="text-emerald-700">Pronta Entrega</strong> (envio imediato)
+            </label>
+          </div>
+
+          <!-- Foto da Peça -->
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Foto da Peça *</label>
+            <div class="border-2 border-dashed border-stone-300 hover:border-amber-800 rounded-xl p-4 text-center cursor-pointer bg-stone-50 transition relative">
+              <input type="file" id="foto-input" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer">
+              <div id="preview-container" class="hidden mb-2">
+                <img id="img-preview" src="" class="h-28 mx-auto rounded-lg object-cover shadow-sm">
+              </div>
+              <div id="placeholder-upload">
+                <i class="fa-solid fa-camera text-2xl text-stone-400 mb-1"></i>
+                <p class="text-xs font-medium text-stone-600">Tirar foto com o celular ou escolher da galeria</p>
+                <p class="text-[10px] text-stone-400">JPG ou PNG</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão Enviar -->
+          <button type="submit" id="btn-submit"
+            class="w-full py-3.5 bg-amber-900 hover:bg-amber-950 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: LISTAGEM E CONTROLE -->
+    <div class="lg:col-span-7">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-center mb-5">
+          <div>
+            <h2 class="text-xl font-bold text-stone-900">Peças no Ateliê</h2>
+            <p class="text-xs text-stone-500">Pausar ou remover produtos da vitrine.</p>
+          </div>
+          <span id="contador-produtos" class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold">
+            0 peças
+          </span>
+        </div>
+
+        <div id="loading" class="py-12 text-center text-stone-400">
+          <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+          <p class="text-xs">Carregando catálogo...</p>
+        </div>
+
+        <div id="lista-produtos" class="space-y-3 hidden">
+          <!-- Injetado dinamicamente via JS -->
+        </div>
+
+        <div id="lista-vazia" class="hidden py-12 text-center text-stone-400">
+          <i class="fa-solid fa-box-open text-3xl mb-2"></i>
+          <p class="text-sm font-medium">Nenhuma peça cadastrada ainda.</p>
+          <p class="text-xs text-stone-400">Cadastre a primeira peça no formulário ao lado.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // ==============================================================
+    // CREDENCIAIS DO SUPABASE (COLE AS MESMAS DO INDEX.HTML)
+    // ==============================================================
+    const SUPABASE_URL = "SUA_SUPABASE_URL_AQUI";
+    const SUPABASE_ANON_KEY = "SUA_SUPABASE_ANON_KEY_AQUI";
+    
+    let db = null;
+    if (SUPABASE_URL !== "SUA_SUPABASE_URL_AQUI") {
+      db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    const form = document.getElementById('form-produto');
+    const fotoInput = document.getElementById('foto-input');
+    const previewContainer = document.getElementById('preview-container');
+    const imgPreview = document.getElementById('img-preview');
+    const placeholderUpload = document.getElementById('placeholder-upload');
+    const listaProdutos = document.getElementById('lista-produtos');
+    const loading = document.getElementById('loading');
+    const listaVazia = document.getElementById('lista-vazia');
+    const contadorProdutos = document.getElementById('contador-produtos');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    // Pré-visualização da Foto
+    fotoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        imgPreview.src = URL.createObjectURL(file);
+        previewContainer.classList.remove('hidden');
+        placeholderUpload.classList.add('hidden');
+      }
+    });
+
+    // Listar Peças
+    async function carregarProdutos() {
+      if (!db) {
+        loading.innerHTML = `<p class="text-amber-800 text-xs">⚠️ Configure as credenciais do Supabase no topo do script para conectar o banco.</p>`;
+        return;
+      }
+
+      loading.classList.remove('hidden');
+      listaProdutos.classList.add('hidden');
+      listaVazia.classList.add('hidden');
+
+      const { data, error } = await db
+        .from('produtos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      loading.classList.add('hidden');
+
+      if (error) {
+        alert("Erro ao buscar catálogo: " + error.message);
+        return;
+      }
+
+      contadorProdutos.textContent = `${data.length} peças`;
+
+      if (data.length === 0) {
+        listaVazia.classList.remove('hidden');
+        return;
+      }
+
+      listaProdutos.innerHTML = '';
+      listaProdutos.classList.remove('hidden');
+
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "flex items-center gap-4 p-3 bg-stone-50 hover:bg-stone-100/70 border border-stone-200 rounded-xl transition";
+        div.innerHTML = `
+          <img src="${item.imagem_url}" class="w-16 h-16 rounded-lg object-cover border border-stone-200">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold text-stone-900 text-sm truncate">${item.nome}</h4>
+              ${item.pronta_entrega ? '<span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded-full font-bold">Pronta Entrega</span>' : ''}
+              ${!item.ativo ? '<span class="px-2 py-0.5 text-[10px] bg-stone-200 text-stone-600 rounded-full font-medium">Oculto</span>' : ''}
+            </div>
+            <p class="text-xs text-stone-500">${item.medidas} • ${item.fio}</p>
+            <p class="text-sm font-bold text-amber-900 mt-0.5">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="alternarStatus('${item.id}', ${item.ativo})" title="${item.ativo ? 'Ocultar da loja' : 'Mostrar na loja'}"
+              class="w-8 h-8 rounded-lg flex items-center justify-center text-xs ${item.ativo ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'} transition">
+              <i class="fa-solid ${item.ativo ? 'fa-eye' : 'fa-eye-slash'}"></i>
+            </button>
+            <button onclick="excluirProduto('${item.id}')" title="Excluir"
+              class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 transition">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+        listaProdutos.appendChild(div);
+      });
+    }
+
+    // Salvar Novo Produto com Upload de Imagem
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!db) {
+        alert("Preencha as chaves do Supabase no código do admin.html");
+        return;
+      }
+      
+      const file = fotoInput.files[0];
+      if (!file) {
+        alert("Selecione uma foto da peça.");
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando imagem...`;
+
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+
+        // 1. Upload para o bucket 'fotos-tapetes'
+        const { error: uploadError } = await db.storage
+          .from('fotos-tapetes')
+          .upload(fileName, file);
+
+        if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
+
+        // 2. URL Pública da Imagem
+        const { data: publicUrlData } = db.storage
+          .from('fotos-tapetes')
+          .getPublicUrl(fileName);
+
+        const imagem_url = publicUrlData.publicUrl;
+
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Salvando peça...`;
+
+        // 3. Insert na Tabela 'produtos'
+        const novoItem = {
+          nome: document.getElementById('nome').value,
+          categoria: document.getElementById('categoria').value,
+          preco: parseFloat(document.getElementById('preco').value),
+          medidas: document.getElementById('medidas').value,
+          fio: document.getElementById('fio').value,
+          pronta_entrega: document.getElementById('pronta_entrega').checked,
+          imagem_url: imagem_url,
+          ativo: true
+        };
+
+        const { error: insertError } = await db.from('produtos').insert([novoItem]);
+        if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
+
+        alert("Peça publicada com sucesso!");
+        form.reset();
+        previewContainer.classList.add('hidden');
+        placeholderUpload.classList.remove('hidden');
+        carregarProdutos();
+
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo`;
+      }
+    });
+
+    window.alternarStatus = async (id, statusAtual) => {
+      const { error } = await db.from('produtos').update({ ativo: !statusAtual }).eq('id', id);
+      if (error) alert("Erro: " + error.message);
+      else carregarProdutos();
+    };
+
+    window.excluirProduto = async (id) => {
+      if (!confirm("Tem certeza que deseja remover esta peça?")) return;
+      const { error } = await db.from('produtos').delete().eq('id', id);
+      if (error) alert("Erro: " + error.message);
+      else carregarProdutos();
+    };
+
+    carregarProdutos();
+  </script>
+</body>
+</html>
