@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Ateliê da Jucilene - Gerenciador & Modelos</title>
+  <title>Painel Ateliê da Jucilene - Gestão & Calculadora de Preços</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,6 +31,9 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
+        <a href="#calculadora-secao" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-2 rounded-lg font-semibold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-calculator"></i> <span class="hidden sm:inline">Calcular Preço</span>
+        </a>
         <a href="index.html" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Loja
         </a>
@@ -41,11 +44,11 @@
   <!-- ÁREA PRINCIPAL -->
   <main class="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <!-- COLUNA ESQUERDA: FORMULÁRIO DE CADASTRO -->
+    <!-- COLUNA ESQUERDA: CADASTRO, CONFIGURAÇÕES E QR CODE -->
     <div class="lg:col-span-5 space-y-6">
 
-      <!-- BLOCO: CADASTRAR NOVA PEÇA COM AUTO-PREENCHIMENTO -->
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+      <!-- BLOCO 1: CADASTRAR NOVA PEÇA -->
+      <div id="bloco-cadastro" class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex items-center justify-between mb-1">
           <h2 class="text-xl font-bold text-stone-900 flex items-center gap-2">
             <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
@@ -53,7 +56,7 @@
         </div>
         <p class="text-xs text-stone-500 mb-5">Tire uma foto e preencha as informações para exibir na vitrine.</p>
 
-        <!-- SELETOR DE MODELO PADRONIZADO (TEMPLATES) -->
+        <!-- SELETOR DE MODELO PADRONIZADO -->
         <div class="mb-5 p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl">
           <div class="flex items-center justify-between mb-1.5">
             <label class="block text-xs font-bold text-amber-950 flex items-center gap-1.5">
@@ -67,14 +70,14 @@
             class="w-full px-3 py-2 rounded-lg border border-amber-300 focus:border-amber-800 text-xs bg-white outline-none font-medium">
             <option value="">-- Selecione para preencher automático ou digite abaixo --</option>
           </select>
-          <p class="text-[10px] text-amber-800/80 mt-1">Ao escolher, nome, categoria, preço e barbante são preenchidos automaticamente.</p>
+          <p class="text-[10px] text-amber-800/80 mt-1">Preenche nome, categoria, preço e barbante automaticamente.</p>
         </div>
 
         <form id="form-produto" class="space-y-4">
           <!-- Nome da Peça -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Modelo *</label>
-            <input type="text" id="nome" required placeholder="Ex: Passadeira Cozinha Boho Cru"
+            <input type="text" id="nome" required placeholder="Ex: Jogo 6 Porta-Copos Algodão Cru"
               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
           </div>
 
@@ -90,9 +93,14 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-stone-700 mb-1">Preço (R$) *</label>
-              <input type="number" step="0.01" id="preco" required placeholder="145.00"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
+              <div class="flex justify-between items-center mb-1">
+                <label class="block text-xs font-semibold text-stone-700">Preço (R$) *</label>
+                <a href="#calculadora-secao" class="text-[11px] text-emerald-700 hover:underline font-bold flex items-center gap-0.5">
+                  <i class="fa-solid fa-calculator"></i> Calcular
+                </a>
+              </div>
+              <input type="number" step="0.01" id="preco" required placeholder="68.00"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition font-bold text-amber-950">
             </div>
           </div>
 
@@ -100,12 +108,12 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">Dimensões *</label>
-              <input type="text" id="medidas" required placeholder="Ex: 1,40m x 0,45m"
+              <input type="text" id="medidas" required placeholder="Ex: 15cm diâmetro (6 un.)"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
             </div>
             <div>
               <label class="block text-xs font-semibold text-stone-700 mb-1">Tipo de Barbante *</label>
-              <input type="text" id="fio" required placeholder="Ex: Barbante nº 8 Ecológico"
+              <input type="text" id="fio" required placeholder="Ex: Algodão Cru nº 6"
                 class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
             </div>
           </div>
@@ -142,7 +150,7 @@
         </form>
       </div>
 
-      <!-- BLOCO: WHATSAPP DE VENDAS -->
+      <!-- BLOCO 2: WHATSAPP DE VENDAS -->
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <h2 class="text-base font-bold text-stone-900 mb-1 flex items-center gap-2">
           <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp de Vendas
@@ -158,7 +166,7 @@
         </form>
       </div>
 
-      <!-- BLOCO: QR CODE -->
+      <!-- BLOCO 3: QR CODE -->
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-base font-bold text-stone-900 flex items-center gap-2">
@@ -177,9 +185,141 @@
 
     </div>
 
-    <!-- COLUNA DIREITA: PEÇAS ATIVAS NO CATÁLOGO -->
-    <div class="lg:col-span-7">
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 sticky top-20">
+    <!-- COLUNA DIREITA: CALCULADORA DE PRECIFICAÇÃO + PEÇAS CADASTRADAS -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- ================= CALCULADORA DE PRECIFICAÇÃO ARTESANAL ================= -->
+      <div id="calculadora-secao" class="bg-white rounded-2xl p-6 shadow-sm border-2 border-amber-200">
+        <div class="flex items-center justify-between mb-1">
+          <h2 class="text-xl font-bold text-stone-900 flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-amber-800"></i> Calculadora de Precificação
+          </h2>
+          <span class="px-2.5 py-1 bg-amber-100 text-amber-900 text-[11px] font-bold rounded-full">Fórmula Profissional</span>
+        </div>
+        <p class="text-xs text-stone-500 mb-5">Calcule o preço justo separando o custo do barbante, o seu salário por hora e o lucro do ateliê.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- 1. Custo do Fio / Balança -->
+          <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+            <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-scale-balanced"></i> 1. Barbante & Embalagem
+            </h3>
+            
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Preço do Cone (R$)</label>
+                <input type="number" step="0.01" id="calc-preco-cone" value="24.00" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none focus:border-amber-800 bg-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Peso do Cone (g)</label>
+                <input type="number" step="1" id="calc-peso-cone" value="400" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none focus:border-amber-800 bg-white">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Peso da Peça Pronta (g)</label>
+                <input type="number" step="1" id="calc-peso-peca" value="200" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Embalagem / Tag (R$)</label>
+                <input type="number" step="0.01" id="calc-embalagem" value="3.00" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none focus:border-amber-800 bg-white">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Mão de Obra e Margens -->
+          <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
+            <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-clock"></i> 2. Tempo & Margem do Ateliê
+            </h3>
+
+            <div>
+              <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Valor da sua Hora (R$/h)</label>
+              <input type="number" step="0.50" id="calc-valor-hora" value="16.00" oninput="calcularPrecoArtesanato()"
+                class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none focus:border-amber-800 bg-white">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Horas gastas</label>
+                <input type="number" step="1" min="0" id="calc-horas" value="2" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Minutos gastos</label>
+                <input type="number" step="5" min="0" max="59" id="calc-minutos" value="0" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Custos Fixos (%)</label>
+                <input type="number" step="1" id="calc-indiretos" value="10" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none bg-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Lucro Ateliê (%)</label>
+                <input type="number" step="1" id="calc-lucro" value="25" oninput="calcularPrecoArtesanato()"
+                  class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none bg-white">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RESUMO DETALHADO DOS CÁLCULOS -->
+        <div class="mt-4 p-4 rounded-2xl bg-amber-50/90 border border-amber-200 space-y-3">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center border-b border-amber-200/80 pb-3">
+            <div class="bg-white/80 p-2 rounded-lg">
+              <span class="block text-[10px] text-stone-500">Material + Emb.</span>
+              <strong id="res-material" class="text-xs font-bold text-stone-800">R$ 15,00</strong>
+            </div>
+            <div class="bg-white/80 p-2 rounded-lg">
+              <span class="block text-[10px] text-stone-500">Seu Salário (Mão de Obra)</span>
+              <strong id="res-mao-obra" class="text-xs font-bold text-emerald-800">R$ 32,00</strong>
+            </div>
+            <div class="bg-white/80 p-2 rounded-lg">
+              <span class="block text-[10px] text-stone-500">Custos Indiretos</span>
+              <strong id="res-indiretos" class="text-xs font-bold text-stone-800">R$ 4,70</strong>
+            </div>
+            <div class="bg-white/80 p-2 rounded-lg">
+              <span class="block text-[10px] text-stone-500">Lucro do Ateliê</span>
+              <strong id="res-lucro" class="text-xs font-bold text-amber-900">R$ 12,93</strong>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
+            <div class="flex items-center gap-6">
+              <div>
+                <span class="block text-[11px] font-semibold text-emerald-800">Preço à Vista / Pix (5% OFF):</span>
+                <span id="res-preco-pix" class="text-xl font-bold text-emerald-700">R$ 64,63</span>
+              </div>
+              <div class="border-l border-amber-300 pl-6">
+                <span class="block text-[11px] font-bold text-amber-950">Preço de Vitrine (Site / Cartão):</span>
+                <span id="res-preco-vitrine" class="text-2xl font-extrabold text-amber-950">R$ 68,00</span>
+              </div>
+            </div>
+
+            <button type="button" onclick="transferirPrecoParaCadastro()"
+              class="w-full sm:w-auto px-4 py-2.5 bg-amber-900 hover:bg-amber-950 text-white text-xs font-bold rounded-xl shadow transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i> Usar Preço no Cadastro
+            </button>
+          </div>
+          <p class="text-[10px] text-stone-500 text-center sm:text-left">
+            💡 O <strong>Preço de Vitrine</strong> já inclui a margem para que, quando a cliente ganhar os 5% de desconto no Pix, você receba o valor integral planejado!
+          </p>
+        </div>
+      </div>
+
+      <!-- ================= LISTAGEM DE PEÇAS CADASTRADAS ================= -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex justify-between items-center mb-5">
           <div>
             <h2 class="text-xl font-bold text-stone-900">Peças Cadastradas na Vitrine</h2>
@@ -203,11 +343,12 @@
           <p class="text-xs text-stone-400">Cadastre a primeira peça no formulário ao lado.</p>
         </div>
       </div>
+
     </div>
 
   </main>
 
-  <!-- ================= MODAL: GERENCIAR MODELOS PADRONIZADOS ================= -->
+  <!-- MODAL: GERENCIAR MODELOS PADRONIZADOS -->
   <div id="modal-modelos" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3">
@@ -217,12 +358,11 @@
         <button onclick="fecharModalModelos()" class="text-stone-400 hover:text-stone-700 text-xl font-bold">&times;</button>
       </div>
 
-      <!-- Formulário para Criar Novo Modelo Padrão -->
       <form id="form-novo-modelo-padrao" class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
         <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wide">+ Criar Novo Modelo Base</h4>
         <div>
           <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Nome do Modelo Base *</label>
-          <input type="text" id="mod-nome" required placeholder="Ex: Caminho de Mesa Espiral" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+          <input type="text" id="mod-nome" required placeholder="Ex: Jogo 6 Porta-Copos Algodão Cru" class="w-full px-3 py-1.5 rounded-lg border text-xs">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -231,17 +371,17 @@
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Preço Sugerido (R$) *</label>
-            <input type="number" step="0.01" id="mod-preco" required placeholder="130.00" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+            <input type="number" step="0.01" id="mod-preco" required placeholder="68.00" class="w-full px-3 py-1.5 rounded-lg border text-xs">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Dimensões Padrão *</label>
-            <input type="text" id="mod-medidas" required placeholder="Ex: 1,20m x 0,40m" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+            <input type="text" id="mod-medidas" required placeholder="Ex: 15cm (6 unidades)" class="w-full px-3 py-1.5 rounded-lg border text-xs">
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Barbante Padrão *</label>
-            <input type="text" id="mod-fio" required placeholder="Ex: Barbante nº 6" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+            <input type="text" id="mod-fio" required placeholder="Ex: Algodão Cru nº 6" class="w-full px-3 py-1.5 rounded-lg border text-xs">
           </div>
         </div>
         <button type="submit" class="w-full py-2 bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs rounded-lg transition">
@@ -249,7 +389,6 @@
         </button>
       </form>
 
-      <!-- Lista de Modelos Padronizados -->
       <div>
         <h4 class="text-xs font-bold text-stone-800 mb-2">Modelos Base Existentes:</h4>
         <div id="lista-modelos-base" class="space-y-2 max-h-56 overflow-y-auto"></div>
@@ -265,11 +404,10 @@
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Listas em memória
     let categoriasLista = [];
     let modelosPadraoLista = [];
+    let precoVitrineCalculado = 68.00;
 
-    // Elementos DOM
     const selectCategoria = document.getElementById('categoria');
     const selectModeloPadrao = document.getElementById('select-modelo-padrao');
     const formProduto = document.getElementById('form-produto');
@@ -284,6 +422,77 @@
     const btnSubmit = document.getElementById('btn-submit');
 
     // ==============================================================
+    // LÓGICA DA CALCULADORA DE PRECIFICAÇÃO ARTESANAL
+    // ==============================================================
+    function carregarPreferenciasCalculadora() {
+      if (localStorage.getItem('calc_preco_cone')) document.getElementById('calc-preco-cone').value = localStorage.getItem('calc_preco_cone');
+      if (localStorage.getItem('calc_peso_cone')) document.getElementById('calc-peso-cone').value = localStorage.getItem('calc_peso_cone');
+      if (localStorage.getItem('calc_valor_hora')) document.getElementById('calc-valor-hora').value = localStorage.getItem('calc_valor_hora');
+      calcularPrecoArtesanato();
+    }
+
+    window.calcularPrecoArtesanato = () => {
+      const precoCone = parseFloat(document.getElementById('calc-preco-cone').value) || 0;
+      const pesoCone = parseFloat(document.getElementById('calc-peso-cone').value) || 1;
+      const pesoPeca = parseFloat(document.getElementById('calc-peso-peca').value) || 0;
+      const embalagem = parseFloat(document.getElementById('calc-embalagem').value) || 0;
+      
+      const valorHora = parseFloat(document.getElementById('calc-valor-hora').value) || 0;
+      const horas = parseFloat(document.getElementById('calc-horas').value) || 0;
+      const minutos = parseFloat(document.getElementById('calc-minutos').value) || 0;
+      
+      const percIndiretos = parseFloat(document.getElementById('calc-indiretos').value) || 0;
+      const percLucro = parseFloat(document.getElementById('calc-lucro').value) || 0;
+
+      // Salvar preferências básicas no navegador da Jucilene
+      localStorage.setItem('calc_preco_cone', precoCone);
+      localStorage.setItem('calc_peso_cone', pesoCone);
+      localStorage.setItem('calc_valor_hora', valorHora);
+
+      // 1. Custo de Material (Fio proporcional ao peso + Embalagem)
+      const custoFio = (precoCone / pesoCone) * pesoPeca;
+      const custoMaterialTotal = custoFio + embalagem;
+
+      // 2. Custo de Mão de Obra (Salário da Artesã)
+      const tempoTotalHoras = horas + (minutos / 60);
+      const custoMaoDeObra = tempoTotalHoras * valorHora;
+
+      // 3. Custos Indiretos (% sobre Material + Mão de Obra)
+      const subtotalProducao = custoMaterialTotal + custoMaoDeObra;
+      const valorIndiretos = subtotalProducao * (percIndiretos / 100);
+
+      // 4. Custo Total e Lucro do Ateliê
+      const custoTotalPeca = subtotalProducao + valorIndiretos;
+      const valorLucro = custoTotalPeca * (percLucro / 100);
+
+      // 5. Preço Final à Vista (Pix) e Preço de Vitrine (considerando 5% OFF no Pix)
+      const precoPix = custoTotalPeca + valorLucro;
+      const precoVitrine = Math.ceil(precoPix / 0.95); // Arredonda para cima para um preço comercial limpo
+      precoVitrineCalculado = precoVitrine;
+
+      // Atualizar interface
+      const formatarMoeda = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
+      document.getElementById('res-material').textContent = formatarMoeda(custoMaterialTotal);
+      document.getElementById('res-mao-obra').textContent = formatarMoeda(custoMaoDeObra);
+      document.getElementById('res-indiretos').textContent = formatarMoeda(valorIndiretos);
+      document.getElementById('res-lucro').textContent = formatarMoeda(valorLucro);
+      document.getElementById('res-preco-pix').textContent = formatarMoeda(precoPix);
+      document.getElementById('res-preco-vitrine').textContent = formatarMoeda(precoVitrine);
+    };
+
+    window.transferirPrecoParaCadastro = () => {
+      const campoPreco = document.getElementById('preco');
+      campoPreco.value = precoVitrineCalculado.toFixed(2);
+      
+      // Efeito visual de destaque e rolagem suave até o formulário
+      document.getElementById('bloco-cadastro').scrollIntoView({ behavior: 'smooth' });
+      campoPreco.classList.add('ring-4', 'ring-amber-500', 'bg-amber-50');
+      setTimeout(() => {
+        campoPreco.classList.remove('ring-4', 'ring-amber-500', 'bg-amber-50');
+      }, 2000);
+    };
+
+    // ==============================================================
     // 1. CARREGAR CATEGORIAS DINÂMICAS DO SUPABASE
     // ==============================================================
     async function carregarCategorias() {
@@ -296,9 +505,7 @@
         if (error) throw error;
         categoriasLista = data || [];
 
-        // Atualiza o select do form principal
         selectCategoria.innerHTML = '<option value="">Selecione uma Categoria</option>';
-        // Atualiza também o select do modal de modelos
         const modCatSelect = document.getElementById('mod-categoria');
         modCatSelect.innerHTML = '<option value="">Selecione a Categoria</option>';
 
@@ -311,9 +518,8 @@
       }
     }
 
-    // Adicionar nova categoria via diálogo rápido
     window.adicionarNovaCategoriaPrompt = async () => {
-      const nomeCat = prompt("Digite o nome da nova Categoria (ex: Caminhos de Mesa, Mantas, Sousplat):");
+      const nomeCat = prompt("Digite o nome da nova Categoria (ex: Mesa Posta, Porta-Copos, Sousplat):");
       if (!nomeCat || nomeCat.trim() === '') return;
 
       const slug = nomeCat.trim().toLowerCase()
@@ -373,7 +579,6 @@
       }
     }
 
-    // Auto-preenchimento ao escolher um modelo padronizado
     window.aplicarModeloPadrao = (id) => {
       if (!id) return;
       const mod = modelosPadraoLista.find(m => m.id === id);
@@ -386,7 +591,6 @@
       document.getElementById('fio').value = mod.fio_padrao;
     };
 
-    // Cadastrar novo modelo base no modal
     document.getElementById('form-novo-modelo-padrao').addEventListener('submit', async (e) => {
       e.preventDefault();
       const novoModelo = {
@@ -414,14 +618,11 @@
       carregarModelosPadrao();
     };
 
-    // Modal de Modelos Base
     window.abrirModalModelos = () => {
-      const modal = document.getElementById('modal-modelos');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('modal-modelos').classList.remove('opacity-0', 'pointer-events-none');
     };
     window.fecharModalModelos = () => {
-      const modal = document.getElementById('modal-modelos');
-      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('modal-modelos').classList.add('opacity-0', 'pointer-events-none');
     };
 
     // ==============================================================
@@ -615,6 +816,7 @@
 
     // Inicialização ao Carregar
     window.addEventListener('DOMContentLoaded', async () => {
+      carregarPreferenciasCalculadora();
       await carregarCategorias();
       await carregarModelosPadrao();
       await carregarConfigWhats();
