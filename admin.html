@@ -54,7 +54,7 @@
             <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
           </h2>
         </div>
-        <p class="text-xs text-stone-500 mb-5">Tire uma foto e preencha as informações para exibir na vitrine.</p>
+        <p class="text-xs text-stone-500 mb-5">Anexe uma ou mais fotos e preencha os dados para exibir na vitrine.</p>
 
         <!-- SELETOR DE MODELO PADRONIZADO -->
         <div class="mb-5 p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl">
@@ -126,18 +126,24 @@
             </label>
           </div>
 
-          <!-- Foto da Peça -->
+          <!-- Upload de Múltiplas Fotos da Peça -->
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Foto da Peça Real *</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-semibold text-stone-700">Fotos da Peça Real * (1 ou mais)</label>
+              <button type="button" id="btn-limpar-fotos" onclick="limparFotosSelecionadas()" class="hidden text-[11px] text-rose-600 hover:underline font-semibold">
+                Limpar fotos
+              </button>
+            </div>
+            
+            <!-- Grade de Preview das Fotos Selecionadas -->
+            <div id="preview-container" class="hidden grid grid-cols-3 gap-2 mb-3"></div>
+
             <div class="border-2 border-dashed border-stone-300 hover:border-amber-800 rounded-xl p-4 text-center cursor-pointer bg-stone-50 transition relative">
-              <input type="file" id="foto-input" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer">
-              <div id="preview-container" class="hidden mb-2">
-                <img id="img-preview" src="" class="h-28 mx-auto rounded-lg object-cover shadow-sm">
-              </div>
+              <input type="file" id="foto-input" accept="image/*" multiple class="absolute inset-0 opacity-0 cursor-pointer">
               <div id="placeholder-upload">
-                <i class="fa-solid fa-camera text-2xl text-stone-400 mb-1"></i>
-                <p class="text-xs font-medium text-stone-600">Tirar foto pelo celular ou escolher da galeria</p>
-                <p class="text-[10px] text-stone-400">JPG ou PNG</p>
+                <i class="fa-solid fa-images text-2xl text-stone-400 mb-1"></i>
+                <p class="text-xs font-medium text-stone-600">Toque para escolher 1 ou mais fotos</p>
+                <p class="text-[10px] text-stone-400">Você pode selecionar vários ângulos da peça (JPG/PNG)</p>
               </div>
             </div>
           </div>
@@ -188,7 +194,7 @@
     <!-- COLUNA DIREITA: CALCULADORA DE PRECIFICAÇÃO + PEÇAS CADASTRADAS -->
     <div class="lg:col-span-7 space-y-6">
 
-      <!-- ================= CALCULADORA DE PRECIFICAÇÃO ARTESANAL ================= -->
+      <!-- CALCULADORA DE PRECIFICAÇÃO ARTESANAL -->
       <div id="calculadora-secao" class="bg-white rounded-2xl p-6 shadow-sm border-2 border-amber-200">
         <div class="flex items-center justify-between mb-1">
           <h2 class="text-xl font-bold text-stone-900 flex items-center gap-2">
@@ -318,7 +324,7 @@
         </div>
       </div>
 
-      <!-- ================= LISTAGEM DE PEÇAS CADASTRADAS ================= -->
+      <!-- LISTAGEM DE PEÇAS CADASTRADAS -->
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex justify-between items-center mb-5">
           <div>
@@ -406,6 +412,7 @@
 
     let categoriasLista = [];
     let modelosPadraoLista = [];
+    let arquivosFotosSelecionados = [];
     let precoVitrineCalculado = 68.00;
 
     const selectCategoria = document.getElementById('categoria');
@@ -413,8 +420,7 @@
     const formProduto = document.getElementById('form-produto');
     const fotoInput = document.getElementById('foto-input');
     const previewContainer = document.getElementById('preview-container');
-    const imgPreview = document.getElementById('img-preview');
-    const placeholderUpload = document.getElementById('placeholder-upload');
+    const btnLimparFotos = document.getElementById('btn-limpar-fotos');
     const listaProdutos = document.getElementById('lista-produtos');
     const loading = document.getElementById('loading');
     const listaVazia = document.getElementById('lista-vazia');
@@ -444,33 +450,26 @@
       const percIndiretos = parseFloat(document.getElementById('calc-indiretos').value) || 0;
       const percLucro = parseFloat(document.getElementById('calc-lucro').value) || 0;
 
-      // Salvar preferências básicas no navegador da Jucilene
       localStorage.setItem('calc_preco_cone', precoCone);
       localStorage.setItem('calc_peso_cone', pesoCone);
       localStorage.setItem('calc_valor_hora', valorHora);
 
-      // 1. Custo de Material (Fio proporcional ao peso + Embalagem)
       const custoFio = (precoCone / pesoCone) * pesoPeca;
       const custoMaterialTotal = custoFio + embalagem;
 
-      // 2. Custo de Mão de Obra (Salário da Artesã)
       const tempoTotalHoras = horas + (minutos / 60);
       const custoMaoDeObra = tempoTotalHoras * valorHora;
 
-      // 3. Custos Indiretos (% sobre Material + Mão de Obra)
       const subtotalProducao = custoMaterialTotal + custoMaoDeObra;
       const valorIndiretos = subtotalProducao * (percIndiretos / 100);
 
-      // 4. Custo Total e Lucro do Ateliê
       const custoTotalPeca = subtotalProducao + valorIndiretos;
       const valorLucro = custoTotalPeca * (percLucro / 100);
 
-      // 5. Preço Final à Vista (Pix) e Preço de Vitrine (considerando 5% OFF no Pix)
       const precoPix = custoTotalPeca + valorLucro;
-      const precoVitrine = Math.ceil(precoPix / 0.95); // Arredonda para cima para um preço comercial limpo
+      const precoVitrine = Math.ceil(precoPix / 0.95);
       precoVitrineCalculado = precoVitrine;
 
-      // Atualizar interface
       const formatarMoeda = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
       document.getElementById('res-material').textContent = formatarMoeda(custoMaterialTotal);
       document.getElementById('res-mao-obra').textContent = formatarMoeda(custoMaoDeObra);
@@ -483,8 +482,6 @@
     window.transferirPrecoParaCadastro = () => {
       const campoPreco = document.getElementById('preco');
       campoPreco.value = precoVitrineCalculado.toFixed(2);
-      
-      // Efeito visual de destaque e rolagem suave até o formulário
       document.getElementById('bloco-cadastro').scrollIntoView({ behavior: 'smooth' });
       campoPreco.classList.add('ring-4', 'ring-amber-500', 'bg-amber-50');
       setTimeout(() => {
@@ -626,41 +623,86 @@
     };
 
     // ==============================================================
-    // 3. FOTO & CADASTRO DE PEÇAS
+    // 3. SELEÇÃO E UPLOAD DE MÚLTIPLAS FOTOS
     // ==============================================================
     fotoInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        imgPreview.src = URL.createObjectURL(file);
-        previewContainer.classList.remove('hidden');
-        placeholderUpload.classList.add('hidden');
+      const novosArquivos = Array.from(e.target.files);
+      if (novosArquivos.length > 0) {
+        arquivosFotosSelecionados = [...arquivosFotosSelecionados, ...novosArquivos];
+        renderizarPreviewsFotos();
       }
+      fotoInput.value = ''; // Permite adicionar mais fotos em cliques seguidos
     });
+
+    function renderizarPreviewsFotos() {
+      previewContainer.innerHTML = '';
+      if (arquivosFotosSelecionados.length === 0) {
+        previewContainer.classList.add('hidden');
+        btnLimparFotos.classList.add('hidden');
+        return;
+      }
+
+      previewContainer.classList.remove('hidden');
+      btnLimparFotos.classList.remove('hidden');
+
+      arquivosFotosSelecionados.forEach((file, index) => {
+        const url = URL.createObjectURL(file);
+        const div = document.createElement('div');
+        div.className = "relative group rounded-xl overflow-hidden border border-stone-300 aspect-square bg-stone-100";
+        div.innerHTML = `
+          <img src="${url}" class="w-full h-full object-cover">
+          ${index === 0 ? '<span class="absolute bottom-1 left-1 bg-amber-900/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Capa</span>' : ''}
+          <button type="button" onclick="removerFotoPreview(${index})"
+            class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700">
+            &times;
+          </button>
+        `;
+        previewContainer.appendChild(div);
+      });
+    }
+
+    window.removerFotoPreview = (index) => {
+      arquivosFotosSelecionados.splice(index, 1);
+      renderizarPreviewsFotos();
+    };
+
+    window.limparFotosSelecionadas = () => {
+      arquivosFotosSelecionados = [];
+      renderizarPreviewsFotos();
+    };
 
     formProduto.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const file = fotoInput.files[0];
-      if (!file) {
-        alert("Selecione uma foto da peça.");
+      if (arquivosFotosSelecionados.length === 0) {
+        alert("Selecione pelo menos 1 foto da peça.");
         return;
       }
 
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto...`;
 
       try {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+        const urlsPublicas = [];
 
-        const { error: uploadError } = await db.storage
-          .from('fotos-tapetes')
-          .upload(fileName, file);
+        // Faz o upload de cada foto selecionada
+        for (let i = 0; i < arquivosFotosSelecionados.length; i++) {
+          const file = arquivosFotosSelecionados[i];
+          btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto ${i + 1} de ${arquivosFotosSelecionados.length}...`;
 
-        if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
 
-        const { data: publicUrlData } = db.storage
-          .from('fotos-tapetes')
-          .getPublicUrl(fileName);
+          const { error: uploadError } = await db.storage
+            .from('fotos-tapetes')
+            .upload(fileName, file);
+
+          if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
+
+          const { data: publicUrlData } = db.storage
+            .from('fotos-tapetes')
+            .getPublicUrl(fileName);
+
+          urlsPublicas.push(publicUrlData.publicUrl);
+        }
 
         btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publicando peça...`;
 
@@ -671,18 +713,18 @@
           medidas: document.getElementById('medidas').value,
           fio: document.getElementById('fio').value,
           pronta_entrega: document.getElementById('pronta_entrega').checked,
-          imagem_url: publicUrlData.publicUrl,
+          imagem_url: urlsPublicas[0], // Primeira foto como capa principal
+          imagens_urls: urlsPublicas,  // Todas as fotos salvas para o carrossel
           ativo: true
         };
 
         const { error: insertError } = await db.from('produtos').insert([novoItem]);
         if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
 
-        alert("Peça publicada com sucesso no catálogo!");
+        alert(`Peça publicada com sucesso com ${urlsPublicas.length} foto(s)!`);
         formProduto.reset();
         selectModeloPadrao.value = "";
-        previewContainer.classList.add('hidden');
-        placeholderUpload.classList.remove('hidden');
+        limparFotosSelecionadas();
         carregarProdutos();
 
       } catch (err) {
@@ -722,10 +764,16 @@
       listaProdutos.classList.remove('hidden');
 
       data.forEach(item => {
+        const qtdFotos = (item.imagens_urls && item.imagens_urls.length > 0) ? item.imagens_urls.length : 1;
         const div = document.createElement('div');
         div.className = "flex items-center gap-4 p-3 bg-stone-50 hover:bg-stone-100/70 border border-stone-200 rounded-xl transition";
         div.innerHTML = `
-          <img src="${item.imagem_url}" class="w-16 h-16 rounded-lg object-cover border border-stone-200">
+          <div class="relative w-16 h-16 flex-shrink-0">
+            <img src="${item.imagem_url}" class="w-16 h-16 rounded-lg object-cover border border-stone-200">
+            <span class="absolute -bottom-1 -right-1 bg-stone-800 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+              📷 ${qtdFotos}
+            </span>
+          </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
               <h4 class="font-bold text-stone-900 text-sm truncate">${item.nome}</h4>
@@ -781,48 +829,4 @@
     });
 
     function inicializarQrCode() {
-      const urlLoja = window.location.href.replace(/admin\.html.*$/i, '').replace(/\/$/, '') + '/index.html';
-      document.getElementById('input-url-qrcode').value = urlLoja;
-      new QRCode(document.getElementById('qrcode-box'), {
-        text: urlLoja, width: 150, height: 150, colorDark: "#292524", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-      });
-    }
-
-    window.baixarQrCode = () => {
-      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
-      const a = document.createElement('a');
-      a.href = img.tagName === 'IMG' ? img.src : img.toDataURL();
-      a.download = "qrcode-atelie-jucilene.png";
-      a.click();
-    };
-
-    window.imprimirPlacaQrCode = () => {
-      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
-      const imgSrc = img.tagName === 'IMG' ? img.src : img.toDataURL();
-      const janela = window.open('', '_blank');
-      janela.document.write(`
-        <html><body onload="window.print()" style="font-family:sans-serif; text-align:center; padding:40px;">
-          <div style="border:3px double #7E3F21; border-radius:24px; padding:30px; max-width:350px; margin:auto;">
-            <div style="font-size:32px;">🧶</div>
-            <h1 style="color:#542612; font-size:24px; margin:5px 0;">Ateliê da Jucilene</h1>
-            <p style="color:#8A7B66; font-size:12px; text-transform:uppercase; margin-bottom:20px;">Crochê, Artes & Fios</p>
-            <img src="${imgSrc}" style="width:180px; height:180px; border-radius:12px;">
-            <p style="font-size:13px; color:#444; margin-top:15px;">Aponte a câmera para ver nosso catálogo completo!</p>
-          </div>
-        </body></html>
-      `);
-      janela.document.close();
-    };
-
-    // Inicialização ao Carregar
-    window.addEventListener('DOMContentLoaded', async () => {
-      carregarPreferenciasCalculadora();
-      await carregarCategorias();
-      await carregarModelosPadrao();
-      await carregarConfigWhats();
-      await carregarProdutos();
-      inicializarQrCode();
-    });
-  </script>
-</body>
-</html>
+      const urlLoja = window.location.href.replace(/

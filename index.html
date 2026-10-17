@@ -101,20 +101,17 @@
       <!-- AÇÕES DO TOPO DIREITO -->
       <div class="flex items-center gap-2 sm:gap-3">
         
-        <!-- BOTÃO ACESSO RESTRITO DESKTOP (COM SENHA) -->
         <button onclick="acessarPainelRestrito()" title="Acesso da Artesã"
           class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-stone-200/80 hover:bg-stone-300 text-stone-700 border border-stone-300/80 transition">
           <i class="fa-solid fa-lock text-amber-700"></i>
           <span>Acesso Restrito</span>
         </button>
 
-        <!-- Botão WhatsApp Direto -->
         <a id="btn-whats-topo" href="#" target="_blank"
           class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
         </a>
 
-        <!-- Botão Carrinho -->
         <button onclick="toggleCarrinho(true)" class="relative p-2.5 rounded-full hover:bg-stone-200/60 transition text-stone-700" title="Ver Carrinho">
           <i class="fa-solid fa-basket-shopping text-lg"></i>
           <span id="badge-carrinho" class="absolute -top-1 -right-1 w-5 h-5 bg-argila-700 text-white text-[11px] font-bold rounded-full flex items-center justify-center hidden">
@@ -122,7 +119,6 @@
           </span>
         </button>
 
-        <!-- MENU SUSPENSO / HAMBÚRGUER (3 BARRINHAS) -->
         <button onclick="toggleMenuMobile(true)" class="p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 transition" title="Abrir Menu">
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
@@ -288,13 +284,11 @@
       <div class="text-center max-w-3xl mx-auto mb-12">
         <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Nossa Coleção</h2>
         <p class="text-stone-600 mt-2 text-sm sm:text-base">
-          Escolha peças disponíveis para envio imediato ou solicite a confecção na cor e medida perfeita.
+          Toque nas fotos das peças para ampliar e ver todos os ângulos e detalhes dos pontos.
         </p>
 
         <!-- FILTROS DE CATEGORIA DINÂMICOS DO SUPABASE -->
-        <div id="filtros-categorias-dinamicos" class="flex flex-wrap items-center justify-center gap-2 mt-8">
-          <!-- Carregado dinamicamente via JS -->
-        </div>
+        <div id="filtros-categorias-dinamicos" class="flex flex-wrap items-center justify-center gap-2 mt-8"></div>
       </div>
 
       <div id="loading-catalogo" class="py-16 text-center text-stone-400">
@@ -306,6 +300,40 @@
 
     </div>
   </section>
+
+  <!-- ================= MODAL / LIGHTBOX DE GALERIA DE FOTOS DA PEÇA ================= -->
+  <div id="modal-galeria" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative">
+      <!-- Botão Fechar -->
+      <button onclick="fecharGaleriaModal()" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center text-lg transition">
+        &times;
+      </button>
+
+      <!-- Imagem Principal Ampliada -->
+      <div class="relative aspect-square sm:aspect-[4/3] bg-stone-900 flex items-center justify-center">
+        <img id="galeria-img-principal" src="" class="max-h-full max-w-full object-contain">
+        
+        <button id="galeria-btn-ant" onclick="mudarFotoModal(-1)" class="absolute left-3 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-stone-900 flex items-center justify-center shadow-md transition">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="galeria-btn-prox" onclick="mudarFotoModal(1)" class="absolute right-3 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-stone-900 flex items-center justify-center shadow-md transition">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Miniaturas e Detalhes -->
+      <div class="p-4 sm:p-5 bg-white">
+        <div id="galeria-miniaturas" class="flex items-center justify-center gap-2 mb-3 overflow-x-auto pb-1"></div>
+        <div class="flex items-center justify-between border-t border-stone-200 pt-3">
+          <div>
+            <h3 id="galeria-titulo" class="font-bold text-stone-900 text-base"></h3>
+            <p id="galeria-subtitulo" class="text-xs text-stone-500"></p>
+          </div>
+          <p id="galeria-preco" class="text-lg font-bold text-argila-900"></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- SIMULADOR SOB MEDIDA -->
   <section id="sob-medida" class="py-20 bg-argila-50">
@@ -579,9 +607,6 @@
 
   <!-- SCRIPTS & INTEGRAÇÕES -->
   <script>
-    // ==============================================================
-    // CONFIGURAÇÕES SUPABASE & NÚMERO PADRÃO
-    // ==============================================================
     let WHATSAPP_NUMERO = "5517981347056";
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
@@ -589,7 +614,9 @@
 
     let produtos = [];
     let carrinho = [];
-    let categoriaAtiva = 'todos';
+    let indiceFotoCard = {}; // Guarda qual foto está ativa em cada card
+    let galeriaModalFotos = [];
+    let galeriaModalIndice = 0;
 
     // MENU HAMBÚRGUER
     window.toggleMenuMobile = (abrir) => {
@@ -651,7 +678,6 @@
       sessionStorage.setItem('banner_instalacao_dispensado', 'true');
     };
 
-    // ACESSO RESTRITO COM SENHA
     window.acessarPainelRestrito = () => {
       const senha = prompt("Área Restrita do Ateliê da Jucilene.\nDigite a senha de acesso (padrão: 1234):");
       if (senha === "1234") {
@@ -661,7 +687,6 @@
       }
     };
 
-    // ATUALIZAÇÃO DO WHATSAPP DO BANCO
     function atualizarLinksWhats() {
       const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de peças de crochê.')}`;
       document.getElementById('btn-whats-topo').href = linkWhatsBoasVindas;
@@ -678,57 +703,23 @@
       }
     }
 
-    // ==============================================================
-    // CARREGAR CATEGORIAS DINÂMICAS DO BANCO NA VITRINE
-    // ==============================================================
+    // CARREGAR CATEGORIAS DINÂMICAS
     async function carregarFiltrosCategorias() {
       const container = document.getElementById('filtros-categorias-dinamicos');
       try {
-        const { data, error } = await db
-          .from('categorias')
-          .select('*')
-          .order('ordem', { ascending: true });
+        const { data, error } = await db.from('categorias').select('*').order('ordem', { ascending: true });
+        if (error || !data || data.length === 0) return;
 
-        if (error || !data || data.length === 0) {
-          // Fallback seguro se não houver tabela
-          container.innerHTML = `
-            <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">Todos os Modelos</button>
-            <button onclick="filtrarCategoria('passadeiras')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="passadeiras">Passadeiras</button>
-            <button onclick="filtrarCategoria('sala')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="sala">Sala</button>
-            <button onclick="filtrarCategoria('banheiro')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="banheiro">Banheiro</button>
-            <button onclick="filtrarCategoria('mesa')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="mesa">Caminhos de Mesa</button>
-            <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">⚡ Pronta Entrega</button>
-          `;
-          return;
-        }
-
-        let html = `
-          <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">
-            Todos os Modelos
-          </button>
-        `;
-
+        let html = `<button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">Todos os Modelos</button>`;
         data.forEach(cat => {
-          html += `
-            <button onclick="filtrarCategoria('${cat.slug}')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="${cat.slug}">
-              ${cat.nome}
-            </button>
-          `;
+          html += `<button onclick="filtrarCategoria('${cat.slug}')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="${cat.slug}">${cat.nome}</button>`;
         });
-
-        html += `
-          <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">
-            ⚡ Pronta Entrega
-          </button>
-        `;
-
+        html += `<button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">⚡ Pronta Entrega</button>`;
         container.innerHTML = html;
-      } catch (err) {
-        console.error("Erro ao carregar filtros de categorias:", err);
-      }
+      } catch (err) {}
     }
 
-    // CATÁLOGO E RENDERIZAÇÃO
+    // CARREGAR PRODUTOS E CARROSSEL DE MÚLTIPLAS FOTOS
     async function carregarProdutos() {
       const loading = document.getElementById('loading-catalogo');
       const grade = document.getElementById('grade-produtos');
@@ -740,11 +731,7 @@
           .eq('ativo', true)
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
-          produtos = data;
-        } else {
-          produtos = [];
-        }
+        produtos = (!error && data) ? data : [];
       } catch (e) {
         produtos = [];
       } finally {
@@ -752,6 +739,13 @@
         grade.classList.remove('hidden');
         renderizarGrade(produtos);
       }
+    }
+
+    function obterListaFotos(prod) {
+      if (prod.imagens_urls && Array.isArray(prod.imagens_urls) && prod.imagens_urls.length > 0) {
+        return prod.imagens_urls;
+      }
+      return [prod.imagem_url];
     }
 
     function renderizarGrade(lista) {
@@ -764,19 +758,42 @@
       }
 
       lista.forEach(prod => {
+        const fotos = obterListaFotos(prod);
+        indiceFotoCard[prod.id] = 0;
         const precoPix = prod.preco * 0.95;
+
         const div = document.createElement('div');
         div.className = "bg-[#FAF8F5] rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:shadow-md transition flex flex-col";
         div.innerHTML = `
-          <div class="relative aspect-square rounded-2xl overflow-hidden bg-stone-200 mb-4">
-            <img src="${prod.imagem_url}" alt="${prod.nome}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+          <div class="relative aspect-square rounded-2xl overflow-hidden bg-stone-200 mb-4 group">
+            <img id="card-img-${prod.id}" src="${fotos[0]}" alt="${prod.nome}" onclick="abrirGaleriaModal('${prod.id}')"
+              class="w-full h-full object-cover cursor-pointer hover:scale-105 transition duration-500">
+            
             ${prod.pronta_entrega ? `
-              <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+              <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow pointer-events-none">
                 ⚡ Pronta Entrega
               </span>
             ` : `
-              <span class="absolute top-3 left-3 bg-argila-800/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+              <span class="absolute top-3 left-3 bg-argila-800/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow pointer-events-none">
                 🧵 Sob Encomenda
+              </span>
+            `}
+
+            ${fotos.length > 1 ? `
+              <!-- Botões de Setas do Carrossel -->
+              <button onclick="trocarFotoCard('${prod.id}', -1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 hover:bg-white text-stone-800 flex items-center justify-center shadow transition">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+              </button>
+              <button onclick="trocarFotoCard('${prod.id}', 1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 hover:bg-white text-stone-800 flex items-center justify-center shadow transition">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </button>
+              <span id="card-contador-${prod.id}" onclick="abrirGaleriaModal('${prod.id}')"
+                class="cursor-pointer absolute bottom-2.5 right-2.5 bg-black/65 text-white text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm">
+                📷 1/${fotos.length}
+              </span>
+            ` : `
+              <span onclick="abrirGaleriaModal('${prod.id}')" class="cursor-pointer absolute bottom-2.5 right-2.5 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> Ampliar
               </span>
             `}
           </div>
@@ -816,8 +833,73 @@
       });
     }
 
+    // Trocar foto direto no card do produto
+    window.trocarFotoCard = (id, delta) => {
+      const prod = produtos.find(p => p.id == id);
+      if (!prod) return;
+      const fotos = obterListaFotos(prod);
+      let idx = (indiceFotoCard[id] || 0) + delta;
+      if (idx < 0) idx = fotos.length - 1;
+      if (idx >= fotos.length) idx = 0;
+      indiceFotoCard[id] = idx;
+
+      document.getElementById(`card-img-${id}`).src = fotos[idx];
+      const contador = document.getElementById(`card-contador-${id}`);
+      if (contador) contador.textContent = `📷 ${idx + 1}/${fotos.length}`;
+    };
+
+    // Abrir Modal Lightbox de Galeria em Tela Cheia
+    window.abrirGaleriaModal = (id) => {
+      const prod = produtos.find(p => p.id == id);
+      if (!prod) return;
+      galeriaModalFotos = obterListaFotos(prod);
+      galeriaModalIndice = indiceFotoCard[id] || 0;
+
+      document.getElementById('galeria-titulo').textContent = prod.nome;
+      document.getElementById('galeria-subtitulo').textContent = `${prod.medidas} • ${prod.fio}`;
+      document.getElementById('galeria-preco').textContent = `R$ ${(prod.preco * 0.95).toFixed(2).replace('.', ',')} no Pix`;
+
+      atualizarTelaGaleriaModal();
+      const modal = document.getElementById('modal-galeria');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    };
+
+    function atualizarTelaGaleriaModal() {
+      document.getElementById('galeria-img-principal').src = galeriaModalFotos[galeriaModalIndice];
+      const btnAnt = document.getElementById('galeria-btn-ant');
+      const btnProx = document.getElementById('galeria-btn-prox');
+      const miniaturas = document.getElementById('galeria-miniaturas');
+
+      if (galeriaModalFotos.length <= 1) {
+        btnAnt.classList.add('hidden');
+        btnProx.classList.add('hidden');
+        miniaturas.innerHTML = '';
+      } else {
+        btnAnt.classList.remove('hidden');
+        btnProx.classList.remove('hidden');
+        miniaturas.innerHTML = '';
+        galeriaModalFotos.forEach((url, i) => {
+          const thumb = document.createElement('img');
+          thumb.src = url;
+          thumb.onclick = () => { galeriaModalIndice = i; atualizarTelaGaleriaModal(); };
+          thumb.className = `w-14 h-14 rounded-xl object-cover cursor-pointer border-2 transition ${i === galeriaModalIndice ? 'border-argila-700 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`;
+          miniaturas.appendChild(thumb);
+        });
+      }
+    }
+
+    window.mudarFotoModal = (delta) => {
+      galeriaModalIndice += delta;
+      if (galeriaModalIndice < 0) galeriaModalIndice = galeriaModalFotos.length - 1;
+      if (galeriaModalIndice >= galeriaModalFotos.length) galeriaModalIndice = 0;
+      atualizarTelaGaleriaModal();
+    };
+
+    window.fecharGaleriaModal = () => {
+      document.getElementById('modal-galeria').classList.add('opacity-0', 'pointer-events-none');
+    };
+
     window.filtrarCategoria = (cat) => {
-      categoriaAtiva = cat;
       document.querySelectorAll('.filtro-btn').forEach(btn => {
         if (btn.dataset.categoria === cat) {
           btn.className = "filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition";
@@ -826,13 +908,9 @@
         }
       });
 
-      if (cat === 'todos') {
-        renderizarGrade(produtos);
-      } else if (cat === 'pronta_entrega') {
-        renderizarGrade(produtos.filter(p => p.pronta_entrega));
-      } else {
-        renderizarGrade(produtos.filter(p => p.categoria === cat));
-      }
+      if (cat === 'todos') renderizarGrade(produtos);
+      else if (cat === 'pronta_entrega') renderizarGrade(produtos.filter(p => p.pronta_entrega));
+      else renderizarGrade(produtos.filter(p => p.categoria === cat));
     };
 
     // CARRINHO
