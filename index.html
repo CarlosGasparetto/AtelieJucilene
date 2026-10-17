@@ -54,7 +54,6 @@
     }
   </style>
 
-  <!-- Registro do Service Worker para PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -109,7 +108,7 @@
           <span>Acesso Restrito</span>
         </button>
 
-        <!-- Botão WhatsApp Direto (Visível em Telas Médias/Grandes) -->
+        <!-- Botão WhatsApp Direto -->
         <a id="btn-whats-topo" href="#" target="_blank"
           class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
@@ -131,11 +130,10 @@
     </div>
   </header>
 
-  <!-- ================= GAVETA DO MENU SUSPENSO (MOBILE/TABLET) ================= -->
+  <!-- GAVETA DO MENU SUSPENSO (MOBILE/TABLET) -->
   <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMenuMobile(false)"></div>
   <aside id="menu-drawer" class="fixed top-0 right-0 h-full w-full max-w-xs sm:max-w-sm bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
     
-    <!-- Topo do Menu -->
     <div class="p-5 border-b border-stone-200 flex items-center justify-between bg-[#FAF8F5]">
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-full bg-argila-100 flex items-center justify-center text-lg">🧶</div>
@@ -149,10 +147,9 @@
       </button>
     </div>
 
-    <!-- Links de Navegação -->
     <div class="flex-1 overflow-y-auto p-5 space-y-2 text-stone-800">
       <a href="#colecao" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
-        <i class="fa-solid fa-gem text-argila-700 w-5 text-center"></i> Coleção de Tapetes
+        <i class="fa-solid fa-gem text-argila-700 w-5 text-center"></i> Coleção de Peças
       </a>
       <a href="#sob-medida" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm transition">
         <i class="fa-solid fa-ruler-combined text-argila-700 w-5 text-center"></i> Encomenda Sob Medida
@@ -168,19 +165,16 @@
       </a>
 
       <div class="pt-3 border-t border-stone-200 space-y-2">
-        <!-- Botão WhatsApp no Menu -->
         <a id="btn-whats-menu" href="#" target="_blank"
           class="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-lg"></i> Conversar no WhatsApp
         </a>
 
-        <!-- Botão Instalar App dentro do Menu -->
         <button onclick="acionarInstalacaoApp()" id="btn-menu-instalar"
           class="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-sm transition border border-amber-300">
           <i class="fa-solid fa-mobile-screen-button"></i> Instalar Aplicativo
         </button>
 
-        <!-- Acesso Restrito no Menu -->
         <button onclick="toggleMenuMobile(false); acessarPainelRestrito();"
           class="flex items-center justify-center gap-2 w-full p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition border border-stone-300">
           <i class="fa-solid fa-lock text-amber-700"></i> Painel da Artesã (Restrito)
@@ -188,13 +182,12 @@
       </div>
     </div>
 
-    <!-- Rodapé do Menu -->
     <div class="p-4 bg-stone-50 border-t border-stone-200 text-center">
       <p class="text-[11px] text-stone-500">Ateliê da Jucilene • Feito à Mão 🧶</p>
     </div>
   </aside>
 
-  <!-- ================= BANNER FLUTUANTE DE INSTALAÇÃO DO APP ================= -->
+  <!-- BANNER FLUTUANTE DE INSTALAÇÃO DO APP -->
   <div id="banner-instalacao" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl z-50 border border-amber-800/40 transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
       <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow">
@@ -232,7 +225,7 @@
           </h1>
 
           <p class="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-            Tapetes, passadeiras e conjuntos de banheiro exclusivos em barbante selecionado. Peças encorpadas, macias e feitas à mão para aconchegar toda a família.
+            Tapetes, passadeiras, caminhos de mesa e conjuntos de banheiro exclusivos em barbante selecionado. Peças encorpadas, macias e feitas à mão para aconchegar toda a família.
           </p>
 
           <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
@@ -244,7 +237,6 @@
             </a>
           </div>
 
-          <!-- Selos de Confiança -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-stone-200/80">
             <div class="flex items-center gap-2.5">
               <i class="fa-solid fa-hand-holding-heart text-argila-700 text-lg"></i>
@@ -269,7 +261,7 @@
           <div class="relative mx-auto max-w-md lg:max-w-none">
             <div class="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-stone-200">
               <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1000&q=80"
-                alt="Tapete artesanal Ateliê da Jucilene"
+                alt="Tapeçaria artesanal Ateliê da Jucilene"
                 class="w-full h-full object-cover">
             </div>
 
@@ -299,26 +291,9 @@
           Escolha peças disponíveis para envio imediato ou solicite a confecção na cor e medida perfeita.
         </p>
 
-        <!-- Filtros -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
-          <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">
-            Todos os Modelos
-          </button>
-          <button onclick="filtrarCategoria('passadeiras')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="passadeiras">
-            Passadeiras de Cozinha
-          </button>
-          <button onclick="filtrarCategoria('sala')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="sala">
-            Tapetes de Sala
-          </button>
-          <button onclick="filtrarCategoria('banheiro')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="banheiro">
-            Jogos de Banheiro
-          </button>
-          <button onclick="filtrarCategoria('infantil')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="infantil">
-            Linha Infantil
-          </button>
-          <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">
-            ⚡ Pronta Entrega
-          </button>
+        <!-- FILTROS DE CATEGORIA DINÂMICOS DO SUPABASE -->
+        <div id="filtros-categorias-dinamicos" class="flex flex-wrap items-center justify-center gap-2 mt-8">
+          <!-- Carregado dinamicamente via JS -->
         </div>
       </div>
 
@@ -327,9 +302,7 @@
         <p class="text-sm font-medium">Carregando peças do ateliê...</p>
       </div>
 
-      <div id="grade-produtos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
-        <!-- Injetado dinamicamente via JS -->
-      </div>
+      <div id="grade-produtos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
 
     </div>
   </section>
@@ -341,15 +314,15 @@
         
         <div class="text-center max-w-xl mx-auto mb-8">
           <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Personalize seu Espaço</span>
-          <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1">Simulador de Tapete Sob Medida</h2>
+          <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1">Simulador de Peça Sob Medida</h2>
           <p class="text-stone-600 text-xs sm:text-sm mt-2">
-            Precisa de um tamanho sob medida para o seu corredor, pia ou quarto? Envie as preferências direto para o WhatsApp da Jucilene.
+            Precisa de um tamanho especial para sua mesa, corredor ou sala? Envie as preferências direto para o WhatsApp da Jucilene.
           </p>
         </div>
 
         <div class="space-y-6">
           <div>
-            <label class="block text-xs font-bold text-stone-800 mb-2">1. Formato do Tapete</label>
+            <label class="block text-xs font-bold text-stone-800 mb-2">1. Formato da Peça</label>
             <div class="grid grid-cols-3 gap-3">
               <button type="button" onclick="setFormato('Retangular')" class-formato="Retangular" class="formato-btn py-3 rounded-xl border-2 border-argila-700 bg-argila-50 text-argila-900 text-xs font-bold flex flex-col items-center gap-1">
                 <i class="fa-regular fa-square text-base"></i> Retangular
@@ -366,12 +339,12 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold text-stone-800 mb-1">Comprimento / Diâmetro (metros)</label>
-              <input type="number" step="0.05" id="sim-comp" value="1.50" min="0.60" max="3.00"
+              <input type="number" step="0.05" id="sim-comp" value="1.50" min="0.40" max="3.00"
                 class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm font-semibold">
             </div>
             <div id="box-largura">
               <label class="block text-xs font-bold text-stone-800 mb-1">Largura (metros)</label>
-              <input type="number" step="0.05" id="sim-larg" value="0.50" min="0.40" max="2.50"
+              <input type="number" step="0.05" id="sim-larg" value="0.50" min="0.30" max="2.50"
                 class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-argila-700 outline-none text-sm font-semibold">
             </div>
           </div>
@@ -410,7 +383,7 @@
         <div class="lg:col-span-5">
           <div class="relative">
             <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80"
-              alt="Artesã a tecer crochê"
+              alt="Artesã tecendo crochê"
               class="w-full rounded-3xl shadow-xl border-4 border-argila-100 object-cover">
             <div class="absolute -bottom-5 -right-5 bg-argila-800 text-white p-4 rounded-2xl shadow-lg text-center">
               <span class="block text-2xl font-serif font-bold">100%</span>
@@ -425,7 +398,7 @@
             Olá, sou a Jucilene! Bem-vindo ao meu ateliê de arte manual.
           </h2>
           <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
-            O crochê para mim é a arte de transformar fios simples em peças cheias de afeto, beleza e aconchego para o seu lar. Cada tapete é produzido à mão com atenção rigorosa a cada ponto, garantindo firmeza, caimento impecável e longa durabilidade.
+            O crochê para mim é a arte de transformar fios simples em peças cheias de afeto, beleza e aconchego para o seu lar. Cada tapete, caminho de mesa ou conjunto é produzido à mão com atenção rigorosa a cada ponto, garantindo firmeza, caimento impecável e longa durabilidade.
           </p>
           <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
             Aqui não encontrará produção industrial rápida. Cada trabalho respeita o tempo do feito à mão para que chegue à sua casa perfeito.
@@ -451,7 +424,7 @@
   <section id="cuidados" class="py-20 bg-stone-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Durabilidade Garantida</span>
-      <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1 mb-10">Como Lavar e Conservar seu Tapete</h2>
+      <h2 class="font-serif text-3xl font-bold text-stone-900 mt-1 mb-10">Como Lavar e Conservar suas Peças de Crochê</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-left">
         <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
@@ -530,7 +503,7 @@
           <span class="font-serif text-xl font-bold text-white">Ateliê da Jucilene</span>
         </div>
         <p class="text-xs text-stone-400 max-w-sm">
-          Crochê, Artes & Fios. Transformando fios nobres em tapeçaria artesanal durável, bonita e acolhedora.
+          Crochê, Artes & Fios. Transformando fios nobres em peças artesanais duráveis, bonitas e acolhedoras.
         </p>
       </div>
 
@@ -612,12 +585,13 @@
     let WHATSAPP_NUMERO = "5517981347056";
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
-
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ==============================================================
-    // CONTROLE DO MENU SUSPENSO (HAMBÚRGUER)
-    // ==============================================================
+    let produtos = [];
+    let carrinho = [];
+    let categoriaAtiva = 'todos';
+
+    // MENU HAMBÚRGUER
     window.toggleMenuMobile = (abrir) => {
       const drawer = document.getElementById('menu-drawer');
       const overlay = document.getElementById('menu-overlay');
@@ -630,18 +604,13 @@
       }
     };
 
-    // ==============================================================
-    // CONTROLE DE INSTALAÇÃO DO APP (PWA)
-    // ==============================================================
+    // PWA INSTALAÇÃO
     let instaladorAppPrompt = null;
     const bannerInstalacao = document.getElementById('banner-instalacao');
 
-    // Captura o evento de instalação do navegador (Chrome, Edge, Android)
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       instaladorAppPrompt = e;
-
-      // Exibe o banner apenas se não foi dispensado recentemente nesta sessão
       if (!sessionStorage.getItem('banner_instalacao_dispensado')) {
         setTimeout(() => {
           bannerInstalacao.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
@@ -649,16 +618,13 @@
       }
     });
 
-    // Detecta iPhone / iOS Safari para guiar a instalação
     function isIos() {
       return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase()) && !window.MSStream;
     }
-
     function isInStandaloneMode() {
       return ('standalone' in window.navigator) && (window.navigator.standalone);
     }
 
-    // Se estiver no iOS e não estiver instalado, mostra o banner na primeira visita
     window.addEventListener('DOMContentLoaded', () => {
       if (isIos() && !isInStandaloneMode() && !sessionStorage.getItem('banner_instalacao_dispensado')) {
         setTimeout(() => {
@@ -670,13 +636,13 @@
     window.acionarInstalacaoApp = async () => {
       if (instaladorAppPrompt) {
         instaladorAppPrompt.prompt();
-        const { outcome } = await instaladorAppPrompt.userChoice;
+        await instaladorAppPrompt.userChoice;
         instaladorAppPrompt = null;
         dispensarBannerInstalacao();
       } else if (isIos()) {
-        alert("📲 Para instalar no seu iPhone:\n\n1. Toque no botão 'Compartilhar' (ícone de quadrado com seta para cima no rodapé do Safari);\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.");
+        alert("📲 No iPhone:\n1. Toque em 'Compartilhar' (quadrado com seta);\n2. Selecione 'Adicionar à Tela de Início'.");
       } else {
-        alert("📲 Para instalar este aplicativo:\nToque nos 3 pontinhos do seu navegador e escolha 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
+        alert("📲 Toque nos 3 pontos do navegador e escolha 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
       }
     };
 
@@ -685,9 +651,7 @@
       sessionStorage.setItem('banner_instalacao_dispensado', 'true');
     };
 
-    // ==============================================================
     // ACESSO RESTRITO COM SENHA
-    // ==============================================================
     window.acessarPainelRestrito = () => {
       const senha = prompt("Área Restrita do Ateliê da Jucilene.\nDigite a senha de acesso (padrão: 1234):");
       if (senha === "1234") {
@@ -697,11 +661,9 @@
       }
     };
 
-    // ==============================================================
-    // ATUALIZAÇÃO DO WHATSAPP (BANCO SUPABASE)
-    // ==============================================================
+    // ATUALIZAÇÃO DO WHATSAPP DO BANCO
     function atualizarLinksWhats() {
-      const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de tapetes de crochê.')}`;
+      const linkWhatsBoasVindas = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá Jucilene! Estive no seu site e gostaria de conhecer as opções de peças de crochê.')}`;
       document.getElementById('btn-whats-topo').href = linkWhatsBoasVindas;
       document.getElementById('btn-whats-flutuante').href = linkWhatsBoasVindas;
       document.getElementById('btn-whats-menu').href = linkWhatsBoasVindas;
@@ -709,71 +671,64 @@
 
     async function carregarNumeroWhatsBanco() {
       try {
-        const { data, error } = await db
-          .from('configuracoes')
-          .select('valor')
-          .eq('chave', 'whatsapp')
-          .maybeSingle();
-
-        if (data && data.valor && data.valor.trim() !== '') {
-          WHATSAPP_NUMERO = data.valor.trim();
-        }
-      } catch (e) {
-        console.warn("Usando número padrão:", e);
-      } finally {
+        const { data } = await db.from('configuracoes').select('valor').eq('chave', 'whatsapp').maybeSingle();
+        if (data && data.valor) WHATSAPP_NUMERO = data.valor.trim();
+      } catch (e) {} finally {
         atualizarLinksWhats();
       }
     }
 
     // ==============================================================
-    // CATÁLOGO E PRODUTOS
+    // CARREGAR CATEGORIAS DINÂMICAS DO BANCO NA VITRINE
     // ==============================================================
-    const catalogoDemo = [
-      {
-        id: "demo-1",
-        nome: "Passadeira Cozinha Boho Cru",
-        categoria: "passadeiras",
-        preco: 145.00,
-        medidas: "1,40m x 0,45m",
-        fio: "Barbante Ecológico nº 8",
-        pronta_entrega: true,
-        imagem_url: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "demo-2",
-        nome: "Tapete Redondo Mandala Sala",
-        categoria: "sala",
-        preco: 230.00,
-        medidas: "1,15m de diâmetro",
-        fio: "100% Algodão Premium nº 6",
-        pronta_entrega: false,
-        imagem_url: "https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "demo-3",
-        nome: "Jogo de Banheiro Russo (3 Peças)",
-        categoria: "banheiro",
-        preco: 185.00,
-        medidas: "Tampa + 2 Tapetes",
-        fio: "Barbante Macio nº 6",
-        pronta_entrega: true,
-        imagem_url: "https://images.unsplash.com/photo-1584589167171-541ce45f1eea?auto=format&fit=crop&w=800&q=80"
-      },
-      {
-        id: "demo-4",
-        nome: "Tapete Ursinho Quarto Infantil",
-        categoria: "infantil",
-        preco: 160.00,
-        medidas: "1,00m de diâmetro",
-        fio: "Barbante Antialérgico",
-        pronta_entrega: false,
-        imagem_url: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=800&q=80"
+    async function carregarFiltrosCategorias() {
+      const container = document.getElementById('filtros-categorias-dinamicos');
+      try {
+        const { data, error } = await db
+          .from('categorias')
+          .select('*')
+          .order('ordem', { ascending: true });
+
+        if (error || !data || data.length === 0) {
+          // Fallback seguro se não houver tabela
+          container.innerHTML = `
+            <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">Todos os Modelos</button>
+            <button onclick="filtrarCategoria('passadeiras')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="passadeiras">Passadeiras</button>
+            <button onclick="filtrarCategoria('sala')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="sala">Sala</button>
+            <button onclick="filtrarCategoria('banheiro')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="banheiro">Banheiro</button>
+            <button onclick="filtrarCategoria('mesa')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="mesa">Caminhos de Mesa</button>
+            <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">⚡ Pronta Entrega</button>
+          `;
+          return;
+        }
+
+        let html = `
+          <button onclick="filtrarCategoria('todos')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition" data-categoria="todos">
+            Todos os Modelos
+          </button>
+        `;
+
+        data.forEach(cat => {
+          html += `
+            <button onclick="filtrarCategoria('${cat.slug}')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-stone-100 text-stone-600 hover:bg-stone-200 transition" data-categoria="${cat.slug}">
+              ${cat.nome}
+            </button>
+          `;
+        });
+
+        html += `
+          <button onclick="filtrarCategoria('pronta_entrega')" class="filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition border border-emerald-200" data-categoria="pronta_entrega">
+            ⚡ Pronta Entrega
+          </button>
+        `;
+
+        container.innerHTML = html;
+      } catch (err) {
+        console.error("Erro ao carregar filtros de categorias:", err);
       }
-    ];
+    }
 
-    let produtos = [];
-    let carrinho = [];
-
+    // CATÁLOGO E RENDERIZAÇÃO
     async function carregarProdutos() {
       const loading = document.getElementById('loading-catalogo');
       const grade = document.getElementById('grade-produtos');
@@ -788,10 +743,10 @@
         if (!error && data && data.length > 0) {
           produtos = data;
         } else {
-          produtos = catalogoDemo;
+          produtos = [];
         }
       } catch (e) {
-        produtos = catalogoDemo;
+        produtos = [];
       } finally {
         loading.classList.add('hidden');
         grade.classList.remove('hidden');
@@ -862,6 +817,7 @@
     }
 
     window.filtrarCategoria = (cat) => {
+      categoriaAtiva = cat;
       document.querySelectorAll('.filtro-btn').forEach(btn => {
         if (btn.dataset.categoria === cat) {
           btn.className = "filtro-btn px-4 py-2 rounded-full text-xs font-semibold bg-argila-700 text-white shadow-sm transition";
@@ -879,6 +835,7 @@
       }
     };
 
+    // CARRINHO
     window.toggleCarrinho = (abrir) => {
       const drawer = document.getElementById('carrinho-drawer');
       const overlay = document.getElementById('carrinho-overlay');
@@ -894,14 +851,9 @@
     window.adicionarAoCarrinho = (id) => {
       const prod = produtos.find(p => p.id == id);
       if (!prod) return;
-
       const itemExistente = carrinho.find(item => item.id == id);
-      if (itemExistente) {
-        itemExistente.qtd += 1;
-      } else {
-        carrinho.push({ ...prod, qtd: 1 });
-      }
-
+      if (itemExistente) itemExistente.qtd += 1;
+      else carrinho.push({ ...prod, qtd: 1 });
       atualizarCarrinho();
       toggleCarrinho(true);
     };
@@ -910,9 +862,7 @@
       const item = carrinho.find(i => i.id == id);
       if (!item) return;
       item.qtd += delta;
-      if (item.qtd <= 0) {
-        carrinho = carrinho.filter(i => i.id != id);
-      }
+      if (item.qtd <= 0) carrinho = carrinho.filter(i => i.id != id);
       atualizarCarrinho();
     };
 
@@ -920,23 +870,16 @@
       const container = document.getElementById('carrinho-itens');
       const badge = document.getElementById('badge-carrinho');
       container.innerHTML = '';
-
       let subtotal = 0;
       let qtdTotal = 0;
 
       if (carrinho.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 text-stone-400">
-            <i class="fa-solid fa-basket-shopping text-3xl mb-2"></i>
-            <p class="text-xs">Seu carrinho está vazio.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="text-center py-12 text-stone-400"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p class="text-xs">Seu carrinho está vazio.</p></div>`;
         badge.classList.add('hidden');
       } else {
         carrinho.forEach(item => {
           subtotal += item.preco * item.qtd;
           qtdTotal += item.qtd;
-
           const el = document.createElement('div');
           el.className = "flex items-center gap-3 p-2.5 bg-stone-50 rounded-xl border border-stone-200";
           el.innerHTML = `
@@ -954,20 +897,18 @@
           `;
           container.appendChild(el);
         });
-
         badge.textContent = qtdTotal;
         badge.classList.remove('hidden');
       }
 
       const desc = subtotal * 0.05;
       const total = subtotal - desc;
-
       document.getElementById('carrinho-subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
       document.getElementById('carrinho-desconto').textContent = `- R$ ${desc.toFixed(2).replace('.', ',')}`;
       document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    // Ações de WhatsApp
+    // WHATSAPP
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
       const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -977,18 +918,16 @@
       if (carrinho.length === 0) return;
       let msg = `Olá Jucilene! Gostaria de fechar o seguinte pedido no *Ateliê da Jucilene*:\n\n`;
       let total = 0;
-
       carrinho.forEach(item => {
         msg += `• *${item.qtd}x ${item.nome}* (${item.medidas}) - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
         total += item.preco * item.qtd;
       });
-
       const totalPix = total * 0.95;
       msg += `\n*Total no Pix (5% OFF): R$ ${totalPix.toFixed(2).replace('.', ',')}*\n\nQual o frete para o meu CEP e o prazo de envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    // Simulador Sob Medida
+    // SIMULADOR
     let formatoSelecionado = "Retangular";
     window.setFormato = (f) => {
       formatoSelecionado = f;
@@ -1007,16 +946,15 @@
       const larg = document.getElementById('sim-larg').value;
       const cores = document.getElementById('sim-cores').value || "A combinar";
       const bico = document.getElementById('sim-bico').value;
-
       const dim = (formatoSelecionado === 'Redondo') ? `${comp}m de diâmetro` : `${comp}m x ${larg}m`;
-      const msg = `Olá Jucilene! Gostaria de um orçamento de tapete sob medida:\n\n• Formato: *${formatoSelecionado}*\n• Dimensões: *${dim}*\n• Cores desejadas: *${cores}*\n• Acabamento de borda: *${bico}*\n\nPoderia me passar o valor e o prazo de confecção?`;
-
+      const msg = `Olá Jucilene! Gostaria de um orçamento de peça sob medida:\n\n• Formato: *${formatoSelecionado}*\n• Dimensões: *${dim}*\n• Cores desejadas: *${cores}*\n• Acabamento de borda: *${bico}*\n\nPoderia me passar o valor e o prazo de confecção?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    // Inicialização ao carregar a página
+    // Inicialização
     window.addEventListener('DOMContentLoaded', async () => {
       await carregarNumeroWhatsBanco();
+      await carregarFiltrosCategorias();
       await carregarProdutos();
     });
   </script>
