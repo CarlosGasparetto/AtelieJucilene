@@ -77,7 +77,7 @@
           <!-- Nome da Peça -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Modelo *</label>
-            <input type="text" id="nome" required placeholder="Ex: Jogo 6 Porta-Copos Algodão Cru"
+            <input type="text" id="nome" required placeholder="Ex: Jogo 6 Porta Copos Confeccionados em Ponto Trança"
               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none transition">
           </div>
 
@@ -88,8 +88,14 @@
                 <label class="block text-xs font-semibold text-stone-700">Categoria *</label>
                 <button type="button" onclick="adicionarNovaCategoriaPrompt()" class="text-[11px] text-amber-800 hover:underline font-bold">+ Nova</button>
               </div>
+              <!-- Já inicia com as categorias do banco carregadas imediatamente -->
               <select id="categoria" required class="w-full px-3 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none bg-white">
-                <option value="">Carregando...</option>
+                <option value="porta-copos">Porta Copos</option>
+                <option value="passadeiras">Passadeiras de Cozinha</option>
+                <option value="sala">Tapetes de Sala</option>
+                <option value="banheiro">Jogos de Banheiro</option>
+                <option value="infantil">Linha Infantil</option>
+                <option value="mesa">Caminhos de Mesa</option>
               </select>
             </div>
             <div>
@@ -368,12 +374,19 @@
         <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wide">+ Criar Novo Modelo Base</h4>
         <div>
           <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Nome do Modelo Base *</label>
-          <input type="text" id="mod-nome" required placeholder="Ex: Jogo 6 Porta-Copos Algodão Cru" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+          <input type="text" id="mod-nome" required placeholder="Ex: Jogo 6 Porta Copos Confeccionados em Ponto Trança" class="w-full px-3 py-1.5 rounded-lg border text-xs">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Categoria *</label>
-            <select id="mod-categoria" required class="w-full px-3 py-1.5 rounded-lg border text-xs bg-white"></select>
+            <select id="mod-categoria" required class="w-full px-3 py-1.5 rounded-lg border text-xs bg-white">
+              <option value="porta-copos">Porta Copos</option>
+              <option value="passadeiras">Passadeiras de Cozinha</option>
+              <option value="sala">Tapetes de Sala</option>
+              <option value="banheiro">Jogos de Banheiro</option>
+              <option value="infantil">Linha Infantil</option>
+              <option value="mesa">Caminhos de Mesa</option>
+            </select>
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Preço Sugerido (R$) *</label>
@@ -383,7 +396,7 @@
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Dimensões Padrão *</label>
-            <input type="text" id="mod-medidas" required placeholder="Ex: 15cm (6 unidades)" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+            <input type="text" id="mod-medidas" required placeholder="Ex: 15cm diâmetro (6 un.)" class="w-full px-3 py-1.5 rounded-lg border text-xs">
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Barbante Padrão *</label>
@@ -410,8 +423,62 @@
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let categoriasLista = [];
-    let modelosPadraoLista = [];
+    // Categorias padrão idênticas às gravadas no Supabase (Fallback imediato)
+    const categoriasPadrao = [
+      { nome: 'Passadeiras de Cozinha', slug: 'passadeiras', ordem: 1 },
+      { nome: 'Tapetes de Sala', slug: 'sala', ordem: 2 },
+      { nome: 'Jogos de Banheiro', slug: 'banheiro', ordem: 3 },
+      { nome: 'Linha Infantil', slug: 'infantil', ordem: 4 },
+      { nome: 'Caminhos de Mesa', slug: 'mesa', ordem: 5 },
+      { nome: 'Porta Copos', slug: 'porta-copos', ordem: 6 }
+    ];
+
+    // Modelos padrão de fallback imediato
+    const modelosPadraoIniciais = [
+      {
+        id: 'padrao-porta-copos',
+        nome: 'Jogo 6 Porta Copos Confeccionados em Ponto Trança',
+        categoria_slug: 'porta-copos',
+        preco_sugerido: 68.00,
+        medidas_padrao: '15cm diâmetro (6 un.)',
+        fio_padrao: 'Algodão Cru nº 6'
+      },
+      {
+        id: '3edd11aa-2d32-454c-9a20-65f6f6798',
+        nome: 'Passadeira Cozinha Boho Cru',
+        categoria_slug: 'passadeiras',
+        preco_sugerido: 145.00,
+        medidas_padrao: '1,40m x 0,45m',
+        fio_padrao: 'Barbante Ecológico nº 8'
+      },
+      {
+        id: 'b8552583-2c47-4ee7-9652-a58f256e',
+        nome: 'Tapete Redondo Mandala Sala',
+        categoria_slug: 'sala',
+        preco_sugerido: 230.00,
+        medidas_padrao: '1,15m de diâmetro',
+        fio_padrao: '100% Algodão Premium nº 6'
+      },
+      {
+        id: '266fc843-29b1-42bb-bb77-171549b3f',
+        nome: 'Jogo de Banheiro Russo (3 Peças)',
+        categoria_slug: 'banheiro',
+        preco_sugerido: 185.00,
+        medidas_padrao: 'Tampa + 2 Tapetes',
+        fio_padrao: 'Barbante Macio nº 6'
+      },
+      {
+        id: 'a2af4b0d-9d1e-4cf7-8702-d188d6d9f',
+        nome: 'Caminho de Mesa Clássico Espiral',
+        categoria_slug: 'mesa',
+        preco_sugerido: 130.00,
+        medidas_padrao: '1,20m x 0,40m',
+        fio_padrao: 'Barbante nº 6 Mercerizado'
+      }
+    ];
+
+    let categoriasLista = [...categoriasPadrao];
+    let modelosPadraoLista = [...modelosPadraoIniciais];
     let arquivosFotosSelecionados = [];
     let precoVitrineCalculado = 68.00;
 
@@ -433,7 +500,7 @@
     function carregarPreferenciasCalculadora() {
       if (localStorage.getItem('calc_preco_cone')) document.getElementById('calc-preco-cone').value = localStorage.getItem('calc_preco_cone');
       if (localStorage.getItem('calc_peso_cone')) document.getElementById('calc-peso-cone').value = localStorage.getItem('calc_peso_cone');
-      if (localStorage.getItem('calc_valor_hora')) document.getElementById('calc-valor-hora').value = localStorage.getItem('calc_valor_hora');
+      if (localStorage.getItem('calc_valor_hora')) document.getElementById('calc-valor-hora').value = localStorage.getItem('calc_valor-hora');
       calcularPrecoArtesanato();
     }
 
@@ -490,33 +557,46 @@
     };
 
     // ==============================================================
-    // 1. CARREGAR CATEGORIAS DINÂMICAS DO SUPABASE
+    // 1. RENDERIZAR E SINCRONIZAR CATEGORIAS
     // ==============================================================
+    function popularSelectsCategorias(lista) {
+      const valorAtual = selectCategoria.value;
+      const modCatSelect = document.getElementById('mod-categoria');
+
+      selectCategoria.innerHTML = '';
+      modCatSelect.innerHTML = '';
+
+      lista.forEach(cat => {
+        selectCategoria.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
+        modCatSelect.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
+      });
+
+      if (valorAtual && lista.some(c => c.slug === valorAtual)) {
+        selectCategoria.value = valorAtual;
+      }
+    }
+
     async function carregarCategorias() {
+      // Popula imediatamente com a lista padrão para nunca travar em "Carregando..."
+      popularSelectsCategorias(categoriasLista);
+
       try {
         const { data, error } = await db
           .from('categorias')
           .select('*')
           .order('ordem', { ascending: true });
 
-        if (error) throw error;
-        categoriasLista = data || [];
-
-        selectCategoria.innerHTML = '<option value="">Selecione uma Categoria</option>';
-        const modCatSelect = document.getElementById('mod-categoria');
-        modCatSelect.innerHTML = '<option value="">Selecione a Categoria</option>';
-
-        categoriasLista.forEach(cat => {
-          selectCategoria.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
-          modCatSelect.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
-        });
+        if (!error && data && data.length > 0) {
+          categoriasLista = data;
+          popularSelectsCategorias(categoriasLista);
+        }
       } catch (err) {
-        console.error("Erro ao carregar categorias:", err);
+        console.warn("Usando categorias locais:", err);
       }
     }
 
     window.adicionarNovaCategoriaPrompt = async () => {
-      const nomeCat = prompt("Digite o nome da nova Categoria (ex: Mesa Posta, Porta-Copos, Sousplat):");
+      const nomeCat = prompt("Digite o nome da nova Categoria (ex: Mesa Posta, Sousplat, Mantas):");
       if (!nomeCat || nomeCat.trim() === '') return;
 
       const slug = nomeCat.trim().toLowerCase()
@@ -524,61 +604,70 @@
         .replace(/[^a-z0-9]/g, '-');
 
       try {
-        const { error } = await db.from('categorias').insert([{
+        const novaCat = {
           nome: nomeCat.trim(),
           slug: slug,
           ordem: categoriasLista.length + 1
-        }]);
+        };
 
+        const { error } = await db.from('categorias').insert([novaCat]);
         if (error) throw error;
-        alert(`Categoria "${nomeCat}" criada com sucesso!`);
-        await carregarCategorias();
+
+        categoriasLista.push(novaCat);
+        popularSelectsCategorias(categoriasLista);
         selectCategoria.value = slug;
+        alert(`Categoria "${nomeCat}" criada com sucesso!`);
       } catch (err) {
         alert("Erro ao criar categoria: " + err.message);
       }
     };
 
     // ==============================================================
-    // 2. CARREGAR MODELOS PADRONIZADOS
+    // 2. RENDERIZAR E SINCRONIZAR MODELOS PADRONIZADOS
     // ==============================================================
+    function popularSelectModelos(lista) {
+      selectModeloPadrao.innerHTML = '<option value="">-- Selecione para preencher automático ou digite abaixo --</option>';
+      const listaBaseDiv = document.getElementById('lista-modelos-base');
+      listaBaseDiv.innerHTML = '';
+
+      lista.forEach(m => {
+        selectModeloPadrao.innerHTML += `<option value="${m.id}">${m.nome} (R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')})</option>`;
+
+        listaBaseDiv.innerHTML += `
+          <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-stone-200 text-xs">
+            <div>
+              <p class="font-bold text-stone-900">${m.nome}</p>
+              <p class="text-[11px] text-stone-500">${m.medidas_padrao} • ${m.fio_padrao} • R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')}</p>
+            </div>
+            <button onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5" title="Remover modelo">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+      });
+    }
+
     async function carregarModelosPadrao() {
+      popularSelectModelos(modelosPadraoLista);
+
       try {
         const { data, error } = await db
           .from('modelos_padrao')
           .select('*')
           .order('nome', { ascending: true });
 
-        if (error) throw error;
-        modelosPadraoLista = data || [];
-
-        selectModeloPadrao.innerHTML = '<option value="">-- Selecione para preencher automático ou digite abaixo --</option>';
-        const listaBaseDiv = document.getElementById('lista-modelos-base');
-        listaBaseDiv.innerHTML = '';
-
-        modelosPadraoLista.forEach(m => {
-          selectModeloPadrao.innerHTML += `<option value="${m.id}">${m.nome} (R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')})</option>`;
-
-          listaBaseDiv.innerHTML += `
-            <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-stone-200 text-xs">
-              <div>
-                <p class="font-bold text-stone-900">${m.nome}</p>
-                <p class="text-[11px] text-stone-500">${m.medidas_padrao} • ${m.fio_padrao} • R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')}</p>
-              </div>
-              <button onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5" title="Remover modelo">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          `;
-        });
+        if (!error && data && data.length > 0) {
+          modelosPadraoLista = data;
+          popularSelectModelos(modelosPadraoLista);
+        }
       } catch (err) {
-        console.error("Erro ao buscar modelos padronizados:", err);
+        console.warn("Usando modelos locais:", err);
       }
     }
 
     window.aplicarModeloPadrao = (id) => {
       if (!id) return;
-      const mod = modelosPadraoLista.find(m => m.id === id);
+      const mod = modelosPadraoLista.find(m => String(m.id) === String(id));
       if (!mod) return;
 
       document.getElementById('nome').value = mod.nome;
@@ -601,7 +690,7 @@
       try {
         const { error } = await db.from('modelos_padrao').insert([novoModelo]);
         if (error) throw error;
-        alert("Modelo base cadastrado!");
+        alert("Modelo base cadastrado com sucesso!");
         document.getElementById('form-novo-modelo-padrao').reset();
         await carregarModelosPadrao();
       } catch (err) {
@@ -631,7 +720,7 @@
         arquivosFotosSelecionados = [...arquivosFotosSelecionados, ...novosArquivos];
         renderizarPreviewsFotos();
       }
-      fotoInput.value = ''; // Permite adicionar mais fotos em cliques seguidos
+      fotoInput.value = '';
     });
 
     function renderizarPreviewsFotos() {
@@ -683,7 +772,6 @@
       try {
         const urlsPublicas = [];
 
-        // Faz o upload de cada foto selecionada
         for (let i = 0; i < arquivosFotosSelecionados.length; i++) {
           const file = arquivosFotosSelecionados[i];
           btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto ${i + 1} de ${arquivosFotosSelecionados.length}...`;
@@ -713,8 +801,8 @@
           medidas: document.getElementById('medidas').value,
           fio: document.getElementById('fio').value,
           pronta_entrega: document.getElementById('pronta_entrega').checked,
-          imagem_url: urlsPublicas[0], // Primeira foto como capa principal
-          imagens_urls: urlsPublicas,  // Todas as fotos salvas para o carrossel
+          imagem_url: urlsPublicas[0],
+          imagens_urls: urlsPublicas,
           ativo: true
         };
 
@@ -750,7 +838,7 @@
 
       loading.classList.add('hidden');
       if (error) {
-        alert("Erro ao buscar peças: " + error.message);
+        console.error("Erro ao buscar peças:", error.message);
         return;
       }
 
@@ -829,4 +917,51 @@
     });
 
     function inicializarQrCode() {
-      const urlLoja = window.location.href.replace(/
+      try {
+        const urlLoja = window.location.href.replace(/admin\.html.*$/i, '').replace(/\/$/, '') + '/index.html';
+        document.getElementById('input-url-qrcode').value = urlLoja;
+        document.getElementById('qrcode-box').innerHTML = '';
+        new QRCode(document.getElementById('qrcode-box'), {
+          text: urlLoja, width: 150, height: 150, colorDark: "#292524", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch (e) {}
+    }
+
+    window.baixarQrCode = () => {
+      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
+      const a = document.createElement('a');
+      a.href = img.tagName === 'IMG' ? img.src : img.toDataURL();
+      a.download = "qrcode-atelie-jucilene.png";
+      a.click();
+    };
+
+    window.imprimirPlacaQrCode = () => {
+      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
+      const imgSrc = img.tagName === 'IMG' ? img.src : img.toDataURL();
+      const janela = window.open('', '_blank');
+      janela.document.write(`
+        <html><body onload="window.print()" style="font-family:sans-serif; text-align:center; padding:40px;">
+          <div style="border:3px double #7E3F21; border-radius:24px; padding:30px; max-width:350px; margin:auto;">
+            <div style="font-size:32px;">🧶</div>
+            <h1 style="color:#542612; font-size:24px; margin:5px 0;">Ateliê da Jucilene</h1>
+            <p style="color:#8A7B66; font-size:12px; text-transform:uppercase; margin-bottom:20px;">Crochê, Artes & Fios</p>
+            <img src="${imgSrc}" style="width:180px; height:180px; border-radius:12px;">
+            <p style="font-size:13px; color:#444; margin-top:15px;">Aponte a câmera para ver nosso catálogo completo!</p>
+          </div>
+        </body></html>
+      `);
+      janela.document.close();
+    };
+
+    // ==============================================================
+    // INICIALIZAÇÃO IMEDIATA E PARALELA (SEM TRAVAR NO DOMCONTENTLOADED)
+    // ==============================================================
+    carregarPreferenciasCalculadora();
+    carregarCategorias();
+    carregarModelosPadrao();
+    carregarConfigWhats();
+    carregarProdutos();
+    inicializarQrCode();
+  </script>
+</body>
+</html>
