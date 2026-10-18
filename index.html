@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ateliê da Jucilene | Crochê, Artes & Fios</title>
   
-  <!-- ================= SUPORTE A PWA / INSTALAÇÃO COMO APP ================= -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#542612">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,12 +12,10 @@
   <meta name="apple-mobile-web-app-title" content="Ateliê Jucilene">
   <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=192&q=80">
 
-  <!-- Tailwind CSS & Supabase SDK -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Fontes Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -67,16 +64,13 @@
 
 <body class="bg-[#FAF8F5] text-stone-800 font-sans antialiased selection:bg-argila-200 selection:text-argila-900">
 
-  <!-- AVISO SUPERIOR -->
   <div class="bg-argila-900 text-stone-200 text-xs py-2 px-4 text-center font-medium tracking-wide">
     ✨ Peças 100% artesanais feitas à mão • <span class="text-amber-300 font-bold">5% de desconto no Pix</span> • Enviamos para todo o Brasil
   </div>
 
-  <!-- CABEÇALHO -->
   <header class="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200 transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- LOGOTIPO -->
       <a href="#" class="flex items-center gap-3 group">
         <div class="w-11 h-11 rounded-full bg-argila-100 border border-argila-200 flex items-center justify-center text-xl text-argila-700 shadow-sm group-hover:scale-105 transition">
           🧶
@@ -89,7 +83,6 @@
         </div>
       </a>
 
-      <!-- MENU NAVEGAÇÃO DESKTOP -->
       <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-stone-700">
         <a href="#colecao" class="hover:text-argila-700 transition">Coleção</a>
         <a href="#sob-medida" class="hover:text-argila-700 transition">Sob Medida</a>
@@ -98,7 +91,6 @@
         <a href="#faq" class="hover:text-argila-700 transition">Dúvidas</a>
       </nav>
 
-      <!-- AÇÕES DO TOPO DIREITO -->
       <div class="flex items-center gap-2 sm:gap-3">
         
         <button onclick="acessarPainelRestrito()" title="Acesso da Artesã"
@@ -126,7 +118,6 @@
     </div>
   </header>
 
-  <!-- GAVETA DO MENU SUSPENSO (MOBILE/TABLET) -->
   <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMenuMobile(false)"></div>
   <aside id="menu-drawer" class="fixed top-0 right-0 h-full w-full max-w-xs sm:max-w-sm bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
     
@@ -183,7 +174,6 @@
     </div>
   </aside>
 
-  <!-- BANNER FLUTUANTE DE INSTALAÇÃO DO APP -->
   <div id="banner-instalacao" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md bg-stone-900 text-white p-4 rounded-2xl shadow-2xl z-50 border border-amber-800/40 transform translate-y-32 opacity-0 transition-all duration-500 pointer-events-none flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
       <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow">
@@ -205,7 +195,6 @@
     </div>
   </div>
 
-  <!-- HERO SECTION -->
   <section class="relative pt-12 pb-20 md:py-24 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -277,7 +266,6 @@
     </div>
   </section>
 
-  <!-- CATÁLOGO / VITRINE -->
   <section id="colecao" class="py-20 bg-white border-y border-stone-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -287,7 +275,6 @@
           Toque nas fotos das peças para ampliar e ver todos os ângulos e detalhes dos pontos.
         </p>
 
-        <!-- FILTROS DE CATEGORIA DINÂMICOS DO SUPABASE -->
         <div id="filtros-categorias-dinamicos" class="flex flex-wrap items-center justify-center gap-2 mt-8"></div>
       </div>
 
@@ -301,15 +288,12 @@
     </div>
   </section>
 
-  <!-- ================= MODAL / LIGHTBOX DE GALERIA DE FOTOS DA PEÇA ================= -->
   <div id="modal-galeria" class="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative">
-      <!-- Botão Fechar -->
       <button onclick="fecharGaleriaModal()" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center text-lg transition">
         &times;
       </button>
 
-      <!-- Imagem Principal Ampliada -->
       <div class="relative aspect-square sm:aspect-[4/3] bg-stone-900 flex items-center justify-center">
         <img id="galeria-img-principal" src="" class="max-h-full max-w-full object-contain">
         
@@ -321,7 +305,6 @@
         </button>
       </div>
 
-      <!-- Miniaturas e Detalhes -->
       <div class="p-4 sm:p-5 bg-white">
         <div id="galeria-miniaturas" class="flex items-center justify-center gap-2 mb-3 overflow-x-auto pb-1"></div>
         <div class="flex items-center justify-between border-t border-stone-200 pt-3">
@@ -335,7 +318,6 @@
     </div>
   </div>
 
-  <!-- SIMULADOR SOB MEDIDA -->
   <section id="sob-medida" class="py-20 bg-argila-50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-md border border-argila-200">
@@ -403,7 +385,6 @@
     </div>
   </section>
 
-  <!-- SOBRE A ARTESÃ -->
   <section id="sobre" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -448,7 +429,6 @@
     </div>
   </section>
 
-  <!-- GUIA DE LAVAGEM -->
   <section id="cuidados" class="py-20 bg-stone-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="text-xs font-bold uppercase tracking-wider text-argila-700">Durabilidade Garantida</span>
@@ -482,7 +462,6 @@
     </div>
   </section>
 
-  <!-- FAQ -->
   <section id="faq" class="py-20 bg-white">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="font-serif text-3xl font-bold text-stone-900 text-center mb-8">Perguntas Frequentes</h2>
@@ -521,7 +500,6 @@
     </div>
   </section>
 
-  <!-- RODAPÉ -->
   <footer class="bg-stone-900 text-stone-300 py-12 border-t border-stone-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
       
@@ -562,7 +540,6 @@
     </div>
   </footer>
 
-  <!-- DRAWER DO CARRINHO -->
   <div id="carrinho-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCarrinho(false)"></div>
   <aside id="carrinho-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
     <div class="p-4 border-b border-stone-200 flex items-center justify-between">
@@ -598,14 +575,12 @@
     </div>
   </aside>
 
-  <!-- BOTÃO WHATSAPP FLUTUANTE -->
   <a id="btn-whats-flutuante" href="#" target="_blank"
     class="fixed bottom-6 right-6 z-30 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-xl hover:scale-110 transition text-2xl"
     title="Tirar dúvidas no WhatsApp">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- SCRIPTS & INTEGRAÇÕES -->
   <script>
     let WHATSAPP_NUMERO = "5517981347056";
     const SUPABASE_URL = "https://gibbuatpxedcslvapjjj.supabase.co";
@@ -614,11 +589,10 @@
 
     let produtos = [];
     let carrinho = [];
-    let indiceFotoCard = {}; // Guarda qual foto está ativa em cada card
+    let indiceFotoCard = {}; 
     let galeriaModalFotos = [];
     let galeriaModalIndice = 0;
 
-    // MENU HAMBÚRGUER
     window.toggleMenuMobile = (abrir) => {
       const drawer = document.getElementById('menu-drawer');
       const overlay = document.getElementById('menu-overlay');
@@ -631,7 +605,6 @@
       }
     };
 
-    // PWA INSTALAÇÃO
     let instaladorAppPrompt = null;
     const bannerInstalacao = document.getElementById('banner-instalacao');
 
@@ -703,7 +676,6 @@
       }
     }
 
-    // CARREGAR CATEGORIAS DINÂMICAS
     async function carregarFiltrosCategorias() {
       const container = document.getElementById('filtros-categorias-dinamicos');
       try {
@@ -719,7 +691,6 @@
       } catch (err) {}
     }
 
-    // CARREGAR PRODUTOS E CARROSSEL DE MÚLTIPLAS FOTOS
     async function carregarProdutos() {
       const loading = document.getElementById('loading-catalogo');
       const grade = document.getElementById('grade-produtos');
@@ -780,7 +751,6 @@
             `}
 
             ${fotos.length > 1 ? `
-              <!-- Botões de Setas do Carrossel -->
               <button onclick="trocarFotoCard('${prod.id}', -1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 hover:bg-white text-stone-800 flex items-center justify-center shadow transition">
                 <i class="fa-solid fa-chevron-left text-xs"></i>
               </button>
@@ -833,7 +803,6 @@
       });
     }
 
-    // Trocar foto direto no card do produto
     window.trocarFotoCard = (id, delta) => {
       const prod = produtos.find(p => p.id == id);
       if (!prod) return;
@@ -848,7 +817,6 @@
       if (contador) contador.textContent = `📷 ${idx + 1}/${fotos.length}`;
     };
 
-    // Abrir Modal Lightbox de Galeria em Tela Cheia
     window.abrirGaleriaModal = (id) => {
       const prod = produtos.find(p => p.id == id);
       if (!prod) return;
@@ -860,8 +828,7 @@
       document.getElementById('galeria-preco').textContent = `R$ ${(prod.preco * 0.95).toFixed(2).replace('.', ',')} no Pix`;
 
       atualizarTelaGaleriaModal();
-      const modal = document.getElementById('modal-galeria');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('modal-galeria').classList.remove('opacity-0', 'pointer-events-none');
     };
 
     function atualizarTelaGaleriaModal() {
@@ -913,7 +880,6 @@
       else renderizarGrade(produtos.filter(p => p.categoria === cat));
     };
 
-    // CARRINHO
     window.toggleCarrinho = (abrir) => {
       const drawer = document.getElementById('carrinho-drawer');
       const overlay = document.getElementById('carrinho-overlay');
@@ -986,7 +952,6 @@
       document.getElementById('carrinho-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    // WHATSAPP
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
       const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1005,7 +970,6 @@
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    // SIMULADOR
     let formatoSelecionado = "Retangular";
     window.setFormato = (f) => {
       formatoSelecionado = f;
@@ -1029,7 +993,6 @@
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    // Inicialização
     window.addEventListener('DOMContentLoaded', async () => {
       await carregarNumeroWhatsBanco();
       await carregarFiltrosCategorias();
