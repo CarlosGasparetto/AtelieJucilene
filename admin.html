@@ -27,7 +27,7 @@
         </div>
         <div>
           <h1 class="text-base sm:text-lg font-bold text-stone-900 leading-tight">Ateliê da Jucilene</h1>
-          <p class="text-[11px] text-stone-500 font-medium">Crochê, Artes & Fios • Painel de Controle</p>
+          <p id="status-conexao-topo" class="text-[11px] text-stone-500 font-medium">Conectando ao banco de dados...</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
@@ -73,7 +73,7 @@
           <p class="text-[10px] text-amber-800/80 mt-1">Preenche nome, categoria, preço e barbante automaticamente.</p>
         </div>
 
-        <form id="form-produto" class="space-y-4">
+        <form id="form-produto" onsubmit="return false;" class="space-y-4">
           <!-- Nome da Peça -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Nome do Modelo *</label>
@@ -88,7 +88,6 @@
                 <label class="block text-xs font-semibold text-stone-700">Categoria *</label>
                 <button type="button" onclick="adicionarNovaCategoriaPrompt()" class="text-[11px] text-amber-800 hover:underline font-bold">+ Nova</button>
               </div>
-              <!-- Já inicia com as categorias do banco carregadas imediatamente -->
               <select id="categoria" required class="w-full px-3 py-2.5 rounded-xl border border-stone-300 focus:border-amber-800 text-sm outline-none bg-white">
                 <option value="porta-copos">Porta Copos</option>
                 <option value="passadeiras">Passadeiras de Cozinha</option>
@@ -154,8 +153,11 @@
             </div>
           </div>
 
+          <!-- CAIXA DE STATUS VISUAL DO ENVIO -->
+          <div id="status-publicacao" class="hidden p-3.5 rounded-xl text-xs font-semibold border"></div>
+
           <!-- Botão Enviar -->
-          <button type="submit" id="btn-submit"
+          <button type="button" id="btn-submit" onclick="publicarPecaNoCatalogo()"
             class="w-full py-3.5 bg-amber-900 hover:bg-amber-950 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
             <i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo
           </button>
@@ -168,10 +170,10 @@
           <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp de Vendas
         </h2>
         <p class="text-xs text-stone-500 mb-3">Número para onde os pedidos do catálogo são enviados.</p>
-        <form id="form-config-whats" class="flex gap-2">
+        <form id="form-config-whats" onsubmit="return false;" class="flex gap-2">
           <input type="text" id="whats-config-input" required placeholder="5517981347056"
             class="flex-1 px-3.5 py-2 rounded-xl border border-stone-300 focus:border-emerald-600 text-xs outline-none font-mono">
-          <button type="submit" id="btn-salvar-whats"
+          <button type="button" onclick="salvarConfigWhats()" id="btn-salvar-whats"
             class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow transition">
             Salvar
           </button>
@@ -190,8 +192,8 @@
           <div id="qrcode-box" class="p-2 bg-white rounded-lg shadow-sm"></div>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="baixarQrCode()" class="py-2 bg-amber-900 text-white font-semibold text-xs rounded-xl">Baixar Imagem</button>
-          <button onclick="imprimirPlacaQrCode()" class="py-2 bg-stone-100 border text-stone-700 font-semibold text-xs rounded-xl">Imprimir Placa</button>
+          <button type="button" onclick="baixarQrCode()" class="py-2 bg-amber-900 text-white font-semibold text-xs rounded-xl">Baixar Imagem</button>
+          <button type="button" onclick="imprimirPlacaQrCode()" class="py-2 bg-stone-100 border text-stone-700 font-semibold text-xs rounded-xl">Imprimir Placa</button>
         </div>
       </div>
 
@@ -212,7 +214,6 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           
-          <!-- 1. Custo do Fio / Balança -->
           <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
             <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
               <i class="fa-solid fa-scale-balanced"></i> 1. Barbante & Embalagem
@@ -245,7 +246,6 @@
             </div>
           </div>
 
-          <!-- 2. Mão de Obra e Margens -->
           <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
             <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
               <i class="fa-solid fa-clock"></i> 2. Tempo & Margem do Ateliê
@@ -286,7 +286,6 @@
 
         </div>
 
-        <!-- RESUMO DETALHADO DOS CÁLCULOS -->
         <div class="mt-4 p-4 rounded-2xl bg-amber-50/90 border border-amber-200 space-y-3">
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center border-b border-amber-200/80 pb-3">
             <div class="bg-white/80 p-2 rounded-lg">
@@ -324,9 +323,6 @@
               <i class="fa-solid fa-arrow-left"></i> Usar Preço no Cadastro
             </button>
           </div>
-          <p class="text-[10px] text-stone-500 text-center sm:text-left">
-            💡 O <strong>Preço de Vitrine</strong> já inclui a margem para que, quando a cliente ganhar os 5% de desconto no Pix, você receba o valor integral planejado!
-          </p>
         </div>
       </div>
 
@@ -335,7 +331,7 @@
         <div class="flex justify-between items-center mb-5">
           <div>
             <h2 class="text-xl font-bold text-stone-900">Peças Cadastradas na Vitrine</h2>
-            <p class="text-xs text-stone-500">Pausar ou remover produtos da loja.</p>
+            <p class="text-xs text-stone-500">Produtos salvos atualmente na tabela do Supabase.</p>
           </div>
           <span id="contador-produtos" class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold">
             0 peças
@@ -367,10 +363,10 @@
         <h3 class="font-serif font-bold text-lg text-stone-900 flex items-center gap-2">
           <i class="fa-solid fa-sliders text-amber-800"></i> Modelos Base Padronizados
         </h3>
-        <button onclick="fecharModalModelos()" class="text-stone-400 hover:text-stone-700 text-xl font-bold">&times;</button>
+        <button type="button" onclick="fecharModalModelos()" class="text-stone-400 hover:text-stone-700 text-xl font-bold">&times;</button>
       </div>
 
-      <form id="form-novo-modelo-padrao" class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+      <form id="form-novo-modelo-padrao" onsubmit="return false;" class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
         <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wide">+ Criar Novo Modelo Base</h4>
         <div>
           <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Nome do Modelo Base *</label>
@@ -403,8 +399,8 @@
             <input type="text" id="mod-fio" required placeholder="Ex: Algodão Cru nº 6" class="w-full px-3 py-1.5 rounded-lg border text-xs">
           </div>
         </div>
-        <button type="submit" class="w-full py-2 bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs rounded-lg transition">
-          Salvar Modelo Base
+        <button type="button" onclick="salvarNovoModeloBase()" class="w-full py-2 bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs rounded-lg transition">
+          Salvar Modelo Base no Supabase
         </button>
       </form>
 
@@ -423,7 +419,6 @@
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Categorias padrão idênticas às gravadas no Supabase (Fallback imediato)
     const categoriasPadrao = [
       { nome: 'Passadeiras de Cozinha', slug: 'passadeiras', ordem: 1 },
       { nome: 'Tapetes de Sala', slug: 'sala', ordem: 2 },
@@ -433,7 +428,6 @@
       { nome: 'Porta Copos', slug: 'porta-copos', ordem: 6 }
     ];
 
-    // Modelos padrão de fallback imediato
     const modelosPadraoIniciais = [
       {
         id: 'padrao-porta-copos',
@@ -442,38 +436,6 @@
         preco_sugerido: 68.00,
         medidas_padrao: '15cm diâmetro (6 un.)',
         fio_padrao: 'Algodão Cru nº 6'
-      },
-      {
-        id: '3edd11aa-2d32-454c-9a20-65f6f6798',
-        nome: 'Passadeira Cozinha Boho Cru',
-        categoria_slug: 'passadeiras',
-        preco_sugerido: 145.00,
-        medidas_padrao: '1,40m x 0,45m',
-        fio_padrao: 'Barbante Ecológico nº 8'
-      },
-      {
-        id: 'b8552583-2c47-4ee7-9652-a58f256e',
-        nome: 'Tapete Redondo Mandala Sala',
-        categoria_slug: 'sala',
-        preco_sugerido: 230.00,
-        medidas_padrao: '1,15m de diâmetro',
-        fio_padrao: '100% Algodão Premium nº 6'
-      },
-      {
-        id: '266fc843-29b1-42bb-bb77-171549b3f',
-        nome: 'Jogo de Banheiro Russo (3 Peças)',
-        categoria_slug: 'banheiro',
-        preco_sugerido: 185.00,
-        medidas_padrao: 'Tampa + 2 Tapetes',
-        fio_padrao: 'Barbante Macio nº 6'
-      },
-      {
-        id: 'a2af4b0d-9d1e-4cf7-8702-d188d6d9f',
-        nome: 'Caminho de Mesa Clássico Espiral',
-        categoria_slug: 'mesa',
-        preco_sugerido: 130.00,
-        medidas_padrao: '1,20m x 0,40m',
-        fio_padrao: 'Barbante nº 6 Mercerizado'
       }
     ];
 
@@ -493,14 +455,28 @@
     const listaVazia = document.getElementById('lista-vazia');
     const contadorProdutos = document.getElementById('contador-produtos');
     const btnSubmit = document.getElementById('btn-submit');
+    const statusPublicacao = document.getElementById('status-publicacao');
+    const statusConexaoTopo = document.getElementById('status-conexao-topo');
+
+    function exibirMensagemStatus(texto, tipo = 'info') {
+      statusPublicacao.classList.remove('hidden', 'bg-amber-50', 'text-amber-900', 'border-amber-300', 'bg-emerald-50', 'text-emerald-900', 'border-emerald-300', 'bg-rose-50', 'text-rose-900', 'border-rose-300');
+      if (tipo === 'sucesso') {
+        statusPublicacao.classList.add('bg-emerald-50', 'text-emerald-900', 'border-emerald-300');
+      } else if (tipo === 'erro') {
+        statusPublicacao.classList.add('bg-rose-50', 'text-rose-900', 'border-rose-300');
+      } else {
+        statusPublicacao.classList.add('bg-amber-50', 'text-amber-900', 'border-amber-300');
+      }
+      statusPublicacao.innerHTML = texto;
+    }
 
     // ==============================================================
-    // LÓGICA DA CALCULADORA DE PRECIFICAÇÃO ARTESANAL
+    // CALCULADORA DE PRECIFICAÇÃO
     // ==============================================================
     function carregarPreferenciasCalculadora() {
       if (localStorage.getItem('calc_preco_cone')) document.getElementById('calc-preco-cone').value = localStorage.getItem('calc_preco_cone');
       if (localStorage.getItem('calc_peso_cone')) document.getElementById('calc-peso-cone').value = localStorage.getItem('calc_peso_cone');
-      if (localStorage.getItem('calc_valor_hora')) document.getElementById('calc-valor-hora').value = localStorage.getItem('calc_valor-hora');
+      if (localStorage.getItem('calc_valor_hora')) document.getElementById('calc-valor-hora').value = localStorage.getItem('calc_valor_hora');
       calcularPrecoArtesanato();
     }
 
@@ -509,11 +485,9 @@
       const pesoCone = parseFloat(document.getElementById('calc-peso-cone').value) || 1;
       const pesoPeca = parseFloat(document.getElementById('calc-peso-peca').value) || 0;
       const embalagem = parseFloat(document.getElementById('calc-embalagem').value) || 0;
-      
       const valorHora = parseFloat(document.getElementById('calc-valor-hora').value) || 0;
       const horas = parseFloat(document.getElementById('calc-horas').value) || 0;
       const minutos = parseFloat(document.getElementById('calc-minutos').value) || 0;
-      
       const percIndiretos = parseFloat(document.getElementById('calc-indiretos').value) || 0;
       const percLucro = parseFloat(document.getElementById('calc-lucro').value) || 0;
 
@@ -523,16 +497,12 @@
 
       const custoFio = (precoCone / pesoCone) * pesoPeca;
       const custoMaterialTotal = custoFio + embalagem;
-
       const tempoTotalHoras = horas + (minutos / 60);
       const custoMaoDeObra = tempoTotalHoras * valorHora;
-
       const subtotalProducao = custoMaterialTotal + custoMaoDeObra;
       const valorIndiretos = subtotalProducao * (percIndiretos / 100);
-
       const custoTotalPeca = subtotalProducao + valorIndiretos;
       const valorLucro = custoTotalPeca * (percLucro / 100);
-
       const precoPix = custoTotalPeca + valorLucro;
       const precoVitrine = Math.ceil(precoPix / 0.95);
       precoVitrineCalculado = precoVitrine;
@@ -557,12 +527,11 @@
     };
 
     // ==============================================================
-    // 1. RENDERIZAR E SINCRONIZAR CATEGORIAS
+    // 1. CATEGORIAS
     // ==============================================================
     function popularSelectsCategorias(lista) {
       const valorAtual = selectCategoria.value;
       const modCatSelect = document.getElementById('mod-categoria');
-
       selectCategoria.innerHTML = '';
       modCatSelect.innerHTML = '';
 
@@ -577,21 +546,16 @@
     }
 
     async function carregarCategorias() {
-      // Popula imediatamente com a lista padrão para nunca travar em "Carregando..."
       popularSelectsCategorias(categoriasLista);
-
       try {
-        const { data, error } = await db
-          .from('categorias')
-          .select('*')
-          .order('ordem', { ascending: true });
-
+        const { data, error } = await db.from('categorias').select('*').order('ordem', { ascending: true });
         if (!error && data && data.length > 0) {
           categoriasLista = data;
           popularSelectsCategorias(categoriasLista);
+          statusConexaoTopo.innerHTML = `<span class="text-emerald-700 font-bold">● Conectado ao Supabase</span> (${data.length} categorias ativas)`;
         }
       } catch (err) {
-        console.warn("Usando categorias locais:", err);
+        console.warn("Categorias locais:", err);
       }
     }
 
@@ -604,26 +568,19 @@
         .replace(/[^a-z0-9]/g, '-');
 
       try {
-        const novaCat = {
-          nome: nomeCat.trim(),
-          slug: slug,
-          ordem: categoriasLista.length + 1
-        };
-
+        const novaCat = { nome: nomeCat.trim(), slug: slug, ordem: categoriasLista.length + 1 };
         const { error } = await db.from('categorias').insert([novaCat]);
         if (error) throw error;
-
-        categoriasLista.push(novaCat);
-        popularSelectsCategorias(categoriasLista);
+        await carregarCategorias();
         selectCategoria.value = slug;
-        alert(`Categoria "${nomeCat}" criada com sucesso!`);
+        alert(`Categoria "${nomeCat}" salva no Supabase!`);
       } catch (err) {
-        alert("Erro ao criar categoria: " + err.message);
+        alert("Erro ao criar categoria no Supabase: " + err.message);
       }
     };
 
     // ==============================================================
-    // 2. RENDERIZAR E SINCRONIZAR MODELOS PADRONIZADOS
+    // 2. MODELOS PADRONIZADOS
     // ==============================================================
     function popularSelectModelos(lista) {
       selectModeloPadrao.innerHTML = '<option value="">-- Selecione para preencher automático ou digite abaixo --</option>';
@@ -632,14 +589,13 @@
 
       lista.forEach(m => {
         selectModeloPadrao.innerHTML += `<option value="${m.id}">${m.nome} (R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')})</option>`;
-
         listaBaseDiv.innerHTML += `
           <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-stone-200 text-xs">
             <div>
               <p class="font-bold text-stone-900">${m.nome}</p>
               <p class="text-[11px] text-stone-500">${m.medidas_padrao} • ${m.fio_padrao} • R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')}</p>
             </div>
-            <button onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5" title="Remover modelo">
+            <button type="button" onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5" title="Remover modelo">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -649,27 +605,19 @@
 
     async function carregarModelosPadrao() {
       popularSelectModelos(modelosPadraoLista);
-
       try {
-        const { data, error } = await db
-          .from('modelos_padrao')
-          .select('*')
-          .order('nome', { ascending: true });
-
+        const { data, error } = await db.from('modelos_padrao').select('*').order('nome', { ascending: true });
         if (!error && data && data.length > 0) {
-          modelosPadraoLista = data;
+          modelosPadraoLista = [...modelosPadraoIniciais, ...data.filter(d => d.nome !== modelosPadraoIniciais[0].nome)];
           popularSelectModelos(modelosPadraoLista);
         }
-      } catch (err) {
-        console.warn("Usando modelos locais:", err);
-      }
+      } catch (err) {}
     }
 
     window.aplicarModeloPadrao = (id) => {
       if (!id) return;
       const mod = modelosPadraoLista.find(m => String(m.id) === String(id));
       if (!mod) return;
-
       document.getElementById('nome').value = mod.nome;
       document.getElementById('categoria').value = mod.categoria_slug;
       document.getElementById('preco').value = mod.preco_sugerido;
@@ -677,26 +625,30 @@
       document.getElementById('fio').value = mod.fio_padrao;
     };
 
-    document.getElementById('form-novo-modelo-padrao').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const novoModelo = {
-        nome: document.getElementById('mod-nome').value.trim(),
-        categoria_slug: document.getElementById('mod-categoria').value,
-        preco_sugerido: parseFloat(document.getElementById('mod-preco').value),
-        medidas_padrao: document.getElementById('mod-medidas').value.trim(),
-        fio_padrao: document.getElementById('mod-fio').value.trim()
-      };
+    window.salvarNovoModeloBase = async () => {
+      const nome = document.getElementById('mod-nome').value.trim();
+      const categoria_slug = document.getElementById('mod-categoria').value;
+      const preco_sugerido = parseFloat(document.getElementById('mod-preco').value);
+      const medidas_padrao = document.getElementById('mod-medidas').value.trim();
+      const fio_padrao = document.getElementById('mod-fio').value.trim();
+
+      if (!nome || isNaN(preco_sugerido)) {
+        alert("Preencha o nome e o preço sugerido do modelo base.");
+        return;
+      }
 
       try {
-        const { error } = await db.from('modelos_padrao').insert([novoModelo]);
+        const { error } = await db.from('modelos_padrao').insert([{
+          nome, categoria_slug, preco_sugerido, medidas_padrao, fio_padrao
+        }]);
         if (error) throw error;
-        alert("Modelo base cadastrado com sucesso!");
+        alert("Modelo base salvo no Supabase com sucesso!");
         document.getElementById('form-novo-modelo-padrao').reset();
         await carregarModelosPadrao();
       } catch (err) {
         alert("Erro ao salvar modelo base: " + err.message);
       }
-    });
+    };
 
     window.excluirModeloPadrao = async (id) => {
       if (!confirm("Remover este modelo base?")) return;
@@ -704,15 +656,11 @@
       carregarModelosPadrao();
     };
 
-    window.abrirModalModelos = () => {
-      document.getElementById('modal-modelos').classList.remove('opacity-0', 'pointer-events-none');
-    };
-    window.fecharModalModelos = () => {
-      document.getElementById('modal-modelos').classList.add('opacity-0', 'pointer-events-none');
-    };
+    window.abrirModalModelos = () => document.getElementById('modal-modelos').classList.remove('opacity-0', 'pointer-events-none');
+    window.fecharModalModelos = () => document.getElementById('modal-modelos').classList.add('opacity-0', 'pointer-events-none');
 
     // ==============================================================
-    // 3. SELEÇÃO E UPLOAD DE MÚLTIPLAS FOTOS
+    // 3. UPLOAD DE FOTOS E PUBLICAÇÃO NO SUPABASE
     // ==============================================================
     fotoInput.addEventListener('change', (e) => {
       const novosArquivos = Array.from(e.target.files);
@@ -730,7 +678,6 @@
         btnLimparFotos.classList.add('hidden');
         return;
       }
-
       previewContainer.classList.remove('hidden');
       btnLimparFotos.classList.remove('hidden');
 
@@ -742,7 +689,7 @@
           <img src="${url}" class="w-full h-full object-cover">
           ${index === 0 ? '<span class="absolute bottom-1 left-1 bg-amber-900/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Capa</span>' : ''}
           <button type="button" onclick="removerFotoPreview(${index})"
-            class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700">
+            class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow">
             &times;
           </button>
         `;
@@ -760,10 +707,22 @@
       renderizarPreviewsFotos();
     };
 
-    formProduto.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Função principal de publicação chamada diretamente pelo botão
+    window.publicarPecaNoCatalogo = async () => {
+      const nome = document.getElementById('nome').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      const preco = parseFloat(document.getElementById('preco').value);
+      const medidas = document.getElementById('medidas').value.trim();
+      const fio = document.getElementById('fio').value.trim();
+      const pronta_entrega = document.getElementById('pronta_entrega').checked;
+
+      if (!nome || !categoria || isNaN(preco) || !medidas || !fio) {
+        exibirMensagemStatus("⚠️ Preencha todos os campos obrigatórios (Nome, Categoria, Preço, Dimensões e Barbante).", "erro");
+        return;
+      }
+
       if (arquivosFotosSelecionados.length === 0) {
-        alert("Selecione pelo menos 1 foto da peça.");
+        exibirMensagemStatus("⚠️ Toque na área tracejada para selecionar pelo menos 1 foto da peça antes de publicar.", "erro");
         return;
       }
 
@@ -774,7 +733,9 @@
 
         for (let i = 0; i < arquivosFotosSelecionados.length; i++) {
           const file = arquivosFotosSelecionados[i];
-          btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto ${i + 1} de ${arquivosFotosSelecionados.length}...`;
+          const msgFoto = `⏳ Etapa 1/2: Enviando foto ${i + 1} de ${arquivosFotosSelecionados.length} para o Supabase Storage...`;
+          btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto ${i + 1}/${arquivosFotosSelecionados.length}...`;
+          exibirMensagemStatus(msgFoto, "info");
 
           const fileExt = file.name.split('.').pop();
           const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
@@ -783,7 +744,9 @@
             .from('fotos-tapetes')
             .upload(fileName, file);
 
-          if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
+          if (uploadError) {
+            throw new Error(`Falha ao enviar foto para o bucket 'fotos-tapetes': ${uploadError.message}. Verifique se rodou o script SQL no Supabase.`);
+          }
 
           const { data: publicUrlData } = db.storage
             .from('fotos-tapetes')
@@ -792,36 +755,44 @@
           urlsPublicas.push(publicUrlData.publicUrl);
         }
 
-        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publicando peça...`;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Gravando no banco...`;
+        exibirMensagemStatus("⏳ Etapa 2/2: Gravando peça na tabela 'produtos' do Supabase...", "info");
 
         const novoItem = {
-          nome: document.getElementById('nome').value,
-          categoria: document.getElementById('categoria').value,
-          preco: parseFloat(document.getElementById('preco').value),
-          medidas: document.getElementById('medidas').value,
-          fio: document.getElementById('fio').value,
-          pronta_entrega: document.getElementById('pronta_entrega').checked,
+          nome: nome,
+          categoria: categoria,
+          preco: preco,
+          medidas: medidas,
+          fio: fio,
+          pronta_entrega: pronta_entrega,
           imagem_url: urlsPublicas[0],
           imagens_urls: urlsPublicas,
           ativo: true
         };
 
-        const { error: insertError } = await db.from('produtos').insert([novoItem]);
-        if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
+        const { data: insertedData, error: insertError } = await db
+          .from('produtos')
+          .insert([novoItem])
+          .select();
 
-        alert(`Peça publicada com sucesso com ${urlsPublicas.length} foto(s)!`);
+        if (insertError) {
+          throw new Error(`O banco recusou a gravação na tabela 'produtos': ${insertError.message}. Rode o Script SQL do Passo 1 no Supabase para liberar a permissão RLS!`);
+        }
+
+        exibirMensagemStatus(`✅ Sucesso! A peça "${nome}" foi gravada no Supabase com ${urlsPublicas.length} foto(s) e já está visível na loja!`, "sucesso");
         formProduto.reset();
         selectModeloPadrao.value = "";
         limparFotosSelecionadas();
-        carregarProdutos();
+        await carregarProdutos();
 
       } catch (err) {
+        exibirMensagemStatus(`❌ ${err.message}`, "erro");
         alert(err.message);
       } finally {
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo`;
       }
-    });
+    };
 
     // ==============================================================
     // 4. LISTAGEM DAS PEÇAS NO CATÁLOGO
@@ -872,11 +843,11 @@
             <p class="text-sm font-bold text-amber-900 mt-0.5">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
           </div>
           <div class="flex items-center gap-1.5">
-            <button onclick="alternarStatus('${item.id}', ${item.ativo})" title="${item.ativo ? 'Ocultar' : 'Mostrar'}"
+            <button type="button" onclick="alternarStatus('${item.id}', ${item.ativo})" title="${item.ativo ? 'Ocultar' : 'Mostrar'}"
               class="w-8 h-8 rounded-lg flex items-center justify-center text-xs ${item.ativo ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'} transition">
               <i class="fa-solid ${item.ativo ? 'fa-eye' : 'fa-eye-slash'}"></i>
             </button>
-            <button onclick="excluirProduto('${item.id}')" title="Excluir"
+            <button type="button" onclick="excluirProduto('${item.id}')" title="Excluir"
               class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 transition">
               <i class="fa-solid fa-trash"></i>
             </button>
@@ -900,7 +871,7 @@
     };
 
     // ==============================================================
-    // 5. CONFIGURAÇÃO DO WHATSAPP & QR CODE
+    // 5. WHATSAPP & QR CODE
     // ==============================================================
     async function carregarConfigWhats() {
       try {
@@ -909,12 +880,12 @@
       } catch (e) {}
     }
 
-    document.getElementById('form-config-whats').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    window.salvarConfigWhats = async () => {
       const novoNum = document.getElementById('whats-config-input').value.replace(/\D/g, '').trim();
-      await db.from('configuracoes').upsert({ chave: 'whatsapp', valor: novoNum });
-      alert("WhatsApp atualizado com sucesso!");
-    });
+      const { error } = await db.from('configuracoes').upsert({ chave: 'whatsapp', valor: novoNum });
+      if (error) alert("Erro ao salvar WhatsApp: " + error.message);
+      else alert("WhatsApp atualizado com sucesso!");
+    };
 
     function inicializarQrCode() {
       try {
@@ -922,46 +893,4 @@
         document.getElementById('input-url-qrcode').value = urlLoja;
         document.getElementById('qrcode-box').innerHTML = '';
         new QRCode(document.getElementById('qrcode-box'), {
-          text: urlLoja, width: 150, height: 150, colorDark: "#292524", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
-        });
-      } catch (e) {}
-    }
-
-    window.baixarQrCode = () => {
-      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
-      const a = document.createElement('a');
-      a.href = img.tagName === 'IMG' ? img.src : img.toDataURL();
-      a.download = "qrcode-atelie-jucilene.png";
-      a.click();
-    };
-
-    window.imprimirPlacaQrCode = () => {
-      const img = document.querySelector('#qrcode-box img') || document.querySelector('#qrcode-box canvas');
-      const imgSrc = img.tagName === 'IMG' ? img.src : img.toDataURL();
-      const janela = window.open('', '_blank');
-      janela.document.write(`
-        <html><body onload="window.print()" style="font-family:sans-serif; text-align:center; padding:40px;">
-          <div style="border:3px double #7E3F21; border-radius:24px; padding:30px; max-width:350px; margin:auto;">
-            <div style="font-size:32px;">🧶</div>
-            <h1 style="color:#542612; font-size:24px; margin:5px 0;">Ateliê da Jucilene</h1>
-            <p style="color:#8A7B66; font-size:12px; text-transform:uppercase; margin-bottom:20px;">Crochê, Artes & Fios</p>
-            <img src="${imgSrc}" style="width:180px; height:180px; border-radius:12px;">
-            <p style="font-size:13px; color:#444; margin-top:15px;">Aponte a câmera para ver nosso catálogo completo!</p>
-          </div>
-        </body></html>
-      `);
-      janela.document.close();
-    };
-
-    // ==============================================================
-    // INICIALIZAÇÃO IMEDIATA E PARALELA (SEM TRAVAR NO DOMCONTENTLOADED)
-    // ==============================================================
-    carregarPreferenciasCalculadora();
-    carregarCategorias();
-    carregarModelosPadrao();
-    carregarConfigWhats();
-    carregarProdutos();
-    inicializarQrCode();
-  </script>
-</body>
-</html>
+          text: urlLoja, width
