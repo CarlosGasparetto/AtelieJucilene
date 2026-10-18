@@ -7,7 +7,6 @@
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Link do QRCode atualizado e estável -->
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -47,13 +46,13 @@
 
       <div id="bloco-cadastro" class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
         <div class="flex items-center justify-between mb-1">
-          <h2 class="text-xl font-bold text-stone-900 flex items-center gap-2">
+          <h2 id="titulo-form-produto" class="text-xl font-bold text-stone-900 flex items-center gap-2">
             <i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça
           </h2>
         </div>
-        <p class="text-xs text-stone-500 mb-5">Anexe uma ou mais fotos e preencha os dados para exibir na vitrine.</p>
+        <p id="subtitulo-form-produto" class="text-xs text-stone-500 mb-5">Anexe uma ou mais fotos e preencha os dados para exibir na vitrine.</p>
 
-        <div class="mb-5 p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl">
+        <div id="box-seletor-modelo" class="mb-5 p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl transition">
           <div class="flex items-center justify-between mb-1.5">
             <label class="block text-xs font-bold text-amber-950 flex items-center gap-1.5">
               <i class="fa-solid fa-wand-magic-sparkles text-amber-700"></i> Modelo Base (Padronizado)
@@ -125,7 +124,7 @@
 
           <div>
             <div class="flex items-center justify-between mb-1">
-              <label class="block text-xs font-semibold text-stone-700">Fotos da Peça Real * (1 ou mais)</label>
+              <label class="block text-xs font-semibold text-stone-700">Fotos da Peça Real <span id="req-foto">*</span></label>
               <button type="button" id="btn-limpar-fotos" onclick="limparFotosSelecionadas()" class="hidden text-[11px] text-rose-600 hover:underline font-semibold">
                 Limpar fotos
               </button>
@@ -134,7 +133,7 @@
             <div id="preview-container" class="hidden grid grid-cols-3 gap-2 mb-3"></div>
 
             <div class="border-2 border-dashed border-stone-300 hover:border-amber-800 rounded-xl p-4 text-center cursor-pointer bg-stone-50 transition relative">
-              <input type="file" id="foto-input" accept="image/*" multiple class="absolute inset-0 opacity-0 cursor-pointer">
+              <input type="file" id="foto-input" accept="image/*" multiple required class="absolute inset-0 opacity-0 cursor-pointer">
               <div id="placeholder-upload">
                 <i class="fa-solid fa-images text-2xl text-stone-400 mb-1"></i>
                 <p class="text-xs font-medium text-stone-600">Toque para escolher 1 ou mais fotos</p>
@@ -143,10 +142,17 @@
             </div>
           </div>
 
-          <button type="submit" id="btn-submit"
-            class="w-full py-3.5 bg-amber-900 hover:bg-amber-950 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo
-          </button>
+          <!-- Botões de Ação (Com Cancelar oculto por padrão) -->
+          <div class="flex gap-2 pt-2">
+            <button type="button" id="btn-cancelar-edicao" onclick="cancelarEdicao()" 
+              class="hidden w-1/3 py-3.5 bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold text-sm rounded-xl transition">
+              Cancelar
+            </button>
+            <button type="submit" id="btn-submit"
+              class="flex-1 py-3.5 bg-amber-900 hover:bg-amber-950 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up" id="icone-btn-submit"></i> <span id="texto-btn-submit">Publicar no Catálogo</span>
+            </button>
+          </div>
         </form>
       </div>
 
@@ -216,12 +222,12 @@
 
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Peso da Peça Pronta (g)</label>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Peso da Peça (g)</label>
                 <input type="number" step="1" id="calc-peso-peca" value="200" oninput="calcularPrecoArtesanato()"
                   class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Embalagem / Tag (R$)</label>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Embalagem (R$)</label>
                 <input type="number" step="0.01" id="calc-embalagem" value="3.00" oninput="calcularPrecoArtesanato()"
                   class="w-full px-2.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold outline-none focus:border-amber-800 bg-white">
               </div>
@@ -230,7 +236,7 @@
 
           <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
             <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-              <i class="fa-solid fa-clock"></i> 2. Tempo & Margem do Ateliê
+              <i class="fa-solid fa-clock"></i> 2. Tempo & Margem
             </h3>
 
             <div>
@@ -246,7 +252,7 @@
                   class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
               </div>
               <div>
-                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Minutos gastas</label>
+                <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Minutos gastos</label>
                 <input type="number" step="5" min="0" max="59" id="calc-minutos" value="0" oninput="calcularPrecoArtesanato()"
                   class="w-full px-2.5 py-1.5 rounded-lg border border-amber-400 bg-amber-50/40 text-xs font-bold outline-none focus:border-amber-800">
               </div>
@@ -275,7 +281,7 @@
               <strong id="res-material" class="text-xs font-bold text-stone-800">R$ 15,00</strong>
             </div>
             <div class="bg-white/80 p-2 rounded-lg">
-              <span class="block text-[10px] text-stone-500">Seu Salário (Mão de Obra)</span>
+              <span class="block text-[10px] text-stone-500">Seu Salário</span>
               <strong id="res-mao-obra" class="text-xs font-bold text-emerald-800">R$ 32,00</strong>
             </div>
             <div class="bg-white/80 p-2 rounded-lg">
@@ -291,11 +297,11 @@
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
             <div class="flex items-center gap-6">
               <div>
-                <span class="block text-[11px] font-semibold text-emerald-800">Preço à Vista / Pix (5% OFF):</span>
+                <span class="block text-[11px] font-semibold text-emerald-800">Preço à Vista/Pix:</span>
                 <span id="res-preco-pix" class="text-xl font-bold text-emerald-700">R$ 64,63</span>
               </div>
               <div class="border-l border-amber-300 pl-6">
-                <span class="block text-[11px] font-bold text-amber-950">Preço de Vitrine (Site / Cartão):</span>
+                <span class="block text-[11px] font-bold text-amber-950">Preço de Vitrine:</span>
                 <span id="res-preco-vitrine" class="text-2xl font-extrabold text-amber-950">R$ 68,00</span>
               </div>
             </div>
@@ -305,9 +311,6 @@
               <i class="fa-solid fa-arrow-left"></i> Usar Preço no Cadastro
             </button>
           </div>
-          <p class="text-[10px] text-stone-500 text-center sm:text-left">
-            💡 O <strong>Preço de Vitrine</strong> já inclui a margem para que, quando a cliente ganhar os 5% de desconto no Pix, você receba o valor integral planejado!
-          </p>
         </div>
       </div>
 
@@ -315,7 +318,7 @@
         <div class="flex justify-between items-center mb-5">
           <div>
             <h2 class="text-xl font-bold text-stone-900">Peças Cadastradas na Vitrine</h2>
-            <p class="text-xs text-stone-500">Pausar ou remover produtos da loja.</p>
+            <p class="text-xs text-stone-500">Edite, pause ou remova produtos da loja.</p>
           </div>
           <span id="contador-produtos" class="px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-bold">
             0 peças
@@ -332,7 +335,6 @@
         <div id="lista-vazia" class="hidden py-12 text-center text-stone-400">
           <i class="fa-solid fa-box-open text-3xl mb-2"></i>
           <p class="text-sm font-medium">Nenhuma peça cadastrada ainda.</p>
-          <p class="text-xs text-stone-400">Cadastre a primeira peça no formulário ao lado.</p>
         </div>
       </div>
 
@@ -340,6 +342,7 @@
 
   </main>
 
+  <!-- MODAL: GERENCIAR MODELOS PADRONIZADOS -->
   <div id="modal-modelos" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3">
@@ -353,7 +356,7 @@
         <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wide">+ Criar Novo Modelo Base</h4>
         <div>
           <label class="block text-[11px] font-semibold text-stone-600 mb-0.5">Nome do Modelo Base *</label>
-          <input type="text" id="mod-nome" required placeholder="Ex: Jogo 6 Porta Copos Confeccionados em Ponto Trança" class="w-full px-3 py-1.5 rounded-lg border text-xs">
+          <input type="text" id="mod-nome" required placeholder="Ex: Jogo 6 Porta Copos Ponto Trança" class="w-full px-3 py-1.5 rounded-lg border text-xs">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -402,62 +405,14 @@
     const SUPABASE_ANON_KEY = "sb_publishable_jFydKcLFRqgvcm2t06K_1Q_niAht-D_";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const categoriasPadrao = [
-      { nome: 'Passadeiras de Cozinha', slug: 'passadeiras', ordem: 1 },
-      { nome: 'Tapetes de Sala', slug: 'sala', ordem: 2 },
-      { nome: 'Jogos de Banheiro', slug: 'banheiro', ordem: 3 },
-      { nome: 'Linha Infantil', slug: 'infantil', ordem: 4 },
-      { nome: 'Caminhos de Mesa', slug: 'mesa', ordem: 5 },
-      { nome: 'Porta Copos', slug: 'porta-copos', ordem: 6 }
-    ];
-
-    const modelosPadraoIniciais = [
-      {
-        id: 'padrao-porta-copos',
-        nome: 'Jogo 6 Porta Copos Confeccionados em Ponto Trança',
-        categoria_slug: 'porta-copos',
-        preco_sugerido: 68.00,
-        medidas_padrao: '15cm diâmetro (6 un.)',
-        fio_padrao: 'Algodão Cru nº 6'
-      },
-      {
-        id: '3edd11aa-2d32-454c-9a20-65f6f6798',
-        nome: 'Passadeira Cozinha Boho Cru',
-        categoria_slug: 'passadeiras',
-        preco_sugerido: 145.00,
-        medidas_padrao: '1,40m x 0,45m',
-        fio_padrao: 'Barbante Ecológico nº 8'
-      },
-      {
-        id: 'b8552583-2c47-4ee7-9652-a58f256e',
-        nome: 'Tapete Redondo Mandala Sala',
-        categoria_slug: 'sala',
-        preco_sugerido: 230.00,
-        medidas_padrao: '1,15m de diâmetro',
-        fio_padrao: '100% Algodão Premium nº 6'
-      },
-      {
-        id: '266fc843-29b1-42bb-bb77-171549b3f',
-        nome: 'Jogo de Banheiro Russo (3 Peças)',
-        categoria_slug: 'banheiro',
-        preco_sugerido: 185.00,
-        medidas_padrao: 'Tampa + 2 Tapetes',
-        fio_padrao: 'Barbante Macio nº 6'
-      },
-      {
-        id: 'a2af4b0d-9d1e-4cf7-8702-d188d6d9f',
-        nome: 'Caminho de Mesa Clássico Espiral',
-        categoria_slug: 'mesa',
-        preco_sugerido: 130.00,
-        medidas_padrao: '1,20m x 0,40m',
-        fio_padrao: 'Barbante nº 6 Mercerizado'
-      }
-    ];
-
-    let categoriasLista = [...categoriasPadrao];
-    let modelosPadraoLista = [...modelosPadraoIniciais];
+    let categoriasLista = [];
+    let modelosPadraoLista = [];
+    let produtosVitrine = []; // Guarda as peças carregadas para podermos editar
     let arquivosFotosSelecionados = [];
     let precoVitrineCalculado = 68.00;
+    
+    // Variável para controlar se estamos CRIANDO ou EDITANDO uma peça
+    let produtoEmEdicaoId = null;
 
     const selectCategoria = document.getElementById('categoria');
     const selectModeloPadrao = document.getElementById('select-modelo-padrao');
@@ -486,11 +441,9 @@
       const pesoCone = parseFloat(document.getElementById('calc-peso-cone').value) || 1;
       const pesoPeca = parseFloat(document.getElementById('calc-peso-peca').value) || 0;
       const embalagem = parseFloat(document.getElementById('calc-embalagem').value) || 0;
-      
       const valorHora = parseFloat(document.getElementById('calc-valor-hora').value) || 0;
       const horas = parseFloat(document.getElementById('calc-horas').value) || 0;
       const minutos = parseFloat(document.getElementById('calc-minutos').value) || 0;
-      
       const percIndiretos = parseFloat(document.getElementById('calc-indiretos').value) || 0;
       const percLucro = parseFloat(document.getElementById('calc-lucro').value) || 0;
 
@@ -498,21 +451,14 @@
       localStorage.setItem('calc_peso_cone', pesoCone);
       localStorage.setItem('calc_valor_hora', valorHora);
 
-      const custoFio = (precoCone / pesoCone) * pesoPeca;
-      const custoMaterialTotal = custoFio + embalagem;
-
-      const tempoTotalHoras = horas + (minutos / 60);
-      const custoMaoDeObra = tempoTotalHoras * valorHora;
-
-      const subtotalProducao = custoMaterialTotal + custoMaoDeObra;
-      const valorIndiretos = subtotalProducao * (percIndiretos / 100);
-
-      const custoTotalPeca = subtotalProducao + valorIndiretos;
+      const custoMaterialTotal = ((precoCone / pesoCone) * pesoPeca) + embalagem;
+      const custoMaoDeObra = (horas + (minutos / 60)) * valorHora;
+      const valorIndiretos = (custoMaterialTotal + custoMaoDeObra) * (percIndiretos / 100);
+      const custoTotalPeca = custoMaterialTotal + custoMaoDeObra + valorIndiretos;
       const valorLucro = custoTotalPeca * (percLucro / 100);
-
       const precoPix = custoTotalPeca + valorLucro;
-      const precoVitrine = Math.ceil(precoPix / 0.95);
-      precoVitrineCalculado = precoVitrine;
+      
+      precoVitrineCalculado = Math.ceil(precoPix / 0.95);
 
       const formatarMoeda = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
       document.getElementById('res-material').textContent = formatarMoeda(custoMaterialTotal);
@@ -520,7 +466,7 @@
       document.getElementById('res-indiretos').textContent = formatarMoeda(valorIndiretos);
       document.getElementById('res-lucro').textContent = formatarMoeda(valorLucro);
       document.getElementById('res-preco-pix').textContent = formatarMoeda(precoPix);
-      document.getElementById('res-preco-vitrine').textContent = formatarMoeda(precoVitrine);
+      document.getElementById('res-preco-vitrine').textContent = formatarMoeda(precoVitrineCalculado);
     };
 
     window.transferirPrecoParaCadastro = () => {
@@ -528,67 +474,42 @@
       campoPreco.value = precoVitrineCalculado.toFixed(2);
       document.getElementById('bloco-cadastro').scrollIntoView({ behavior: 'smooth' });
       campoPreco.classList.add('ring-4', 'ring-amber-500', 'bg-amber-50');
-      setTimeout(() => {
-        campoPreco.classList.remove('ring-4', 'ring-amber-500', 'bg-amber-50');
-      }, 2000);
+      setTimeout(() => campoPreco.classList.remove('ring-4', 'ring-amber-500', 'bg-amber-50'), 2000);
     };
 
     // ==============================================================
-    // 1. RENDERIZAR E SINCRONIZAR CATEGORIAS
+    // 1. CARREGAR CATEGORIAS DINÂMICAS DO SUPABASE
     // ==============================================================
     function popularSelectsCategorias(lista) {
       const valorAtual = selectCategoria.value;
       const modCatSelect = document.getElementById('mod-categoria');
-
       selectCategoria.innerHTML = '';
       modCatSelect.innerHTML = '';
-
       lista.forEach(cat => {
         selectCategoria.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
         modCatSelect.innerHTML += `<option value="${cat.slug}">${cat.nome}</option>`;
       });
-
-      if (valorAtual && lista.some(c => c.slug === valorAtual)) {
-        selectCategoria.value = valorAtual;
-      }
+      if (valorAtual && lista.some(c => c.slug === valorAtual)) selectCategoria.value = valorAtual;
     }
 
     async function carregarCategorias() {
-      popularSelectsCategorias(categoriasLista);
-
       try {
-        const { data, error } = await db
-          .from('categorias')
-          .select('*')
-          .order('ordem', { ascending: true });
-
+        const { data, error } = await db.from('categorias').select('*').order('ordem', { ascending: true });
         if (!error && data && data.length > 0) {
           categoriasLista = data;
           popularSelectsCategorias(categoriasLista);
         }
-      } catch (err) {
-        console.warn("Usando categorias locais:", err);
-      }
+      } catch (err) {}
     }
 
     window.adicionarNovaCategoriaPrompt = async () => {
-      const nomeCat = prompt("Digite o nome da nova Categoria (ex: Mesa Posta, Sousplat, Mantas):");
+      const nomeCat = prompt("Digite o nome da nova Categoria:");
       if (!nomeCat || nomeCat.trim() === '') return;
-
-      const slug = nomeCat.trim().toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, '-');
-
+      const slug = nomeCat.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-');
       try {
-        const novaCat = {
-          nome: nomeCat.trim(),
-          slug: slug,
-          ordem: categoriasLista.length + 1
-        };
-
+        const novaCat = { nome: nomeCat.trim(), slug: slug, ordem: categoriasLista.length + 1 };
         const { error } = await db.from('categorias').insert([novaCat]);
         if (error) throw error;
-
         categoriasLista.push(novaCat);
         popularSelectsCategorias(categoriasLista);
         selectCategoria.value = slug;
@@ -599,53 +520,39 @@
     };
 
     // ==============================================================
-    // 2. RENDERIZAR E SINCRONIZAR MODELOS PADRONIZADOS
+    // 2. MODELOS PADRONIZADOS
     // ==============================================================
     function popularSelectModelos(lista) {
       selectModeloPadrao.innerHTML = '<option value="">-- Selecione para preencher automático ou digite abaixo --</option>';
       const listaBaseDiv = document.getElementById('lista-modelos-base');
       listaBaseDiv.innerHTML = '';
-
       lista.forEach(m => {
         selectModeloPadrao.innerHTML += `<option value="${m.id}">${m.nome} (R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')})</option>`;
-
         listaBaseDiv.innerHTML += `
           <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-stone-200 text-xs">
             <div>
               <p class="font-bold text-stone-900">${m.nome}</p>
               <p class="text-[11px] text-stone-500">${m.medidas_padrao} • ${m.fio_padrao} • R$ ${parseFloat(m.preco_sugerido).toFixed(2).replace('.', ',')}</p>
             </div>
-            <button onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5" title="Remover modelo">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        `;
+            <button onclick="excluirModeloPadrao('${m.id}')" class="text-rose-600 hover:text-rose-800 p-1.5"><i class="fa-solid fa-trash"></i></button>
+          </div>`;
       });
     }
 
     async function carregarModelosPadrao() {
-      popularSelectModelos(modelosPadraoLista);
-
       try {
-        const { data, error } = await db
-          .from('modelos_padrao')
-          .select('*')
-          .order('nome', { ascending: true });
-
+        const { data, error } = await db.from('modelos_padrao').select('*').order('nome', { ascending: true });
         if (!error && data && data.length > 0) {
           modelosPadraoLista = data;
           popularSelectModelos(modelosPadraoLista);
         }
-      } catch (err) {
-        console.warn("Usando modelos locais:", err);
-      }
+      } catch (err) {}
     }
 
     window.aplicarModeloPadrao = (id) => {
       if (!id) return;
       const mod = modelosPadraoLista.find(m => String(m.id) === String(id));
       if (!mod) return;
-
       document.getElementById('nome').value = mod.nome;
       document.getElementById('categoria').value = mod.categoria_slug;
       document.getElementById('preco').value = mod.preco_sugerido;
@@ -662,16 +569,13 @@
         medidas_padrao: document.getElementById('mod-medidas').value.trim(),
         fio_padrao: document.getElementById('mod-fio').value.trim()
       };
-
       try {
         const { error } = await db.from('modelos_padrao').insert([novoModelo]);
         if (error) throw error;
         alert("Modelo base cadastrado com sucesso!");
         document.getElementById('form-novo-modelo-padrao').reset();
         await carregarModelosPadrao();
-      } catch (err) {
-        alert("Erro ao salvar modelo base: " + err.message);
-      }
+      } catch (err) { alert("Erro ao salvar modelo base: " + err.message); }
     });
 
     window.excluirModeloPadrao = async (id) => {
@@ -680,15 +584,11 @@
       carregarModelosPadrao();
     };
 
-    window.abrirModalModelos = () => {
-      document.getElementById('modal-modelos').classList.remove('opacity-0', 'pointer-events-none');
-    };
-    window.fecharModalModelos = () => {
-      document.getElementById('modal-modelos').classList.add('opacity-0', 'pointer-events-none');
-    };
+    window.abrirModalModelos = () => document.getElementById('modal-modelos').classList.remove('opacity-0', 'pointer-events-none');
+    window.fecharModalModelos = () => document.getElementById('modal-modelos').classList.add('opacity-0', 'pointer-events-none');
 
     // ==============================================================
-    // 3. SELEÇÃO E UPLOAD DE MÚLTIPLAS FOTOS
+    // 3. FOTO & CADASTRO/EDIÇÃO DE PEÇAS
     // ==============================================================
     fotoInput.addEventListener('change', (e) => {
       const novosArquivos = Array.from(e.target.files);
@@ -706,7 +606,6 @@
         btnLimparFotos.classList.add('hidden');
         return;
       }
-
       previewContainer.classList.remove('hidden');
       btnLimparFotos.classList.remove('hidden');
 
@@ -718,9 +617,7 @@
           <img src="${url}" class="w-full h-full object-cover">
           ${index === 0 ? '<span class="absolute bottom-1 left-1 bg-amber-900/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Capa</span>' : ''}
           <button type="button" onclick="removerFotoPreview(${index})"
-            class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700">
-            &times;
-          </button>
+            class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700">&times;</button>
         `;
         previewContainer.appendChild(div);
       });
@@ -736,66 +633,133 @@
       renderizarPreviewsFotos();
     };
 
+    // === FUNÇÃO DE EDITAR PRODUTO ===
+    window.editarProduto = (id) => {
+      const prod = produtosVitrine.find(p => p.id === id);
+      if (!prod) return;
+
+      produtoEmEdicaoId = id;
+      document.getElementById('nome').value = prod.nome;
+      document.getElementById('categoria').value = prod.categoria;
+      document.getElementById('preco').value = prod.preco;
+      document.getElementById('medidas').value = prod.medidas;
+      document.getElementById('fio').value = prod.fio;
+      document.getElementById('pronta_entrega').checked = prod.pronta_entrega;
+
+      // Ocultar seletor de modelo padrão para não confundir na edição
+      document.getElementById('box-seletor-modelo').classList.add('hidden');
+
+      // Tornar a foto Opcional durante a edição
+      fotoInput.removeAttribute('required');
+      document.getElementById('req-foto').classList.add('hidden');
+      
+      document.getElementById('placeholder-upload').innerHTML = `
+        <i class="fa-solid fa-image text-2xl text-stone-400 mb-1"></i>
+        <p class="text-xs font-medium text-stone-600">Peça já possui foto(s).</p>
+        <p class="text-[10px] text-stone-400">Só adicione novas se quiser substituir as atuais.</p>
+      `;
+
+      // Atualizar Textos e Botões da Interface
+      document.getElementById('titulo-form-produto').innerHTML = `<i class="fa-solid fa-pen text-amber-800"></i> Editando Peça`;
+      document.getElementById('subtitulo-form-produto').textContent = "Altere os dados desejados e clique em Atualizar.";
+      document.getElementById('texto-btn-submit').textContent = "Atualizar Peça";
+      document.getElementById('icone-btn-submit').className = "fa-solid fa-check";
+      document.getElementById('btn-cancelar-edicao').classList.remove('hidden');
+
+      // Rolar suavemente para o formulário
+      document.getElementById('bloco-cadastro').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.cancelarEdicao = () => {
+      produtoEmEdicaoId = null;
+      formProduto.reset();
+      limparFotosSelecionadas();
+      
+      document.getElementById('box-seletor-modelo').classList.remove('hidden');
+      selectModeloPadrao.value = "";
+      
+      fotoInput.setAttribute('required', 'required');
+      document.getElementById('req-foto').classList.remove('hidden');
+      document.getElementById('placeholder-upload').innerHTML = `
+        <i class="fa-solid fa-images text-2xl text-stone-400 mb-1"></i>
+        <p class="text-xs font-medium text-stone-600">Toque para escolher 1 ou mais fotos</p>
+        <p class="text-[10px] text-stone-400">Pode selecionar vários ângulos da peça (JPG/PNG)</p>
+      `;
+
+      document.getElementById('titulo-form-produto').innerHTML = `<i class="fa-solid fa-plus-circle text-amber-800"></i> Cadastrar Nova Peça`;
+      document.getElementById('subtitulo-form-produto').textContent = "Anexe uma ou mais fotos e preencha os dados para exibir na vitrine.";
+      document.getElementById('texto-btn-submit').textContent = "Publicar no Catálogo";
+      document.getElementById('icone-btn-submit').className = "fa-solid fa-cloud-arrow-up";
+      document.getElementById('btn-cancelar-edicao').classList.add('hidden');
+    };
+
     formProduto.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (arquivosFotosSelecionados.length === 0) {
+      const isEditando = produtoEmEdicaoId !== null;
+
+      // Se for um novo cadastro, foto é obrigatória. Se for edição, é opcional.
+      if (!isEditando && arquivosFotosSelecionados.length === 0) {
         alert("Selecione pelo menos 1 foto da peça.");
         return;
       }
 
       btnSubmit.disabled = true;
+      document.getElementById('texto-btn-submit').textContent = isEditando ? "Atualizando..." : "Enviando fotos...";
 
       try {
-        const urlsPublicas = [];
+        let urlsPublicas = [];
 
-        for (let i = 0; i < arquivosFotosSelecionados.length; i++) {
-          const file = arquivosFotosSelecionados[i];
-          btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Enviando foto ${i + 1} de ${arquivosFotosSelecionados.length}...`;
+        // Upload das fotos apenas se houver novos arquivos selecionados
+        if (arquivosFotosSelecionados.length > 0) {
+          for (let i = 0; i < arquivosFotosSelecionados.length; i++) {
+            const file = arquivosFotosSelecionados[i];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
 
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Date.now()}_${i}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+            const { error: uploadError } = await db.storage.from('fotos-tapetes').upload(fileName, file);
+            if (uploadError) throw new Error("Erro no upload: " + uploadError.message);
 
-          const { error: uploadError } = await db.storage
-            .from('fotos-tapetes')
-            .upload(fileName, file);
-
-          if (uploadError) throw new Error("Erro no upload da foto: " + uploadError.message);
-
-          const { data: publicUrlData } = db.storage
-            .from('fotos-tapetes')
-            .getPublicUrl(fileName);
-
-          urlsPublicas.push(publicUrlData.publicUrl);
+            const { data: publicUrlData } = db.storage.from('fotos-tapetes').getPublicUrl(fileName);
+            urlsPublicas.push(publicUrlData.publicUrl);
+          }
         }
 
-        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Publicando peça...`;
+        document.getElementById('texto-btn-submit').textContent = "Salvando no catálogo...";
 
-        const novoItem = {
+        const payload = {
           nome: document.getElementById('nome').value,
           categoria: document.getElementById('categoria').value,
           preco: parseFloat(document.getElementById('preco').value),
           medidas: document.getElementById('medidas').value,
           fio: document.getElementById('fio').value,
-          pronta_entrega: document.getElementById('pronta_entrega').checked,
-          imagem_url: urlsPublicas[0],
-          imagens_urls: urlsPublicas,
-          ativo: true
+          pronta_entrega: document.getElementById('pronta_entrega').checked
         };
 
-        const { error: insertError } = await db.from('produtos').insert([novoItem]);
-        if (insertError) throw new Error("Erro ao salvar produto: " + insertError.message);
+        // Só atualiza as fotos no banco se enviou fotos novas
+        if (urlsPublicas.length > 0) {
+          payload.imagem_url = urlsPublicas[0];
+          payload.imagens_urls = urlsPublicas;
+        }
 
-        alert(`Peça publicada com sucesso com ${urlsPublicas.length} foto(s)!`);
-        formProduto.reset();
-        selectModeloPadrao.value = "";
-        limparFotosSelecionadas();
-        carregarProdutos();
+        if (isEditando) {
+          const { error } = await db.from('produtos').update(payload).eq('id', produtoEmEdicaoId);
+          if (error) throw new Error("Erro ao atualizar: " + error.message);
+          alert("Peça atualizada com sucesso!");
+        } else {
+          payload.ativo = true;
+          const { error } = await db.from('produtos').insert([payload]);
+          if (error) throw new Error("Erro ao salvar: " + error.message);
+          alert(`Peça publicada com sucesso!`);
+        }
+
+        cancelarEdicao(); // Limpa e volta o form para o modo "Cadastrar"
+        carregarProdutos(); // Recarrega a vitrine do lado direito
 
       } catch (err) {
         alert(err.message);
       } finally {
         btnSubmit.disabled = false;
-        btnSubmit.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Publicar no Catálogo`;
+        document.getElementById('texto-btn-submit').textContent = isEditando ? "Atualizar Peça" : "Publicar no Catálogo";
       }
     });
 
@@ -818,8 +782,10 @@
         return;
       }
 
-      contadorProdutos.textContent = `${data.length} peças`;
-      if (data.length === 0) {
+      produtosVitrine = data || []; // Guardamos as peças globalmente para poder editar
+      contadorProdutos.textContent = `${produtosVitrine.length} peças`;
+
+      if (produtosVitrine.length === 0) {
         listaVazia.classList.remove('hidden');
         return;
       }
@@ -827,7 +793,7 @@
       listaProdutos.innerHTML = '';
       listaProdutos.classList.remove('hidden');
 
-      data.forEach(item => {
+      produtosVitrine.forEach(item => {
         const qtdFotos = (item.imagens_urls && item.imagens_urls.length > 0) ? item.imagens_urls.length : 1;
         const div = document.createElement('div');
         div.className = "flex items-center gap-4 p-3 bg-stone-50 hover:bg-stone-100/70 border border-stone-200 rounded-xl transition";
@@ -848,6 +814,11 @@
             <p class="text-sm font-bold text-amber-900 mt-0.5">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
           </div>
           <div class="flex items-center gap-1.5">
+            <!-- BOTÃO EDITAR ADICIONADO -->
+            <button onclick="editarProduto('${item.id}')" title="Editar peça"
+              class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-sky-100 text-sky-800 hover:bg-sky-200 transition">
+              <i class="fa-solid fa-pen"></i>
+            </button>
             <button onclick="alternarStatus('${item.id}', ${item.ativo})" title="${item.ativo ? 'Ocultar' : 'Mostrar'}"
               class="w-8 h-8 rounded-lg flex items-center justify-center text-xs ${item.ativo ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'} transition">
               <i class="fa-solid ${item.ativo ? 'fa-eye' : 'fa-eye-slash'}"></i>
@@ -930,7 +901,7 @@
     };
 
     // ==============================================================
-    // INICIALIZAÇÃO IMEDIATA E PARALELA (SEM TRAVAR NO DOMCONTENTLOADED)
+    // INICIALIZAÇÃO
     // ==============================================================
     carregarPreferenciasCalculadora();
     carregarCategorias();
