@@ -53,10 +53,10 @@
 
       <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-stone-700">
         <a href="#colecao" class="hover:text-argila-700 transition">Coleção</a>
+        <a href="#simulador-frete-vitrine" class="hover:text-argila-700 transition flex items-center gap-1"><i class="fa-solid fa-truck-fast text-argila-700 text-xs"></i> Calcular Frete</a>
         <a href="#sob-medida" class="hover:text-argila-700 transition">Sob Medida</a>
         <a href="#sobre" class="hover:text-argila-700 transition">A Artesã</a>
         <a href="#cuidados" class="hover:text-argila-700 transition">Guia de Lavagem</a>
-        <a href="#faq" class="hover:text-argila-700 transition">Dúvidas</a>
       </nav>
 
       <div class="flex items-center gap-2 sm:gap-3">
@@ -66,7 +66,7 @@
         <a id="btn-whats-topo" href="#" target="_blank" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
           <i class="fa-brands fa-whatsapp text-sm"></i> Fale com a Jucilene
         </a>
-        <button onclick="toggleCarrinho(true)" class="relative p-2.5 rounded-full hover:bg-stone-200/60 transition text-stone-700" title="Ver Carrinho">
+        <button onclick="toggleCarrinho(true)" class="relative p-2.5 rounded-full hover:bg-stone-200/60 transition text-stone-700" title="Ver Carrinho e Calcular Frete">
           <i class="fa-solid fa-basket-shopping text-lg"></i>
           <span id="badge-carrinho" class="absolute -top-1 -right-1 w-5 h-5 bg-argila-700 text-white text-[11px] font-bold rounded-full flex items-center justify-center hidden">0</span>
         </button>
@@ -92,6 +92,7 @@
     </div>
     <div class="flex-1 overflow-y-auto p-5 space-y-2 text-stone-800">
       <a href="#colecao" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm"><i class="fa-solid fa-gem text-argila-700 w-5"></i> Coleção de Peças</a>
+      <a href="#simulador-frete-vitrine" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm"><i class="fa-solid fa-truck-fast text-argila-700 w-5"></i> Simular Frete por CEP</a>
       <a href="#sob-medida" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm"><i class="fa-solid fa-ruler-combined text-argila-700 w-5"></i> Encomenda Sob Medida</a>
       <a href="#sobre" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm"><i class="fa-solid fa-heart text-argila-700 w-5"></i> Sobre a Artesã</a>
       <a href="#cuidados" onclick="toggleMenuMobile(false)" class="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-100 font-semibold text-sm"><i class="fa-solid fa-hands-bubbles text-argila-700 w-5"></i> Guia de Lavagem</a>
@@ -134,7 +135,7 @@
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
           <a href="#colecao" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-argila-700 hover:bg-argila-800 text-white font-semibold text-sm shadow-md transition flex items-center justify-center gap-2"><i class="fa-solid fa-gem text-xs"></i> Ver Peças Prontas</a>
-          <a href="#sob-medida" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 font-semibold text-sm transition flex items-center justify-center gap-2"><i class="fa-solid fa-ruler-combined text-xs text-argila-700"></i> Pedir Sob Medida</a>
+          <a href="#simulador-frete-vitrine" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-stone-100 border border-stone-300 text-stone-800 font-semibold text-sm transition flex items-center justify-center gap-2"><i class="fa-solid fa-truck-fast text-xs text-argila-700"></i> Simular Frete por CEP</a>
         </div>
       </div>
       <div class="lg:col-span-5">
@@ -148,11 +149,37 @@
   <!-- CATÁLOGO -->
   <section id="colecao" class="py-20 bg-white border-y border-stone-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="text-center max-w-3xl mx-auto mb-10">
         <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Nossa Coleção</h2>
         <p class="text-stone-600 mt-2 text-sm sm:text-base">Toque nas fotos das peças para ampliar e ver todos os ângulos.</p>
         <div id="filtros-categorias-dinamicos" class="flex flex-wrap items-center justify-center gap-2 mt-8"></div>
       </div>
+
+      <!-- ================= BARRA DE SIMULAÇÃO RÁPIDA DE FRETE NA VITRINE ================= -->
+      <div id="simulador-frete-vitrine" class="max-w-3xl mx-auto mb-12 bg-[#FAF8F5] rounded-2xl p-4 sm:p-5 border border-argila-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-argila-100 text-argila-800 flex items-center justify-center text-lg flex-shrink-0">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <div>
+              <h3 class="text-xs sm:text-sm font-bold text-stone-900">Consulte o Frete e Prazo de Entrega para sua Cidade</h3>
+              <p class="text-[11px] text-stone-500">Enviamos para todo o Brasil via Correios (PAC e SEDEX) ou Entrega Local.</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="cep-vitrine" maxlength="9" oninput="mascaraCep(this)" placeholder="Digite seu CEP..."
+              class="w-full sm:w-40 px-3.5 py-2 rounded-xl border border-stone-300 text-xs font-semibold outline-none focus:border-argila-700 bg-white">
+            <button type="button" onclick="calcularFreteCep('vitrine')"
+              class="px-4 py-2 bg-argila-700 hover:bg-argila-800 text-white text-xs font-bold rounded-xl transition flex-shrink-0">
+              Simular
+            </button>
+          </div>
+        </div>
+        <!-- Resultado expandido na vitrine -->
+        <div id="resultado-frete-vitrine" class="hidden mt-4 pt-3 border-t border-stone-200"></div>
+      </div>
+
       <div id="loading-catalogo" class="py-16 text-center text-stone-400">
         <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-argila-700"></i>
         <p class="text-sm font-medium">Carregando peças do ateliê...</p>
@@ -235,7 +262,7 @@
   <section id="faq" class="py-16 bg-white">
     <div class="max-w-3xl mx-auto px-4 space-y-3">
       <h2 class="font-serif text-2xl font-bold text-stone-900 text-center mb-6">Dúvidas Frequentes</h2>
-      <details class="bg-stone-50 p-4 rounded-xl border text-xs sm:text-sm"><summary class="font-bold cursor-pointer">Como funciona o pagamento e o envio?</summary><p class="mt-2 text-stone-600">Aceitamos Pix (com 5% de desconto) e Cartão de Crédito via Link Seguro do Mercado Pago. Enviamos para todo o Brasil via Correios.</p></details>
+      <details class="bg-stone-50 p-4 rounded-xl border text-xs sm:text-sm"><summary class="font-bold cursor-pointer">Como funciona o pagamento e o envio?</summary><p class="mt-2 text-stone-600">Aceitamos Pix (com 5% de desconto) e Cartão de Crédito via Link Seguro do Mercado Pago. Enviamos para todo o Brasil via Correios (PAC e SEDEX) ou entrega local.</p></details>
     </div>
   </section>
 
@@ -244,7 +271,7 @@
     <p><button onclick="acessarPainelRestrito()" class="underline hover:text-white"><i class="fa-solid fa-lock text-amber-500"></i> Painel Administrativo</button></p>
   </footer>
 
-  <!-- DRAWER DO CARRINHO COM CÁLCULO DE FRETE POR CEP -->
+  <!-- ================= DRAWER DO CARRINHO COM AS 3 OPÇÕES DE FRETE ================= -->
   <div id="carrinho-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCarrinho(false)"></div>
   <aside id="carrinho-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
     <div class="p-4 border-b border-stone-200 flex items-center justify-between">
@@ -254,21 +281,30 @@
 
     <div id="carrinho-itens" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
 
-    <!-- BLOCO DE CÁLCULO DE FRETE POR CEP -->
-    <div class="px-4 py-3 bg-amber-50/70 border-t border-amber-200/80 space-y-2">
-      <label class="block text-xs font-bold text-stone-800 flex items-center gap-1.5">
-        <i class="fa-solid fa-truck-fast text-argila-700"></i> Calcular Frete e Prazo (Correios)
+    <!-- BLOCO DE CÁLCULO DE FRETE COM 3 OPÇÕES SELECIONÁVEIS -->
+    <div class="px-4 py-3 bg-amber-50/80 border-t border-amber-200 space-y-2">
+      <label class="block text-xs font-bold text-stone-800 flex items-center justify-between">
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-argila-700"></i> Calcular Frete e Prazo</span>
+        <span id="peso-total-badge" class="text-[10px] font-semibold text-stone-500"></span>
       </label>
       <div class="flex gap-2">
-        <input type="text" id="cep-carrinho" maxlength="9" placeholder="Digite seu CEP (ex: 14780-000)" class="flex-1 px-3 py-1.5 rounded-xl border border-stone-300 text-xs outline-none bg-white">
-        <button type="button" onclick="calcularFreteCep()" class="px-3.5 py-1.5 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold rounded-xl transition">Calcular</button>
+        <input type="text" id="cep-carrinho" maxlength="9" oninput="mascaraCep(this)" placeholder="Digite seu CEP (ex: 15015-000)"
+          class="flex-1 px-3 py-1.5 rounded-xl border border-stone-300 text-xs font-semibold outline-none bg-white">
+        <button type="button" onclick="calcularFreteCep('carrinho')"
+          class="px-3.5 py-1.5 bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold rounded-xl transition">
+          Calcular
+        </button>
       </div>
-      <div id="resultado-frete" class="hidden text-[11px] bg-white p-2.5 rounded-xl border border-stone-200 text-stone-700 space-y-0.5"></div>
+      <!-- Container onde aparecem: 🏠 Entrega Local/Retirada, 📦 PAC e ⚡ SEDEX -->
+      <div id="resultado-frete" class="hidden space-y-1.5 pt-1"></div>
     </div>
 
-    <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-2.5">
+    <div class="p-4 border-t border-stone-200 bg-stone-50 space-y-2">
       <div class="flex justify-between text-xs text-stone-600"><span>Subtotal Peças</span><span id="carrinho-subtotal">R$ 0,00</span></div>
       <div class="flex justify-between text-xs text-emerald-700 font-bold"><span>Desconto no Pix (5%)</span><span id="carrinho-desconto">- R$ 0,00</span></div>
+      <div id="linha-frete-resumo" class="hidden flex justify-between text-xs text-stone-700 font-semibold">
+        <span id="nome-frete-resumo">Frete</span><span id="valor-frete-resumo">R$ 0,00</span>
+      </div>
       <div class="flex justify-between text-base font-bold text-stone-900 pt-2 border-t border-stone-200">
         <span>Total no Pix</span><span id="carrinho-total" class="text-argila-800">R$ 0,00</span>
       </div>
@@ -291,7 +327,11 @@
     let indiceFotoCard = {};
     let galeriaModalFotos = [];
     let galeriaModalIndice = 0;
+
+    // Estado do Frete e Modalidades
     let dadosFreteCalculado = null;
+    let opcoesFreteDisponiveis = [];
+    let modalidadeFreteEscolhida = null;
 
     window.toggleMenuMobile = (abrir) => {
       document.getElementById('menu-drawer').classList.toggle('translate-x-full', !abrir);
@@ -466,7 +506,24 @@
       else renderizarGrade(produtos.filter(p => p.categoria === cat));
     };
 
-    // CARRINHO E CÁLCULO DE FRETE POR CEP
+    // ==============================================================
+    // CARRINHO E SIMULADOR DE FRETE COM 3 OPÇÕES (LOCAL, PAC, SEDEX)
+    // ==============================================================
+    window.mascaraCep = (input) => {
+      let v = input.value.replace(/\D/g, '');
+      if (v.length > 5) v = v.substring(0, 5) + '-' + v.substring(5, 8);
+      input.value = v;
+      // Sincroniza os dois campos de CEP (Vitrine e Carrinho)
+      const outroId = input.id === 'cep-vitrine' ? 'cep-carrinho' : 'cep-vitrine';
+      const outroInput = document.getElementById(outroId);
+      if (outroInput) outroInput.value = v;
+
+      // Dispara o cálculo automaticamente ao completar 8 dígitos
+      if (v.replace(/\D/g, '').length === 8) {
+        calcularFreteCep(input.id === 'cep-vitrine' ? 'vitrine' : 'carrinho');
+      }
+    };
+
     window.toggleCarrinho = (abrir) => {
       document.getElementById('carrinho-drawer').classList.toggle('translate-x-full', !abrir);
       document.getElementById('carrinho-overlay').classList.toggle('opacity-0', !abrir);
@@ -491,25 +548,51 @@
       atualizarCarrinho();
     };
 
+    function obterPesoTotalGramas() {
+      if (carrinho.length === 0) return 500; // Pacote base padrão se o carrinho estiver vazio
+      return carrinho.reduce((acc, i) => acc + ((i.peso_gramas || 400) * i.qtd), 0);
+    }
+
+    function atualizarTotaisFinanceirosCarrinho() {
+      const subtotal = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+      const desc = subtotal * 0.05;
+      const valorPixPecas = subtotal - desc;
+      const valorFrete = modalidadeFreteEscolhida ? modalidadeFreteEscolhida.valor : 0;
+      const totalFinal = valorPixPecas + valorFrete;
+
+      document.getElementById('carrinho-subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      document.getElementById('carrinho-desconto').textContent = `- R$ ${desc.toFixed(2).replace('.', ',')}`;
+
+      const linhaFrete = document.getElementById('linha-frete-resumo');
+      if (modalidadeFreteEscolhida) {
+        linhaFrete.classList.remove('hidden');
+        document.getElementById('nome-frete-resumo').textContent = `Frete (${modalidadeFreteEscolhida.tituloCurto})`;
+        document.getElementById('valor-frete-resumo').textContent = valorFrete === 0 ? 'Grátis' : `+ R$ ${valorFrete.toFixed(2).replace('.', ',')}`;
+      } else {
+        linhaFrete.classList.add('hidden');
+      }
+
+      document.getElementById('carrinho-total').textContent = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+    }
+
     function atualizarCarrinho() {
       const container = document.getElementById('carrinho-itens');
       const badge = document.getElementById('badge-carrinho');
       container.innerHTML = '';
-      let subtotal = 0, qtdTotal = 0;
+      let qtdTotal = 0;
 
       if (carrinho.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-stone-400"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p class="text-xs">Seu carrinho está vazio.</p></div>`;
+        container.innerHTML = `<div class="text-center py-10 text-stone-400"><i class="fa-solid fa-basket-shopping text-3xl mb-2"></i><p class="text-xs">Seu carrinho está vazio.</p><p class="text-[11px] text-stone-400 mt-1">Você já pode simular o frete abaixo digitando seu CEP!</p></div>`;
         badge.classList.add('hidden');
       } else {
         carrinho.forEach(item => {
-          subtotal += item.preco * item.qtd;
           qtdTotal += item.qtd;
           container.innerHTML += `
             <div class="flex items-center gap-3 p-2.5 bg-stone-50 rounded-xl border border-stone-200">
               <img src="${item.imagem_url}" class="w-14 h-14 rounded-lg object-cover">
               <div class="flex-1 min-w-0">
                 <h4 class="text-xs font-bold text-stone-900 truncate">${item.nome}</h4>
-                <p class="text-[11px] text-stone-500">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}</p>
+                <p class="text-[11px] text-stone-500">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')} • ${item.peso_gramas || 400}g</p>
                 <div class="flex items-center gap-2 mt-1">
                   <button onclick="alterarQtd('${item.id}', -1)" class="w-5 h-5 bg-stone-200 rounded text-xs font-bold">-</button>
                   <span class="text-xs font-bold">${item.qtd}</span>
@@ -523,73 +606,225 @@
         badge.classList.remove('hidden');
       }
 
-      const desc = subtotal * 0.05;
-      document.getElementById('carrinho-subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
-      document.getElementById('carrinho-desconto').textContent = `- R$ ${desc.toFixed(2).replace('.', ',')}`;
-      document.getElementById('carrinho-total').textContent = `R$ ${(subtotal - desc).toFixed(2).replace('.', ',')}`;
-      if (dadosFreteCalculado) calcularFreteCep();
+      const pesoKg = (obterPesoTotalGramas() / 1000).toFixed(2);
+      document.getElementById('peso-total-badge').textContent = `Peso est.: ${pesoKg} kg`;
+
+      if (dadosFreteCalculado) {
+        calcularFreteCep('carrinho');
+      } else {
+        atualizarTotaisFinanceirosCarrinho();
+      }
     }
 
-    window.calcularFreteCep = async () => {
-      const cepLimpo = document.getElementById('cep-carrinho').value.replace(/\D/g, '');
-      const boxRes = document.getElementById('resultado-frete');
+    window.calcularFreteCep = async (origem = 'carrinho') => {
+      const inputEl = document.getElementById(origem === 'vitrine' ? 'cep-vitrine' : 'cep-carrinho');
+      const cepLimpo = inputEl.value.replace(/\D/g, '');
+
+      const boxCarrinho = document.getElementById('resultado-frete');
+      const boxVitrine = document.getElementById('resultado-frete-vitrine');
+
       if (cepLimpo.length !== 8) {
-        alert("Digite um CEP válido com 8 números.");
+        alert("Digite um CEP válido com 8 números (ex: 14780-000).");
         return;
       }
-      boxRes.classList.remove('hidden');
-      boxRes.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando CEP...`;
+
+      const loadingHtml = `<div class="text-xs text-stone-500 py-2 flex items-center gap-2"><i class="fa-solid fa-spinner fa-spin text-argila-700"></i> Identificando cidade e calculando opções de envio...</div>`;
+      boxCarrinho.classList.remove('hidden');
+      boxCarrinho.innerHTML = loadingHtml;
+      if (boxVitrine) {
+        boxVitrine.classList.remove('hidden');
+        boxVitrine.innerHTML = loadingHtml;
+      }
 
       try {
         const resp = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
         const end = await resp.json();
         if (end.erro) throw new Error("CEP não encontrado");
 
-        const pesoTotalGramas = carrinho.reduce((acc, i) => acc + ((i.peso_gramas || 400) * i.qtd), 0) || 400;
+        const pesoTotalGramas = obterPesoTotalGramas();
         const pesoKg = (pesoTotalGramas / 1000).toFixed(2);
+        const faixasExtras = Math.max(0, Math.ceil((pesoTotalGramas - 500) / 500));
 
-        // Estimativa base de referência saindo de Barretos/SP
-        let basePac = end.uf === 'SP' ? 22.90 : (['MG', 'RJ', 'PR', 'MS', 'GO'].includes(end.uf) ? 31.90 : 44.90);
-        if (end.localidade.toLowerCase() === 'barretos') basePac = 10.00;
-        const adicionalPeso = Math.max(0, Math.ceil((pesoTotalGramas - 500) / 500)) * 4.50;
-        const valorEstimado = basePac + adicionalPeso;
+        const isBarretos = end.localidade.toLowerCase() === 'barretos' || cepLimpo.startsWith('1478');
+        const isRegionalSp = cepLimpo.startsWith('14') || cepLimpo.startsWith('15'); // Região de Ribeirão Preto e São José do Rio Preto
+
+        let valorPac = 24.90, prazoPac = "5 a 7 dias úteis";
+        let valorSedex = 32.90, prazoSedex = "2 a 3 dias úteis";
+
+        if (isBarretos) {
+          valorPac = 16.90 + (faixasExtras * 3.00);
+          prazoPac = "2 a 3 dias úteis";
+          valorSedex = 19.90 + (faixasExtras * 4.00);
+          prazoSedex = "1 a 2 dias úteis";
+        } else if (isRegionalSp) {
+          valorPac = 21.90 + (faixasExtras * 3.50);
+          prazoPac = "3 a 5 dias úteis";
+          valorSedex = 26.90 + (faixasExtras * 4.50);
+          prazoSedex = "1 a 2 dias úteis";
+        } else if (end.uf === 'SP') {
+          valorPac = 24.90 + (faixasExtras * 4.00);
+          prazoPac = "5 a 7 dias úteis";
+          valorSedex = 32.90 + (faixasExtras * 5.50);
+          prazoSedex = "2 a 3 dias úteis";
+        } else if (['MG', 'RJ', 'PR', 'MS', 'GO', 'DF', 'ES', 'SC', 'RS'].includes(end.uf)) {
+          valorPac = 32.90 + (faixasExtras * 5.50);
+          prazoPac = "6 a 10 dias úteis";
+          valorSedex = 48.90 + (faixasExtras * 7.50);
+          prazoSedex = "3 a 5 dias úteis";
+        } else {
+          valorPac = 45.90 + (faixasExtras * 7.00);
+          prazoPac = "9 a 15 dias úteis";
+          valorSedex = 68.90 + (faixasExtras * 10.50);
+          prazoSedex = "4 a 7 dias úteis";
+        }
+
+        // Monta as 3 opções solicitadas
+        opcoesFreteDisponiveis = [];
+
+        if (isBarretos) {
+          opcoesFreteDisponiveis.push({
+            id: 'local',
+            icone: '🏠',
+            titulo: 'Entrega Local / Retirada (Barretos/SP)',
+            tituloCurto: 'Entrega Local',
+            prazo: '1 a 2 dias úteis (ou retirada grátis)',
+            valor: 10.00
+          });
+        } else {
+          opcoesFreteDisponiveis.push({
+            id: 'retirada',
+            icone: '🏠',
+            titulo: 'Retirada / Combinar Entrega Presencial',
+            tituloCurto: 'A Combinar',
+            prazo: 'Combinar direto com a Jucilene',
+            valor: 0.00
+          });
+        }
+
+        opcoesFreteDisponiveis.push({
+          id: 'pac',
+          icone: '📦',
+          titulo: 'PAC (Correios Econômico)',
+          tituloCurto: 'PAC',
+          prazo: prazoPac,
+          valor: valorPac
+        });
+
+        opcoesFreteDisponiveis.push({
+          id: 'sedex',
+          icone: '⚡',
+          titulo: 'SEDEX (Correios Expresso)',
+          tituloCurto: 'SEDEX',
+          prazo: prazoSedex,
+          valor: valorSedex
+        });
 
         dadosFreteCalculado = {
-          cep: cepLimpo,
+          cep: cepLimpo.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
           cidade: `${end.localidade}/${end.uf}`,
-          pesoKg: pesoKg,
-          estimativa: valorEstimado
+          pesoKg: pesoKg
         };
 
-        boxRes.innerHTML = `
-          <p class="font-bold text-stone-900">📍 ${end.localidade} - ${end.uf}</p>
-          <p>📦 Peso estimado do pacote: <strong>${pesoKg} kg</strong></p>
-          <p class="text-emerald-800 font-bold">🚚 Frete estimado: ~ R$ ${valorEstimado.toFixed(2).replace('.', ',')} <span class="font-normal text-[10px] text-stone-500">(confirmado no WhatsApp)</span></p>`;
+        // Seleciona por padrão a entrega local (se for Barretos) ou PAC (para outras cidades)
+        if (!modalidadeFreteEscolhida || !opcoesFreteDisponiveis.some(o => o.id === modalidadeFreteEscolhida.id)) {
+          modalidadeFreteEscolhida = isBarretos ? opcoesFreteDisponiveis[0] : opcoesFreteDisponiveis[1];
+        } else {
+          modalidadeFreteEscolhida = opcoesFreteDisponiveis.find(o => o.id === modalidadeFreteEscolhida.id);
+        }
+
+        renderizarOpcoesFrete();
+        atualizarTotaisFinanceirosCarrinho();
+
       } catch (e) {
-        boxRes.innerHTML = `<span class="text-rose-600">Não foi possível localizar o CEP. Verifique os números digitados.</span>`;
+        const erroHtml = `<p class="text-xs text-rose-600 font-semibold py-1">⚠️ CEP não encontrado. Verifique os 8 números digitados.</p>`;
+        boxCarrinho.innerHTML = erroHtml;
+        if (boxVitrine) boxVitrine.innerHTML = erroHtml;
+      }
+    };
+
+    function renderizarOpcoesFrete() {
+      if (!dadosFreteCalculado) return;
+
+      const cabecalhoCidade = `
+        <div class="flex items-center justify-between text-[11px] text-stone-600 pb-1">
+          <span>📍 Destino: <strong class="text-stone-900">${dadosFreteCalculado.cidade}</strong> (${dadosFreteCalculado.cep})</span>
+          <span>📦 Peso: <strong>${dadosFreteCalculado.pesoKg} kg</strong></span>
+        </div>
+      `;
+
+      let cardsHtml = '';
+      opcoesFreteDisponiveis.forEach(op => {
+        const selecionado = modalidadeFreteEscolhida && modalidadeFreteEscolhida.id === op.id;
+        const precoTexto = op.valor === 0 ? 'A combinar / Grátis' : `R$ ${op.valor.toFixed(2).replace('.', ',')}`;
+
+        cardsHtml += `
+          <div onclick="selecionarModalidadeFrete('${op.id}')"
+            class="cursor-pointer p-2.5 rounded-xl border transition flex items-center justify-between gap-2 ${selecionado ? 'border-2 border-emerald-600 bg-emerald-50/70' : 'border-stone-200 bg-white hover:bg-stone-50'}">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <input type="radio" name="frete_opcao" ${selecionado ? 'checked' : ''} class="text-emerald-600 focus:ring-emerald-500 pointer-events-none">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-stone-900 truncate">${op.icone} ${op.titulo}</p>
+                <p class="text-[10px] text-stone-500">Prazo estimado: ${op.prazo}</p>
+              </div>
+            </div>
+            <span class="text-xs font-extrabold ${selecionado ? 'text-emerald-800' : 'text-stone-800'} flex-shrink-0">${precoTexto}</span>
+          </div>
+        `;
+      });
+
+      const htmlFinal = cabecalhoCidade + `<div class="space-y-1.5">${cardsHtml}</div>`;
+      document.getElementById('resultado-frete').innerHTML = htmlFinal;
+
+      const boxVitrine = document.getElementById('resultado-frete-vitrine');
+      if (boxVitrine) {
+        boxVitrine.innerHTML = htmlFinal;
+      }
+    }
+
+    window.selecionarModalidadeFrete = (idOpcao) => {
+      const encontrada = opcoesFreteDisponiveis.find(o => o.id === idOpcao);
+      if (encontrada) {
+        modalidadeFreteEscolhida = encontrada;
+        renderizarOpcoesFrete();
+        atualizarTotaisFinanceirosCarrinho();
       }
     };
 
     window.comprarAgoraWhatsApp = (nome, medidas, preco) => {
-      const msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}. Como podemos combinar as cores e o envio?`;
+      let msg = `Olá Jucilene! Gostaria de encomendar a peça *${nome}* (${medidas}) no valor de R$ ${preco.toFixed(2).replace('.', ',')}.`;
+      if (dadosFreteCalculado && modalidadeFreteEscolhida) {
+        const vFrete = modalidadeFreteEscolhida.valor === 0 ? 'A combinar' : `R$ ${modalidadeFreteEscolhida.valor.toFixed(2).replace('.', ',')}`;
+        msg += `\n\n📍 *Entrega para:* ${dadosFreteCalculado.cidade} (CEP: ${dadosFreteCalculado.cep})\n🚚 *Modalidade escolhida:* ${modalidadeFreteEscolhida.icone} ${modalidadeFreteEscolhida.titulo} (${vFrete})`;
+      } else {
+        msg += `\nComo podemos combinar as cores e o envio?`;
+      }
       window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
     window.finalizarPedidoWhatsApp = () => {
       if (carrinho.length === 0) return;
       let msg = `Olá Jucilene! Gostaria de fechar o seguinte pedido no *Ateliê da Jucilene*:\n\n`;
-      let total = 0, pesoTotal = 0;
+      let subtotal = 0;
       carrinho.forEach(item => {
         msg += `• *${item.qtd}x ${item.nome}* (${item.medidas}) - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
-        total += item.preco * item.qtd;
-        pesoTotal += (item.peso_gramas || 400) * item.qtd;
+        subtotal += item.preco * item.qtd;
       });
-      msg += `\n*Subtotal:* R$ ${total.toFixed(2).replace('.', ',')}`;
-      msg += `\n*Total com 5% OFF no Pix:* R$ ${(total * 0.95).toFixed(2).replace('.', ',')}`;
-      msg += `\n*Peso estimado da encomenda:* ${(pesoTotal / 1000).toFixed(2)} kg`;
 
-      if (dadosFreteCalculado) {
-        msg += `\n\n📍 *Dados para Entrega:*\n• CEP: ${dadosFreteCalculado.cep} (${dadosFreteCalculado.cidade})\n• Prévia de Frete no site: ~ R$ ${dadosFreteCalculado.estimativa.toFixed(2).replace('.', ',')}`;
+      const valorPixPecas = subtotal * 0.95;
+      const pesoKg = (obterPesoTotalGramas() / 1000).toFixed(2);
+
+      msg += `\n*Subtotal das Peças:* R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      msg += `\n*Peças com 5% OFF no Pix:* R$ ${valorPixPecas.toFixed(2).replace('.', ',')}`;
+      msg += `\n*Peso estimado do pacote:* ${pesoKg} kg`;
+
+      if (dadosFreteCalculado && modalidadeFreteEscolhida) {
+        const vFrete = modalidadeFreteEscolhida.valor;
+        const textoFrete = vFrete === 0 ? 'A combinar / Grátis' : `R$ ${vFrete.toFixed(2).replace('.', ',')}`;
+        msg += `\n\n📍 *Dados de Envio:*`;
+        msg += `\n• Destino: *${dadosFreteCalculado.cidade}* (CEP: ${dadosFreteCalculado.cep})`;
+        msg += `\n• Modalidade escolhida: *${modalidadeFreteEscolhida.icone} ${modalidadeFreteEscolhida.titulo}* (${modalidadeFreteEscolhida.prazo})`;
+        msg += `\n• Valor estimado do Frete: *${textoFrete}*`;
+        msg += `\n\n💰 *Total Estimado (Pix + Frete): R$ ${(valorPixPecas + vFrete).toFixed(2).replace('.', ',')}*`;
       } else {
         msg += `\n\nPoderia calcular o frete para o meu CEP?`;
       }
@@ -620,6 +855,7 @@
     carregarNumeroWhatsBanco();
     carregarFiltrosCategorias();
     carregarProdutos();
+    atualizarCarrinho();
   </script>
 </body>
 </html>
